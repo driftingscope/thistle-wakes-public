@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>One Thistle</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #16141a;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  canvas {
+    display: block;
+  }
+  #hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1.2rem 1.5rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #cbb8d8;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+  #hud h1 {
+    margin: 0 0 0.2rem 0;
+    font-size: 1.3rem;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+  #hud p {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+  #count {
+    position: fixed;
+    bottom: 1rem;
+    right: 1.2rem;
+    font-family: Georgia, serif;
+    font-size: 0.75rem;
+    color: #7a6f85;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud">
+  <h1>One Thistle</h1>
+  <p>click anywhere to grow another. no two are the same, none are kept.</p>
+</div>
+<div id="count"></div>
+<script>
+(function () {
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+  var countEl = document.getElementById('count');
+  var grown = 0;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', function () { resize(); grow(); });
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function branch(x, y, len, angle, width, depth) {
+    var x2 = x + Math.sin(angle) * len;
+    var y2 = y - Math.cos(angle) * len;
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x2, y2);
+    ctx.lineWidth = width;
+    ctx.strokeStyle = 'hsl(' + rand(95, 130) + ', 28%, ' + (18 + depth * 3.5) + '%)';
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // occasional spiky leaf pair along the stem
+    if (depth > 1 && Math.random() < 0.5) {
+      var t = rand(0.3, 0.7);
+      var lx = x + (x2 - x) * t;
+      var ly = y + (y2 - y) * t;
+      [-1, 1].forEach(function (side) {
+        var leafAngle = angle + side * rand(0.9, 1.4);
+        var leafLen = len * rand(0.25, 0.4);
+        var lx2 = lx + Math.sin(leafAngle) * leafLen;
+        var ly2 = ly - Math.cos(leafAngle) * leafLen;
+        ctx.beginPath();
+        ctx.moveTo(lx, ly);
+        ctx.lineTo(lx2, ly2);
+        ctx.lineWidth = Math.max(1, width * 0.5);
+        ctx.strokeStyle = 'hsl(105, 25%, 22%)';
+        ctx.stroke();
+      });
+    }
+
+    if (depth <= 0) {
+      flower(x2, y2, angle);
+      return;
+    }
+
+    var children = Math.random() < 0.35 ? 2 : 1;
+    for (var i = 0; i < children; i++) {
+      var spread = children === 2 ? (i === 0 ? -1 : 1) * rand(0.15, 0.35) : rand(-0.12, 0.12);
+      branch(
+        x2, y2,
+        len * rand(0.68, 0.82),
+        angle + spread,
+        Math.max(0.6, width * 0.72),
+        depth - 1
+      );
+    }
+  }
+
+  function flower(x, y, angle) {
+    // bulbous green base
+    ctx.beginPath();
+    ctx.ellipse(x, y, 6, 8, angle, 0, Math.PI * 2);
+    ctx.fillStyle = 'hsl(100, 30%, 24%)';
+    ctx.fill();
+
+    // spiky purple pom-pom
+    var spikes = Math.floor(rand(14, 22));
+    for (var i = 0; i < spikes; i++) {
+      var a = angle + (i / spikes) * Math.PI * 2 + rand(-0.15, 0.15);
+      var len = rand(9, 16);
+      var x2 = x + Math.sin(a) * len;
+      var y2 = y - Math.cos(a) * len;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x2, y2);
+      ctx.lineWidth = rand(1, 1.8);
+      ctx.strokeStyle = 'hsl(' + rand(275, 300) + ', ' + rand(45, 65) + '%, ' + rand(45, 65) + '%)';
+      ctx.stroke();
+    }
+  }
+
+  function grow() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var baseX = canvas.width / 2 + rand(-40, 40);
+    var baseY = canvas.height * 0.88;
+    branch(baseX, baseY, rand(70, 100), rand(-0.1, 0.1), 9, Math.floor(rand(6, 8)));
+    grown++;
+    countEl.textContent = grown === 1 ? '1 grown' : grown + ' grown';
+  }
+
+  resize();
+  grow();
+  window.addEventListener('click', grow);
+})();
+</script>
+</body>
+</html>
