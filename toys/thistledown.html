@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Thistledown</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #16141a;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  canvas {
+    display: block;
+  }
+  #hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1.2rem 1.5rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #cbb8d8;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+  #hud h1 {
+    margin: 0 0 0.2rem 0;
+    font-size: 1.3rem;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+  #hud p {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+  #count {
+    position: fixed;
+    bottom: 1rem;
+    right: 1.2rem;
+    font-family: Georgia, serif;
+    font-size: 0.75rem;
+    color: #7a6f85;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud">
+  <h1>Thistledown</h1>
+  <p>click anywhere to release a seed. sound on.</p>
+</div>
+<div id="count"></div>
+<script>
+(function () {
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+  var countEl = document.getElementById('count');
+  var released = 0;
+  var seeds = [];
+  var audioCtx = null;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  // pentatonic-minor semitone offsets from a low A, spread across four octaves
+  var SCALE = [0, 3, 5, 7, 10];
+
+  function playSeedTone() {
+    if (!audioCtx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      audioCtx = new AC();
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    var now = audioCtx.currentTime;
+    var octave = Math.floor(rand(0, 4)) - 1;
+    var semitone = SCALE[Math.floor(rand(0, SCALE.length))] + octave * 12;
+    var freq = 220 * Math.pow(2, semitone / 12);
+    var decay = rand(1.2, 2.6);
+
+    var osc = audioCtx.createOscillator();
+    osc.type = Math.random() < 0.5 ? 'sine' : 'triangle';
+    osc.frequency.value = freq;
+
+    var filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = rand(900, 2200);
+
+    var gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(rand(0.15, 0.28), now + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
+
+    osc.connect(filter);
+    if (audioCtx.createStereoPanner) {
+      var panner = audioCtx.createStereoPanner();
+      panner.pan.value = rand(-0.6, 0.6);
+      filter.connect(panner);
+      panner.connect(gain);
+    } else {
+      filter.connect(gain);
+    }
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + decay + 0.1);
+  }
+
+  function spawnSeed(x, y) {
+    seeds.push({
+      x: x,
+      y: y,
+      vy: rand(-0.35, -0.15),
+      sway: rand(0.5, 1.5),
+      swaySpeed: rand(0.6, 1.4),
+      phase: rand(0, Math.PI * 2),
+      age: 0,
+      life: rand(2600, 4200),
+      r: rand(2, 3.5)
+    });
+  }
+
+  function release(x, y) {
+    var n = Math.floor(rand(1, 4));
+    for (var i = 0; i < n; i++) {
+      spawnSeed(x + rand(-10, 10), y + rand(-10, 10));
+    }
+    playSeedTone();
+    released++;
+    countEl.textContent = released === 1 ? '1 released' : released + ' released';
+  }
+
+  var last = null;
+  function tick(t) {
+    if (last === null) last = t;
+    var dt = t - last;
+    last = t;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (var i = seeds.length - 1; i >= 0; i--) {
+      var s = seeds[i];
+      s.age += dt;
+      if (s.age > s.life) {
+        seeds.splice(i, 1);
+        continue;
+      }
+      var tt = s.age / 1000;
+      s.y += s.vy * (dt / 16);
+      s.x += Math.sin(tt * s.swaySpeed + s.phase) * s.sway * (dt / 16);
+
+      var lifeFrac = s.age / s.life;
+      var alpha = lifeFrac < 0.15 ? lifeFrac / 0.15 : (1 - (lifeFrac - 0.15) / 0.85);
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, alpha) * 0.85;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = '#e9e1ef';
+      ctx.fill();
+
+      // a few wisps around the seed body, like a dandelion-style tuft
+      var wisps = 6;
+      for (var w = 0; w < wisps; w++) {
+        var a = (w / wisps) * Math.PI * 2 + s.phase;
+        var wl = s.r * rand(2.2, 3.2);
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(s.x + Math.cos(a) * wl, s.y + Math.sin(a) * wl);
+        ctx.lineWidth = 0.6;
+        ctx.strokeStyle = '#cbb8d8';
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  resize();
+  window.addEventListener('click', function (e) { release(e.clientX, e.clientY); });
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
