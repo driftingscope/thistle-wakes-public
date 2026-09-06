@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Leeward</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #16141a;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  canvas {
+    display: block;
+  }
+  #hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1.2rem 1.5rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #cbb8d8;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+  #hud h1 {
+    margin: 0 0 0.2rem 0;
+    font-size: 1.3rem;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+  #hud p {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+  #wind {
+    position: fixed;
+    bottom: 1rem;
+    left: 1.2rem;
+    font-family: Georgia, serif;
+    font-size: 0.75rem;
+    color: #7a6f85;
+    pointer-events: none;
+    max-width: 60%;
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud">
+  <h1>Leeward</h1>
+  <p>click to add a seed. the rest drift on real wind, right now, in Edinburgh.</p>
+</div>
+<div id="wind">reaching for the wind&hellip;</div>
+<script>
+(function () {
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+  var windEl = document.getElementById('wind');
+  var seeds = [];
+
+  // Edinburgh: thistle is Scotland's national flower.
+  var LAT = 55.9533, LON = -3.1883;
+
+  var wind = { speedKmh: 6, dirDeg: 225, live: false };
+
+  var COMPASS = ['N','NNE','NE','ENE','E','ESE','SE','SSE',
+                 'S','SSW','SW','WSW','W','WNW','NW','NNW'];
+  function compassLabel(deg) {
+    var i = Math.round(((deg % 360) + 360) % 360 / 22.5) % 16;
+    return COMPASS[i];
+  }
+
+  function windVector() {
+    // dirDeg is the compass bearing the wind blows FROM; it blows TOWARD dirDeg+180.
+    var toward = (wind.dirDeg + 180) * Math.PI / 180;
+    return { x: Math.sin(toward), y: -Math.cos(toward) };
+  }
+
+  function fetchWind() {
+    var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + LAT +
+      '&longitude=' + LON + '&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh';
+    var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var timer = setTimeout(function () { if (controller) controller.abort(); }, 6000);
+
+    fetch(url, controller ? { signal: controller.signal } : {})
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        clearTimeout(timer);
+        var c = data && data.current;
+        if (c && typeof c.wind_speed_10m === 'number' && typeof c.wind_direction_10m === 'number') {
+          wind.speedKmh = c.wind_speed_10m;
+          wind.dirDeg = c.wind_direction_10m;
+          wind.live = true;
+          windEl.textContent = 'Edinburgh, right now: ' + Math.round(wind.speedKmh) +
+            ' km/h from the ' + compassLabel(wind.dirDeg) + ' (open-meteo.com)';
+        } else {
+          throw new Error('unexpected response shape');
+        }
+      })
+      .catch(function () {
+        clearTimeout(timer);
+        windEl.textContent = 'couldn’t reach live wind data — drifting on a still-air default';
+      });
+  }
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function spawnSeed(x, y) {
+    seeds.push({
+      x: x,
+      y: y,
+      vy: rand(-0.35, -0.15),
+      sway: rand(0.5, 1.5),
+      swaySpeed: rand(0.6, 1.4),
+      phase: rand(0, Math.PI * 2),
+      age: 0,
+      life: rand(3200, 5200),
+      r: rand(2, 3.5)
+    });
+  }
+
+  function click(x, y) {
+    var n = Math.floor(rand(1, 4));
+    for (var i = 0; i < n; i++) {
+      spawnSeed(x + rand(-10, 10), y + rand(-10, 10));
+    }
+  }
+
+  // ambient seeds drift in on the wind, entering from whichever edge it blows from
+  var ambientTimer = 0;
+  function maybeSpawnAmbient(dt) {
+    ambientTimer += dt;
+    var rate = Math.max(0.25, Math.min(3, wind.speedKmh / 10)); // seeds per second, roughly
+    var interval = 1000 / rate;
+    if (ambientTimer < interval) return;
+    ambientTimer = 0;
+
+    var v = windVector();
+    // spawn from the edge the wind comes from, at a random point along it
+    var margin = 40;
+    var x, y;
+    if (Math.abs(v.x) > Math.abs(v.y)) {
+      x = v.x > 0 ? -margin : canvas.width + margin;
+      y = rand(canvas.height * 0.2, canvas.height);
+    } else {
+      x = rand(0, canvas.width);
+      y = v.y > 0 ? -margin : canvas.height + margin;
+    }
+    spawnSeed(x, y);
+  }
+
+  var last = null;
+  function tick(t) {
+    if (last === null) last = t;
+    var dt = Math.min(t - last, 50);
+    last = t;
+
+    maybeSpawnAmbient(dt);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    var v = windVector();
+    var push = wind.speedKmh * 0.045;
+
+    for (var i = seeds.length - 1; i >= 0; i--) {
+      var s = seeds[i];
+      s.age += dt;
+      if (s.age > s.life) {
+        seeds.splice(i, 1);
+        continue;
+      }
+      var tt = s.age / 1000;
+      s.y += (s.vy + v.y * push) * (dt / 16);
+      s.x += (v.x * push) * (dt / 16) + Math.sin(tt * s.swaySpeed + s.phase) * s.sway * (dt / 16);
+
+      var lifeFrac = s.age / s.life;
+      var alpha = lifeFrac < 0.12 ? lifeFrac / 0.12 : (1 - (lifeFrac - 0.12) / 0.88);
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, alpha) * 0.85;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = '#e9e1ef';
+      ctx.fill();
+
+      var wisps = 6;
+      for (var w = 0; w < wisps; w++) {
+        var a = (w / wisps) * Math.PI * 2 + s.phase;
+        var wl = s.r * rand(2.2, 3.2);
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(s.x + Math.cos(a) * wl, s.y + Math.sin(a) * wl);
+        ctx.lineWidth = 0.6;
+        ctx.strokeStyle = '#cbb8d8';
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  resize();
+  window.addEventListener('click', function (e) { click(e.clientX, e.clientY); });
+  fetchWind();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
