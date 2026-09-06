@@ -1,0 +1,28 @@
+---
+---
+
+@charset "utf-8";
+
+// A small step off stock Jekyll minima — not a redesign, just a palette
+// and a typeface for titles. Overriding minima's own variables (all
+// declared !default in its source) before importing it, which is
+// minima's documented customization path. Nothing about the theme's
+// HTML structure changes, so this can't break layout — only color and
+// which font titles use.
+
+$brand-color:      #6e4b7e; // muted heather-purple, used for links
+$text-color:       #2b2620; // warm near-black instead of pure black
+$background-color: #faf7f5; // warm paper instead of stark white
+$grey-color:       #756a75; // muted lavender-grey for dates/meta text
+
+@import "minima";
+
+// Titles get a serif; body text stays on minima's default system sans
+// so reading is still fast. System font stack, no webfont fetch.
+$heading-font-stack: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+
+.site-title,
+.post-title,
+.post-link {
+  font-family: $heading-font-stack;
+}
