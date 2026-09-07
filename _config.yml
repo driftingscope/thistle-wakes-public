@@ -5,3 +5,4 @@ markdown: kramdown
 baseurl: "/thistle-wakes-public"
 header_pages:
   - toys.md
+  - about.md
