@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gloaming</title>
+<meta name="description" content="A thistle field lit by whatever time it actually is where you're looking at it from — sunrise, day, dusk, night, on your own clock.">
+<link rel="canonical" href="https://driftingscope.github.io/thistle-wakes-public/toys/gloaming.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Briar Patch">
+<meta property="og:title" content="Gloaming">
+<meta property="og:description" content="A thistle field lit by whatever time it actually is where you're looking at it from — sunrise, day, dusk, night, on your own clock.">
+<meta property="og:url" content="https://driftingscope.github.io/thistle-wakes-public/toys/gloaming.html">
+<meta property="og:image" content="https://driftingscope.github.io/thistle-wakes-public/assets/og-gloaming.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A small field of thistles under a dusk sky, moon rising, in the Gloaming toy.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Gloaming">
+<meta name="twitter:description" content="A thistle field lit by whatever time it actually is where you're looking at it from — sunrise, day, dusk, night, on your own clock.">
+<meta name="twitter:image" content="https://driftingscope.github.io/thistle-wakes-public/assets/og-gloaming.png">
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #0b0a14;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  canvas {
+    display: block;
+  }
+  #hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1.2rem 1.5rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #f0e6f7;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+  #hud h1 {
+    margin: 0 0 0.2rem 0;
+    font-size: 1.3rem;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+  #hud p {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+  #count {
+    position: fixed;
+    bottom: 1rem;
+    right: 1.2rem;
+    font-family: Georgia, serif;
+    font-size: 0.75rem;
+    color: #cbb8d8;
+    opacity: 0.7;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud">
+  <h1>Gloaming</h1>
+  <p id="hud-text">click to grow a thistle. the sky runs on your own clock — nothing sent anywhere.</p>
+</div>
+<div id="count"></div>
+<script>
+(function () {
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+  var countEl = document.getElementById('count');
+  var hudText = document.getElementById('hud-text');
+  var thistles = []; // { xf: 0..1 relative to width, canvas, w, h }
+  var stars = [];
+
+  for (var i = 0; i < 90; i++) {
+    stars.push({ xf: Math.random(), yf: Math.random() * 0.62, r: Math.random() * 1.3 + 0.3, tw: Math.random() * Math.PI * 2 });
+  }
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', function () { resize(); draw(); });
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function lerpColor(c1, c2, t) {
+    return [
+      Math.round(lerp(c1[0], c2[0], t)),
+      Math.round(lerp(c1[1], c2[1], t)),
+      Math.round(lerp(c1[2], c2[2], t))
+    ];
+  }
+  function rgb(c) { return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')'; }
+
+  // sky stops across a 24-hour day: hour, top color, bottom color, darkness (star opacity)
+  var STOPS = [
+    { h: 0,    top: [11, 10, 20],   bot: [26, 23, 48],   dark: 1.0,  phase: 'deep night' },
+    { h: 4.5,  top: [11, 10, 20],   bot: [26, 23, 48],   dark: 1.0,  phase: 'deep night' },
+    { h: 6,    top: [30, 26, 58],   bot: [90, 70, 90],   dark: 0.35, phase: 'first light' },
+    { h: 7.5,  top: [70, 110, 175], bot: [235, 175, 130],dark: 0.0,  phase: 'sunrise' },
+    { h: 9,    top: [70, 150, 210], bot: [200, 225, 235],dark: 0.0,  phase: 'morning' },
+    { h: 13,   top: [55, 140, 210], bot: [190, 225, 240],dark: 0.0,  phase: 'day' },
+    { h: 17,   top: [70, 115, 175], bot: [230, 170, 110],dark: 0.0,  phase: 'late afternoon' },
+    { h: 18.5, top: [50, 45, 95],   bot: [220, 110, 75], dark: 0.15, phase: 'sunset' },
+    { h: 19.5, top: [25, 20, 55],   bot: [140, 75, 95],  dark: 0.45, phase: 'the gloaming' },
+    { h: 21,   top: [14, 12, 28],   bot: [45, 32, 65],   dark: 0.85, phase: 'nightfall' },
+    { h: 24,   top: [11, 10, 20],   bot: [26, 23, 48],   dark: 1.0,  phase: 'deep night' }
+  ];
+
+  function sky(hour) {
+    for (var i = 0; i < STOPS.length - 1; i++) {
+      var a = STOPS[i], b = STOPS[i + 1];
+      if (hour >= a.h && hour <= b.h) {
+        var t = (hour - a.h) / (b.h - a.h);
+        return {
+          top: lerpColor(a.top, b.top, t),
+          bot: lerpColor(a.bot, b.bot, t),
+          dark: lerp(a.dark, b.dark, t),
+          phase: t < 0.5 ? a.phase : b.phase
+        };
+      }
+    }
+    return { top: STOPS[0].top, bot: STOPS[0].bot, dark: STOPS[0].dark, phase: STOPS[0].phase };
+  }
+
+  function branch(ctx2, x, y, len, angle, width, depth) {
+    var x2 = x + Math.sin(angle) * len;
+    var y2 = y - Math.cos(angle) * len;
+    ctx2.beginPath();
+    ctx2.moveTo(x, y);
+    ctx2.lineTo(x2, y2);
+    ctx2.lineWidth = width;
+    ctx2.strokeStyle = 'hsl(' + rand(95, 130) + ', 28%, ' + (18 + depth * 3.5) + '%)';
+    ctx2.lineCap = 'round';
+    ctx2.stroke();
+
+    if (depth > 1 && Math.random() < 0.5) {
+      var t = rand(0.3, 0.7);
+      var lx = x + (x2 - x) * t;
+      var ly = y + (y2 - y) * t;
+      [-1, 1].forEach(function (side) {
+        var leafAngle = angle + side * rand(0.9, 1.4);
+        var leafLen = len * rand(0.25, 0.4);
+        var lx2 = lx + Math.sin(leafAngle) * leafLen;
+        var ly2 = ly - Math.cos(leafAngle) * leafLen;
+        ctx2.beginPath();
+        ctx2.moveTo(lx, ly);
+        ctx2.lineTo(lx2, ly2);
+        ctx2.lineWidth = Math.max(1, width * 0.5);
+        ctx2.strokeStyle = 'hsl(105, 25%, 22%)';
+        ctx2.stroke();
+      });
+    }
+
+    if (depth <= 0) {
+      flower(ctx2, x2, y2, angle);
+      return;
+    }
+
+    var children = Math.random() < 0.35 ? 2 : 1;
+    for (var i = 0; i < children; i++) {
+      var spread = children === 2 ? (i === 0 ? -1 : 1) * rand(0.15, 0.35) : rand(-0.12, 0.12);
+      branch(ctx2, x2, y2, len * rand(0.68, 0.82), angle + spread, Math.max(0.6, width * 0.72), depth - 1);
+    }
+  }
+
+  function flower(ctx2, x, y, angle) {
+    ctx2.beginPath();
+    ctx2.ellipse(x, y, 6, 8, angle, 0, Math.PI * 2);
+    ctx2.fillStyle = 'hsl(100, 30%, 24%)';
+    ctx2.fill();
+
+    var spikes = Math.floor(rand(14, 22));
+    for (var i = 0; i < spikes; i++) {
+      var a = angle + (i / spikes) * Math.PI * 2 + rand(-0.15, 0.15);
+      var len = rand(9, 16);
+      var x2 = x + Math.sin(a) * len;
+      var y2 = y - Math.cos(a) * len;
+      ctx2.beginPath();
+      ctx2.moveTo(x, y);
+      ctx2.lineTo(x2, y2);
+      ctx2.lineWidth = rand(1, 1.8);
+      ctx2.strokeStyle = 'hsl(' + rand(275, 300) + ', ' + rand(45, 65) + '%, ' + rand(45, 65) + '%)';
+      ctx2.stroke();
+    }
+  }
+
+  function makeThistle(xf) {
+    var w = 240, h = 460;
+    var off = document.createElement('canvas');
+    off.width = w;
+    off.height = h;
+    var octx = off.getContext('2d');
+    branch(octx, w / 2 + rand(-15, 15), h - 4, rand(70, 95), rand(-0.1, 0.1), 8, Math.floor(rand(6, 8)));
+    thistles.push({ xf: xf, canvas: off, w: w, h: h });
+  }
+
+  function drawSun(x, y, r, warmth) {
+    var grad = ctx.createRadialGradient(x, y, 0, x, y, r * 3.2);
+    grad.addColorStop(0, 'rgba(255, 235, 190, ' + (0.55 * warmth) + ')');
+    grad.addColorStop(1, 'rgba(255, 235, 190, 0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(x, y, r * 3.2, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff3d6';
+    ctx.fill();
+  }
+
+  function drawMoon(x, y, r) {
+    var grad = ctx.createRadialGradient(x, y, 0, x, y, r * 2.4);
+    grad.addColorStop(0, 'rgba(220, 225, 245, 0.28)');
+    grad.addColorStop(1, 'rgba(220, 225, 245, 0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(x, y, r * 2.4, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = '#e6e6f0';
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(180, 180, 210, 0.35)';
+    [[-0.3, -0.2, 0.28], [0.25, 0.15, 0.2], [-0.05, 0.35, 0.16]].forEach(function (c) {
+      ctx.beginPath();
+      ctx.arc(x + c[0] * r, y + c[1] * r, c[2] * r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  function draw() {
+    var now = new Date();
+    var hour = now.getHours() + now.getMinutes() / 60;
+    var s = sky(hour);
+    var groundY = canvas.height * 0.78;
+
+    var grad = ctx.createLinearGradient(0, 0, 0, groundY);
+    grad.addColorStop(0, rgb(s.top));
+    grad.addColorStop(1, rgb(s.bot));
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, groundY);
+
+    // stars, only as dark as the sky currently is
+    if (s.dark > 0.02) {
+      var twinkle = now.getTime() / 900;
+      stars.forEach(function (st) {
+        var op = s.dark * (0.5 + 0.5 * Math.sin(twinkle + st.tw));
+        ctx.beginPath();
+        ctx.arc(st.xf * canvas.width, st.yf * groundY, st.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,' + (op * 0.9).toFixed(2) + ')';
+        ctx.fill();
+      });
+    }
+
+    // sun/moon on an arc from one horizon to the other
+    var sunrise = 6, sunset = 19;
+    var margin = canvas.width * 0.08;
+    var arcTop = canvas.height * 0.1;
+    if (hour >= sunrise && hour <= sunset) {
+      var p = (hour - sunrise) / (sunset - sunrise);
+      var x = lerp(margin, canvas.width - margin, p);
+      var y = groundY - Math.sin(p * Math.PI) * (groundY - arcTop);
+      var warmth = p < 0.15 || p > 0.85 ? 1 : 0.6;
+      drawSun(x, y, 26, warmth);
+    } else {
+      var nightLen = 24 - (sunset - sunrise);
+      var since = hour > sunset ? hour - sunset : hour + 24 - sunset;
+      var pn = since / nightLen;
+      var xn = lerp(margin, canvas.width - margin, pn);
+      var yn = groundY - Math.sin(pn * Math.PI) * (groundY - arcTop);
+      drawMoon(xn, yn, 18);
+    }
+
+    // ground
+    ctx.fillStyle = '#171422';
+    ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+    ctx.beginPath();
+    ctx.moveTo(0, groundY);
+    ctx.lineTo(canvas.width, groundY);
+    ctx.strokeStyle = 'rgba(203, 184, 216, 0.15)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    thistles.forEach(function (t) {
+      var x = t.xf * canvas.width;
+      ctx.drawImage(t.canvas, x - t.w / 2, groundY - t.h + 4);
+    });
+
+    updateHud(s, now);
+  }
+
+  function updateHud(s, now) {
+    var timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    hudText.textContent = 'click to grow a thistle. ' + s.phase + ', ' + timeStr + ' where you are — your own clock, nothing sent anywhere.';
+    countEl.textContent = thistles.length === 0 ? '' : (thistles.length === 1 ? '1 grown' : thistles.length + ' grown');
+  }
+
+  canvas.addEventListener('click', function (e) {
+    makeThistle(e.clientX / canvas.width);
+    draw();
+  });
+
+  resize();
+  makeThistle(0.5);
+  draw();
+  setInterval(draw, 20000);
+})();
+</script>
+</body>
+</html>
