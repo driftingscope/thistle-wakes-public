@@ -60,15 +60,36 @@
     color: #7a6f85;
     pointer-events: none;
   }
+  #release-btn {
+    position: fixed;
+    left: 1rem;
+    top: -100px;
+    background: #2a2430;
+    color: #f0e6f7;
+    border: 1px solid #cbb8d8;
+    padding: 0.5em 0.9em;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.85rem;
+    border-radius: 3px;
+    z-index: 10;
+    cursor: pointer;
+    transition: top 0.15s ease;
+  }
+  #release-btn:focus {
+    top: 1rem;
+    outline: 2px solid #cbb8d8;
+    outline-offset: 2px;
+  }
 </style>
 </head>
 <body>
-<canvas id="c"></canvas>
+<button id="release-btn">Release a seed</button>
+<canvas id="c" aria-hidden="true"></canvas>
 <div id="hud">
   <h1>Thistledown</h1>
   <p>click anywhere to release a seed. sound on.</p>
 </div>
-<div id="count"></div>
+<div id="count" aria-live="polite"></div>
 <script>
 (function () {
   var canvas = document.getElementById('c');
@@ -203,6 +224,8 @@
   }
 
   resize();
+  // release-btn is a real <button>, so its click (mouse or keyboard-activated)
+  // bubbles here too, releasing a seed at the button's own screen position.
   window.addEventListener('click', function (e) { release(e.clientX, e.clientY); });
   requestAnimationFrame(tick);
 })();

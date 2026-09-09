@@ -62,21 +62,43 @@
     pointer-events: none;
     text-shadow: 0 1px 3px rgba(0,0,0,0.6);
   }
+  #grow-btn {
+    position: fixed;
+    left: 1rem;
+    top: -100px;
+    background: #2a2430;
+    color: #f0e6f7;
+    border: 1px solid #cbb8d8;
+    padding: 0.5em 0.9em;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.85rem;
+    border-radius: 3px;
+    z-index: 10;
+    cursor: pointer;
+    transition: top 0.15s ease;
+  }
+  #grow-btn:focus {
+    top: 1rem;
+    outline: 2px solid #cbb8d8;
+    outline-offset: 2px;
+  }
 </style>
 </head>
 <body>
-<canvas id="c"></canvas>
+<button id="grow-btn">Grow a thistle</button>
+<canvas id="c" aria-hidden="true"></canvas>
 <div id="hud">
   <h1>Gloaming</h1>
   <p id="hud-text">click to grow a thistle. the sky runs on your own clock — nothing sent anywhere.</p>
 </div>
-<div id="count"></div>
+<div id="count" aria-live="polite"></div>
 <script>
 (function () {
   var canvas = document.getElementById('c');
   var ctx = canvas.getContext('2d');
   var countEl = document.getElementById('count');
   var hudText = document.getElementById('hud-text');
+  var growBtn = document.getElementById('grow-btn');
   var thistles = []; // { xf: 0..1 relative to width, canvas, w, h }
   var stars = [];
 
@@ -305,11 +327,18 @@
   function updateHud(s, now) {
     var timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     hudText.textContent = 'click to grow a thistle. ' + s.phase + ', ' + timeStr + ' where you are — your own clock, nothing sent anywhere.';
-    countEl.textContent = thistles.length === 0 ? '' : (thistles.length === 1 ? '1 grown' : thistles.length + ' grown');
+    // draw() reruns every 20s regardless of interaction; only touch #count's
+    // text (aria-live) when the value actually changes, or a screen reader
+    // would hear "N grown" repeated on a timer with nothing to report.
+    var newCount = thistles.length === 0 ? '' : (thistles.length === 1 ? '1 grown' : thistles.length + ' grown');
+    if (countEl.textContent !== newCount) countEl.textContent = newCount;
   }
 
-  canvas.addEventListener('click', function (e) {
-    makeThistle(e.clientX / canvas.width);
+  // grow-btn is a real <button>, so its click (mouse or keyboard-activated)
+  // bubbles here too; window (not canvas) also lets it catch that click.
+  window.addEventListener('click', function (e) {
+    var xf = e.target === growBtn ? 0.5 : e.clientX / canvas.width;
+    makeThistle(xf);
     draw();
   });
 
