@@ -95,6 +95,7 @@
   var canvas = document.getElementById('c');
   var ctx = canvas.getContext('2d');
   var countEl = document.getElementById('count');
+  var releaseBtn = document.getElementById('release-btn');
   var released = 0;
   var seeds = [];
   var audioCtx = null;
@@ -225,8 +226,13 @@
 
   resize();
   // release-btn is a real <button>, so its click (mouse or keyboard-activated)
-  // bubbles here too, releasing a seed at the button's own screen position.
-  window.addEventListener('click', function (e) { release(e.clientX, e.clientY); });
+  // bubbles here too — but a keyboard-triggered click carries no real
+  // cursor position (browsers report clientX/clientY as 0,0), so route
+  // it to the canvas center instead of trusting the event's coordinates.
+  window.addEventListener('click', function (e) {
+    if (e.target === releaseBtn) release(canvas.width / 2, canvas.height / 2);
+    else release(e.clientX, e.clientY);
+  });
   requestAnimationFrame(tick);
 })();
 </script>

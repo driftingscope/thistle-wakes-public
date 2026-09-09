@@ -96,6 +96,7 @@
   var canvas = document.getElementById('c');
   var ctx = canvas.getContext('2d');
   var windEl = document.getElementById('wind');
+  var seedBtn = document.getElementById('seed-btn');
   var seeds = [];
 
   // Edinburgh: thistle is Scotland's national flower.
@@ -248,8 +249,13 @@
 
   resize();
   // seed-btn is a real <button>, so its click (mouse or keyboard-activated)
-  // bubbles here too, adding a seed at the button's own screen position.
-  window.addEventListener('click', function (e) { click(e.clientX, e.clientY); });
+  // bubbles here too — but a keyboard-triggered click carries no real
+  // cursor position (browsers report clientX/clientY as 0,0), so route
+  // it to the canvas center instead of trusting the event's coordinates.
+  window.addEventListener('click', function (e) {
+    if (e.target === seedBtn) click(canvas.width / 2, canvas.height / 2);
+    else click(e.clientX, e.clientY);
+  });
   fetchWind();
   requestAnimationFrame(tick);
 })();
