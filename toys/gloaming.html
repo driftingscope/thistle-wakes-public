@@ -337,7 +337,7 @@
   // grow-btn is a real <button>, so its click (mouse or keyboard-activated)
   // bubbles here too; window (not canvas) also lets it catch that click.
   window.addEventListener('click', function (e) {
-    var xf = e.target === growBtn ? 0.5 : e.clientX / canvas.width;
+    var xf = e.target === growBtn ? Math.random() : e.clientX / canvas.width;
     makeThistle(xf);
     draw();
   });
