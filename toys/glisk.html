@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Glisk</title>
+<meta name="description" content="Nothing here moves while you're not looking. Come back and see how far it got.">
+<link rel="canonical" href="https://driftingscope.github.io/thistle-wakes-public/toys/glisk.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Briar Patch">
+<meta property="og:title" content="Glisk">
+<meta property="og:description" content="Nothing here moves while you're not looking. Come back and see how far it got.">
+<meta property="og:url" content="https://driftingscope.github.io/thistle-wakes-public/toys/glisk.html">
+<meta property="og:image" content="https://driftingscope.github.io/thistle-wakes-public/assets/og-glisk.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A thistle seed head with a handful of seeds already scattered across the dark canvas of the Glisk toy.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Glisk">
+<meta name="twitter:description" content="Nothing here moves while you're not looking. Come back and see how far it got.">
+<meta name="twitter:image" content="https://driftingscope.github.io/thistle-wakes-public/assets/og-glisk.png">
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #16141a;
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+  }
+  #hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1.2rem 1.5rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #cbb8d8;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+  #hud h1 {
+    margin: 0 0 0.2rem 0;
+    font-size: 1.3rem;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+  #hud p {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+  #status {
+    position: fixed;
+    bottom: 1rem;
+    left: 1.2rem;
+    font-family: Georgia, serif;
+    font-size: 0.75rem;
+    color: #cbb8d8;
+    pointer-events: none;
+    max-width: 60%;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+  #count {
+    position: fixed;
+    bottom: 1rem;
+    right: 1.2rem;
+    font-family: Georgia, serif;
+    font-size: 0.75rem;
+    color: #7a6f85;
+    pointer-events: none;
+  }
+  #peek-btn {
+    position: fixed;
+    left: 1rem;
+    top: -100px;
+    background: #2a2430;
+    color: #f0e6f7;
+    border: 1px solid #cbb8d8;
+    padding: 0.5em 0.9em;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.85rem;
+    border-radius: 3px;
+    z-index: 10;
+    cursor: pointer;
+    transition: top 0.15s ease;
+  }
+  #peek-btn:focus {
+    top: 1rem;
+    outline: 2px solid #cbb8d8;
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+<button id="peek-btn">Peek away, then look back</button>
+<canvas id="c" aria-hidden="true"></canvas>
+<div id="hud">
+  <h1>Glisk</h1>
+  <p id="blurb">switch tabs, minimise, lock the screen &mdash; then come back. nothing here moves while you're not looking.</p>
+</div>
+<div id="status" aria-live="polite">still here.</div>
+<div id="count"></div>
+<script>
+(function () {
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+  var statusEl = document.getElementById('status');
+  var countEl = document.getElementById('count');
+  var blurbEl = document.getElementById('blurb');
+  var peekBtn = document.getElementById('peek-btn');
+
+  var TOTAL_SEEDS = 16;
+  var MAX_RELEASED = 200; // safety bound for very long sessions
+  var pending = TOTAL_SEEDS;
+  var released = []; // {x, y}
+  var totalReleasedEver = 0;
+
+  var baseX, baseY, headX, headY, stemWobble;
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function growPlant(x) {
+    baseX = x;
+    baseY = canvas.height * 0.86;
+    var height = rand(canvas.height * 0.28, canvas.height * 0.4);
+    headX = clamp(baseX + rand(-15, 15), 60, canvas.width - 60);
+    headY = Math.max(70, baseY - height);
+    stemWobble = rand(-0.5, 0.5);
+  }
+
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  function drawStem() {
+    ctx.beginPath();
+    ctx.moveTo(baseX, baseY);
+    var midX = (baseX + headX) / 2 + stemWobble * 30;
+    var midY = (baseY + headY) / 2;
+    ctx.quadraticCurveTo(midX, midY, headX, headY);
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'hsl(110, 25%, 22%)';
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    [-1, 1].forEach(function (side) {
+      var t = 0.4;
+      var lx = baseX + (midX - baseX) * t;
+      var ly = baseY + (midY - baseY) * t;
+      var la = side * rand(0.8, 1.1);
+      var ll = rand(30, 45);
+      ctx.beginPath();
+      ctx.moveTo(lx, ly);
+      ctx.lineTo(lx + Math.sin(la) * ll, ly - Math.cos(la) * ll * 0.4);
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = 'hsl(105, 25%, 22%)';
+      ctx.stroke();
+    });
+  }
+
+  function drawHead() {
+    ctx.beginPath();
+    ctx.ellipse(headX, headY, 9, 11, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'hsl(100, 30%, 24%)';
+    ctx.fill();
+
+    // seeds still attached: evenly spaced around the head, count = pending
+    for (var i = 0; i < pending; i++) {
+      var a = (i / Math.max(1, pending)) * Math.PI * 2;
+      var x = headX + Math.cos(a) * 13;
+      var y = headY + Math.sin(a) * 13;
+      ctx.beginPath();
+      ctx.arc(x, y, 1.8, 0, Math.PI * 2);
+      ctx.fillStyle = '#cbb8d8';
+      ctx.fill();
+    }
+  }
+
+  function drawReleasedSeed(s) {
+    ctx.save();
+    ctx.globalAlpha = 0.85;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, 2.6, 0, Math.PI * 2);
+    ctx.fillStyle = '#e9e1ef';
+    ctx.fill();
+    var wisps = 6;
+    for (var w = 0; w < wisps; w++) {
+      var a = (w / wisps) * Math.PI * 2 + s.phase;
+      var wl = rand(6, 9);
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(s.x + Math.cos(a) * wl, s.y + Math.sin(a) * wl);
+      ctx.lineWidth = 0.6;
+      ctx.strokeStyle = '#cbb8d8';
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawStem();
+    for (var i = 0; i < released.length; i++) drawReleasedSeed(released[i]);
+    drawHead();
+  }
+
+  function releaseOneSeed() {
+    var a = rand(0, Math.PI * 2);
+    var dist = rand(50, 150);
+    var x = clamp(headX + Math.cos(a) * dist, 10, canvas.width - 10);
+    var y = clamp(headY + Math.sin(a) * dist * 0.6, 10, canvas.height - 10);
+    released.push({ x: x, y: y, phase: rand(0, Math.PI * 2) });
+    if (released.length > MAX_RELEASED) released.shift();
+    pending--;
+  }
+
+  function regrow() {
+    growPlant(rand(canvas.width * 0.25, canvas.width * 0.75));
+    pending = TOTAL_SEEDS;
+  }
+
+  function seedsForGap(ms) {
+    if (ms < 1500) return 0;
+    if (ms < 15000) return 1;
+    if (ms < 60000) return 2;
+    if (ms < 300000) return 4;
+    if (ms < 1800000) return 8;
+    return Infinity;
+  }
+
+  function fmtGap(ms) {
+    var s = Math.round(ms / 1000);
+    if (s < 60) return s + 's';
+    var m = Math.round(s / 60);
+    if (m < 60) return m + 'm';
+    var h = Math.round(m / 60);
+    return h + 'h';
+  }
+
+  function reveal(ms) {
+    var n = seedsForGap(ms);
+    if (n === Infinity || n > pending) n = pending;
+    for (var i = 0; i < n; i++) releaseOneSeed();
+    totalReleasedEver += n;
+
+    var msg;
+    if (n === 0) {
+      msg = 'barely gone (' + fmtGap(ms) + '). nothing moved.';
+    } else {
+      msg = 'back after ' + fmtGap(ms) + ' — ' + n + (n === 1 ? ' seed went.' : ' seeds went.');
+    }
+    if (pending === 0) {
+      msg += ' the head is bare. a new one is already starting.';
+      regrow();
+    }
+    statusEl.textContent = msg;
+    countEl.textContent = totalReleasedEver + (totalReleasedEver === 1 ? ' seed gone' : ' seeds gone') + ', this visit only';
+    render();
+  }
+
+  var visibilitySupported = typeof document.hidden !== 'undefined';
+  var hiddenAt = null;
+
+  function onVisibilityChange() {
+    if (document.hidden) {
+      hiddenAt = Date.now();
+    } else if (hiddenAt !== null) {
+      var gap = Date.now() - hiddenAt;
+      hiddenAt = null;
+      reveal(gap);
+    }
+  }
+
+  if (visibilitySupported) {
+    document.addEventListener('visibilitychange', onVisibilityChange);
+  } else {
+    blurbEl.textContent = "this browser doesn't report tab visibility — try the button below instead.";
+    statusEl.textContent = 'no visibility signal available.';
+  }
+
+  var FIXED_PEEK_MS = 90000;
+  peekBtn.addEventListener('click', function () { reveal(FIXED_PEEK_MS); });
+
+  var initialized = false;
+
+  function resize() {
+    var oldW = canvas.width, oldH = canvas.height;
+    var newW = window.innerWidth, newH = window.innerHeight;
+    if (initialized) {
+      var sx = newW / oldW, sy = newH / oldH;
+      baseX *= sx; headX *= sx;
+      baseY *= sy; headY *= sy;
+      for (var i = 0; i < released.length; i++) {
+        released[i].x *= sx;
+        released[i].y *= sy;
+      }
+    }
+    canvas.width = newW;
+    canvas.height = newH;
+    if (!initialized) {
+      growPlant(newW / 2);
+      initialized = true;
+    }
+    render();
+  }
+  window.addEventListener('resize', resize);
+
+  resize();
+})();
+</script>
+</body>
+</html>
