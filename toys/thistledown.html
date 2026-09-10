@@ -100,6 +100,16 @@
   var seeds = [];
   var audioCtx = null;
 
+  // Each seed here is short-lived and only ever appears because someone
+  // clicked, so it's not the kind of unprompted continuous motion
+  // prefers-reduced-motion is really aimed at. The oscillating sway on top
+  // of the drift is the purely decorative part, so that's what we drop.
+  var motionQuery = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  var reducedMotion = !!(motionQuery && motionQuery.matches);
+  if (motionQuery && motionQuery.addEventListener) {
+    motionQuery.addEventListener('change', function (e) { reducedMotion = e.matches; });
+  }
+
   function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -194,7 +204,7 @@
       }
       var tt = s.age / 1000;
       s.y += s.vy * (dt / 16);
-      s.x += Math.sin(tt * s.swaySpeed + s.phase) * s.sway * (dt / 16);
+      s.x += reducedMotion ? 0 : Math.sin(tt * s.swaySpeed + s.phase) * s.sway * (dt / 16);
 
       var lifeFrac = s.age / s.life;
       var alpha = lifeFrac < 0.15 ? lifeFrac / 0.15 : (1 - (lifeFrac - 0.15) / 0.85);

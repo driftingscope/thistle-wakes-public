@@ -88,7 +88,7 @@
 <canvas id="c" aria-hidden="true"></canvas>
 <div id="hud">
   <h1>Leeward</h1>
-  <p>click to add a seed. the rest drift on real wind, right now, in Edinburgh.</p>
+  <p id="blurb">click to add a seed. the rest drift on real wind, right now, in Edinburgh.</p>
 </div>
 <div id="wind" aria-live="polite">reaching for the wind&hellip;</div>
 <script>
@@ -96,8 +96,29 @@
   var canvas = document.getElementById('c');
   var ctx = canvas.getContext('2d');
   var windEl = document.getElementById('wind');
+  var blurbEl = document.getElementById('blurb');
   var seedBtn = document.getElementById('seed-btn');
   var seeds = [];
+
+  // Leeward's whole point is unprompted, continuous motion, which is exactly
+  // what prefers-reduced-motion asks sites to cut down on. Ambient seeds
+  // drifting in on their own is the part nobody asked for, so that's what
+  // we drop; a click still adds a seed that drifts with the real wind, and
+  // seeds no longer wobble on top of that drift.
+  var motionQuery = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  var reducedMotion = !!(motionQuery && motionQuery.matches);
+  function updateBlurb() {
+    blurbEl.textContent = reducedMotion
+      ? 'click to add a seed that drifts with the real wind in Edinburgh, right now.'
+      : 'click to add a seed. the rest drift on real wind, right now, in Edinburgh.';
+  }
+  updateBlurb();
+  if (motionQuery && motionQuery.addEventListener) {
+    motionQuery.addEventListener('change', function (e) {
+      reducedMotion = e.matches;
+      updateBlurb();
+    });
+  }
 
   // Edinburgh: thistle is Scotland's national flower.
   var LAT = 55.9533, LON = -3.1883;
@@ -176,6 +197,7 @@
   // ambient seeds drift in on the wind, entering from whichever edge it blows from
   var ambientTimer = 0;
   function maybeSpawnAmbient(dt) {
+    if (reducedMotion) return;
     ambientTimer += dt;
     var rate = Math.max(0.25, Math.min(3, wind.speedKmh / 10)); // seeds per second, roughly
     var interval = 1000 / rate;
@@ -218,7 +240,8 @@
       }
       var tt = s.age / 1000;
       s.y += (s.vy + v.y * push) * (dt / 16);
-      s.x += (v.x * push) * (dt / 16) + Math.sin(tt * s.swaySpeed + s.phase) * s.sway * (dt / 16);
+      s.x += (v.x * push) * (dt / 16) +
+        (reducedMotion ? 0 : Math.sin(tt * s.swaySpeed + s.phase) * s.sway * (dt / 16));
 
       var lifeFrac = s.age / s.life;
       var alpha = lifeFrac < 0.12 ? lifeFrac / 0.12 : (1 - (lifeFrac - 0.12) / 0.88);
