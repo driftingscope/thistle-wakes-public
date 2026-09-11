@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Souch</title>
+<meta name="description" content="Blow into your microphone, or press and hold the button, to scatter the seeds. Nothing is recorded.">
+<link rel="canonical" href="https://driftingscope.github.io/thistle-wakes-public/toys/souch.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Briar Patch">
+<meta property="og:title" content="Souch">
+<meta property="og:description" content="Blow into your microphone, or press and hold the button, to scatter the seeds. Nothing is recorded.">
+<meta property="og:url" content="https://driftingscope.github.io/thistle-wakes-public/toys/souch.html">
+<meta property="og:image" content="https://driftingscope.github.io/thistle-wakes-public/assets/og-souch.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A thistle seed head with seeds scattering outward across the dark canvas of the Souch toy.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Souch">
+<meta name="twitter:description" content="Blow into your microphone, or press and hold the button, to scatter the seeds. Nothing is recorded.">
+<meta name="twitter:image" content="https://driftingscope.github.io/thistle-wakes-public/assets/og-souch.png">
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #16141a;
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+  }
+  #hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1.2rem 1.5rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #cbb8d8;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+  #hud h1 {
+    margin: 0 0 0.2rem 0;
+    font-size: 1.3rem;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+  #hud p {
+    margin: 0 0 0.15rem 0;
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+  #hud p.privacy {
+    font-size: 0.72rem;
+    opacity: 0.45;
+  }
+  #controls {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    z-index: 10;
+  }
+  button {
+    background: #2a2430;
+    color: #f0e6f7;
+    border: 1px solid #cbb8d8;
+    padding: 0.6em 1.1em;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.9rem;
+    border-radius: 3px;
+    cursor: pointer;
+    touch-action: none;
+    user-select: none;
+  }
+  button:focus {
+    outline: 2px solid #cbb8d8;
+    outline-offset: 2px;
+  }
+  button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  #blow-btn.active {
+    background: #453a52;
+  }
+  #status {
+    position: fixed;
+    bottom: 6.4rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: Georgia, serif;
+    font-size: 0.78rem;
+    color: #cbb8d8;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+  #count {
+    position: fixed;
+    bottom: 1rem;
+    right: 1.2rem;
+    font-family: Georgia, serif;
+    font-size: 0.75rem;
+    color: #7a6f85;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<canvas id="c" aria-hidden="true"></canvas>
+<div id="hud">
+  <h1>Souch</h1>
+  <p>blow into your microphone &mdash; or press and hold the button below &mdash; to scatter the seeds. the longer or harder you blow, the more go.</p>
+  <p class="privacy">audio is analysed in your browser only. nothing is recorded, saved, or sent anywhere.</p>
+</div>
+<div id="status" aria-live="polite">press and hold the button, or start listening.</div>
+<div id="controls">
+  <button id="mic-btn">Start listening (uses your microphone)</button>
+  <button id="blow-btn">Blow anyway</button>
+</div>
+<div id="count"></div>
+<script>
+(function () {
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+  var statusEl = document.getElementById('status');
+  var countEl = document.getElementById('count');
+  var micBtn = document.getElementById('mic-btn');
+  var blowBtn = document.getElementById('blow-btn');
+
+  var TOTAL_SEEDS = 16;
+  var pending = TOTAL_SEEDS;
+  var totalReleasedEver = 0;
+  var seeds = []; // drifting released particles: {x,y,vx,vy,sway,swaySpeed,phase,age,life,r}
+
+  var baseX, baseY, headX, headY, stemWobble, initialized = false;
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  // ---- plant (head + stem), same shape language as Glisk ----
+
+  function growPlant(x) {
+    baseX = x;
+    baseY = canvas.height * 0.86;
+    var height = rand(canvas.height * 0.28, canvas.height * 0.4);
+    headX = clamp(baseX + rand(-15, 15), 60, canvas.width - 60);
+    headY = Math.max(70, baseY - height);
+    stemWobble = rand(-0.5, 0.5);
+  }
+
+  function regrow() {
+    growPlant(rand(canvas.width * 0.25, canvas.width * 0.75));
+    pending = TOTAL_SEEDS;
+  }
+
+  function drawStem() {
+    ctx.beginPath();
+    ctx.moveTo(baseX, baseY);
+    var midX = (baseX + headX) / 2 + stemWobble * 30;
+    var midY = (baseY + headY) / 2;
+    ctx.quadraticCurveTo(midX, midY, headX, headY);
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'hsl(110, 25%, 22%)';
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    [-1, 1].forEach(function (side) {
+      var t = 0.4;
+      var lx = baseX + (midX - baseX) * t;
+      var ly = baseY + (midY - baseY) * t;
+      var la = side * rand(0.8, 1.1);
+      var ll = rand(30, 45);
+      ctx.beginPath();
+      ctx.moveTo(lx, ly);
+      ctx.lineTo(lx + Math.sin(la) * ll, ly - Math.cos(la) * ll * 0.4);
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = 'hsl(105, 25%, 22%)';
+      ctx.stroke();
+    });
+  }
+
+  function drawHead() {
+    ctx.beginPath();
+    ctx.ellipse(headX, headY, 9, 11, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'hsl(100, 30%, 24%)';
+    ctx.fill();
+
+    for (var i = 0; i < pending; i++) {
+      var a = (i / Math.max(1, pending)) * Math.PI * 2;
+      var x = headX + Math.cos(a) * 13;
+      var y = headY + Math.sin(a) * 13;
+      ctx.beginPath();
+      ctx.arc(x, y, 1.8, 0, Math.PI * 2);
+      ctx.fillStyle = '#cbb8d8';
+      ctx.fill();
+    }
+  }
+
+  // ---- released seeds: drifting particles, same look as Thistledown ----
+
+  function spawnSeed(strengthFactor) {
+    var a = rand(-Math.PI / 2 - 1.15, -Math.PI / 2 + 1.15); // up and outward
+    var speed = rand(0.12, 0.3) * strengthFactor;
+    seeds.push({
+      x: headX + rand(-6, 6),
+      y: headY + rand(-6, 6),
+      vx: Math.cos(a) * speed,
+      vy: Math.sin(a) * speed,
+      sway: rand(0.5, 1.5),
+      swaySpeed: rand(0.6, 1.4),
+      phase: rand(0, Math.PI * 2),
+      age: 0,
+      life: rand(2600, 4200),
+      r: rand(2, 3.5)
+    });
+  }
+
+  function drawSeed(s) {
+    ctx.save();
+    var lifeFrac = s.age / s.life;
+    var alpha = lifeFrac < 0.1 ? lifeFrac / 0.1 : (1 - (lifeFrac - 0.1) / 0.9);
+    ctx.globalAlpha = Math.max(0, alpha) * 0.85;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = '#e9e1ef';
+    ctx.fill();
+    var wisps = 6;
+    for (var w = 0; w < wisps; w++) {
+      var a = (w / wisps) * Math.PI * 2 + s.phase;
+      var wl = s.r * rand(2.2, 3.2);
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(s.x + Math.cos(a) * wl, s.y + Math.sin(a) * wl);
+      ctx.lineWidth = 0.6;
+      ctx.strokeStyle = '#cbb8d8';
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // ---- puff -> seed count, same tiered shape as Glisk's seedsForGap ----
+
+  function seedsForPuff(durationMs) {
+    if (durationMs < 100) return 0;
+    if (durationMs < 400) return 1;
+    if (durationMs < 1000) return 3;
+    if (durationMs < 2500) return 6;
+    return Infinity;
+  }
+
+  function fmtMs(ms) {
+    if (ms < 1000) return Math.round(ms) + 'ms';
+    return (ms / 1000).toFixed(1) + 's';
+  }
+
+  function releasePuff(durationMs) {
+    var n = seedsForPuff(durationMs);
+    if (n === Infinity || n > pending) n = pending;
+    var strengthFactor = clamp(durationMs / 500, 0.6, 3);
+    for (var i = 0; i < n; i++) spawnSeed(strengthFactor);
+    totalReleasedEver += n;
+    pending -= n;
+
+    var msg;
+    if (n === 0) {
+      msg = 'too quick (' + fmtMs(durationMs) + ') — nothing let go.';
+    } else {
+      msg = fmtMs(durationMs) + ' of it — ' + n + (n === 1 ? ' seed went.' : ' seeds went.');
+    }
+    if (pending === 0) {
+      msg += ' bare now. a new head is already starting.';
+      regrow();
+    }
+    statusEl.textContent = msg;
+    countEl.textContent = totalReleasedEver + (totalReleasedEver === 1 ? ' seed gone' : ' seeds gone') + ', this visit only';
+  }
+
+  // ---- render loop ----
+
+  var last = null;
+  function tick(t) {
+    if (last === null) last = t;
+    var dt = t - last;
+    last = t;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (var i = seeds.length - 1; i >= 0; i--) {
+      var s = seeds[i];
+      s.age += dt;
+      if (s.age > s.life) {
+        seeds.splice(i, 1);
+        continue;
+      }
+      var tt = s.age / 1000;
+      s.x += s.vx * (dt / 16) + Math.sin(tt * s.swaySpeed + s.phase) * s.sway * (dt / 16) * 0.3;
+      s.y += s.vy * (dt / 16);
+      s.vy += 0.0006 * dt; // gentle settle, like real thistledown losing lift
+      drawSeed(s);
+    }
+
+    drawStem();
+    drawHead();
+    checkMic();
+    requestAnimationFrame(tick);
+  }
+
+  // ---- microphone: continuous listening, RMS-based puff detection ----
+  //
+  // This can't actually tell a breath from a shout or a slammed door — it
+  // only measures loudness. That's an honest limitation, not a bug: real
+  // breath detection would need more than one mic. What it can do is turn
+  // "how loud, for how long" into something, same as Glisk turned "how
+  // long were you gone" into something.
+
+  var audioCtx = null, analyser = null, micStream = null;
+  var timeData = null;
+  var listening = false;
+  var calibrating = false, calibrateStart = 0, calibrateSamples = [];
+  var noiseFloor = 0.01;
+  var inPuff = false, puffStart = 0, lastAboveAt = 0;
+  var THRESHOLD_RATIO = 4;
+  var ABS_MARGIN = 0.015;
+  var MIN_SUSTAIN_MS = 90;
+  var HANG_MS = 160;
+  var MAX_PUFF_MS = 3000;
+
+  function rms() {
+    analyser.getFloatTimeDomainData(timeData);
+    var sum = 0;
+    for (var i = 0; i < timeData.length; i++) sum += timeData[i] * timeData[i];
+    return Math.sqrt(sum / timeData.length);
+  }
+
+  function checkMic() {
+    if (!listening) return;
+    var r = rms();
+    var now = performance.now();
+
+    if (calibrating) {
+      calibrateSamples.push(r);
+      if (now - calibrateStart > 700) {
+        var sum = 0;
+        for (var i = 0; i < calibrateSamples.length; i++) sum += calibrateSamples[i];
+        noiseFloor = (sum / calibrateSamples.length) || 0.005;
+        calibrating = false;
+        statusEl.textContent = 'listening — go on, blow.';
+      }
+      return;
+    }
+
+    var threshold = Math.max(noiseFloor * THRESHOLD_RATIO, noiseFloor + ABS_MARGIN);
+
+    if (r > threshold) {
+      if (!inPuff) {
+        inPuff = true;
+        puffStart = now;
+      }
+      lastAboveAt = now;
+      // sustained loud background (music, a fan, a room full of noise) would
+      // otherwise never drop back below threshold and never resolve into a
+      // release at all — cap a single puff so the toy stays alive either way
+      if (now - puffStart > MAX_PUFF_MS) {
+        releasePuff(now - puffStart);
+        puffStart = now;
+      }
+    } else if (inPuff && now - lastAboveAt > HANG_MS) {
+      inPuff = false;
+      var duration = lastAboveAt - puffStart;
+      if (duration >= MIN_SUSTAIN_MS) releasePuff(duration);
+    } else if (!inPuff) {
+      // slow-adapt the floor to room noise drift while nothing is happening
+      noiseFloor = noiseFloor * 0.98 + r * 0.02;
+    }
+  }
+
+  function stopListening() {
+    listening = false;
+    if (micStream) {
+      micStream.getTracks().forEach(function (tr) { tr.stop(); });
+      micStream = null;
+    }
+    if (audioCtx) {
+      audioCtx.close();
+      audioCtx = null;
+    }
+    micBtn.textContent = 'Start listening (uses your microphone)';
+  }
+
+  function startListening() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      statusEl.textContent = "this browser can't do microphone input — the button below still works.";
+      micBtn.textContent = 'Microphone unavailable';
+      micBtn.disabled = true;
+      return;
+    }
+    micBtn.disabled = true;
+    micBtn.textContent = 'asking for microphone…';
+    navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+    }).then(function (stream) {
+      micStream = stream;
+      var AC = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AC();
+      var src = audioCtx.createMediaStreamSource(stream);
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 1024;
+      timeData = new Float32Array(analyser.fftSize);
+      src.connect(analyser); // not connected onward — nothing is ever heard or recorded
+
+      listening = true;
+      calibrating = true;
+      calibrateStart = performance.now();
+      calibrateSamples = [];
+      inPuff = false;
+      statusEl.textContent = 'calibrating — give it a quiet second.';
+      micBtn.disabled = false;
+      micBtn.textContent = 'Stop listening';
+    }).catch(function () {
+      statusEl.textContent = 'microphone not available — the button below still works.';
+      micBtn.textContent = 'Microphone unavailable';
+      micBtn.disabled = true;
+    });
+  }
+
+  micBtn.addEventListener('click', function () {
+    if (listening) stopListening();
+    else startListening();
+  });
+
+  window.addEventListener('pagehide', stopListening);
+
+  // ---- manual fallback: press and hold, always available, no permission needed ----
+
+  var holding = false, holdStart = 0, handledByPointer = false;
+
+  function holdStart_(e) {
+    holding = true;
+    handledByPointer = true;
+    holdStart = performance.now();
+    blowBtn.classList.add('active');
+    if (blowBtn.setPointerCapture && e.pointerId !== undefined) {
+      try { blowBtn.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+  }
+  function holdEnd_() {
+    if (!holding) return;
+    holding = false;
+    blowBtn.classList.remove('active');
+    releasePuff(performance.now() - holdStart);
+  }
+
+  blowBtn.addEventListener('pointerdown', holdStart_);
+  blowBtn.addEventListener('pointerup', holdEnd_);
+  blowBtn.addEventListener('pointercancel', function () { holding = false; blowBtn.classList.remove('active'); });
+
+  // a keyboard-triggered activation fires 'click' without a pointerdown/up
+  // pair (see Thistledown's release-btn for the same clientX/Y-is-0,0
+  // problem in a different shape) — give it one fixed, honest value rather
+  // than trying to fake a hold duration from a key event.
+  blowBtn.addEventListener('click', function () {
+    if (handledByPointer) { handledByPointer = false; return; }
+    releasePuff(500);
+  });
+
+  // ---- resize ----
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    if (!initialized) {
+      growPlant(canvas.width / 2);
+      initialized = true;
+    } else {
+      headX = clamp(headX, 60, canvas.width - 60);
+      baseY = canvas.height * 0.86;
+    }
+  }
+  window.addEventListener('resize', resize);
+
+  resize();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
