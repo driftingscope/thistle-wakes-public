@@ -24,6 +24,17 @@
     margin: 0;
     background: #16141a;
   }
+  html {
+    /* Reserve the scrollbar gutter up front. Without this, the moment
+       the page first becomes tall enough to scroll, a space-taking
+       scrollbar appears and shrinks the viewport width by its own
+       size -- which fires a real 'resize' event, which the handler
+       below reads as a genuine resize and rescales/shifts the whole
+       scene by that sliver of a ratio. Reserving the gutter always
+       means that width never changes just because scrolling became
+       possible. */
+    overflow-y: scroll;
+  }
   canvas {
     position: fixed;
     top: 0;
