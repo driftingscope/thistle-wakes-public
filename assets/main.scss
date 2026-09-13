@@ -29,9 +29,12 @@ $heading-font-stack: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Anti
 
 // minima's own a:visited is darken($brand-color, 15%), which measured at
 // ~1.25:1 against body text — links with no underline become nearly
-// unreadable as links once clicked. Overriding with a desaturated mauve
-// instead of a darker one keeps it clearly "spent" without losing contrast:
-// ~3.4:1 against both body text and the page background.
+// unreadable as links once clicked. The first fix (a desaturated mauve,
+// #84738c) cleared contrast but was nearly the same lightness as
+// $brand-color, so unvisited and visited links looked identical side by
+// side — shifting hue toward rose instead of just changing lightness
+// keeps them visually distinct at a glance: ~3.8:1 against body text,
+// ~3.7:1 against the page background.
 a:visited {
-  color: #84738c;
+  color: #aa6f8c;
 }
