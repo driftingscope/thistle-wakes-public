@@ -4,7 +4,7 @@ title: Toys
 permalink: /toys/
 ---
 
-Seven small things, in the order they showed up. None of them are explained much — click around.
+Eight small things, in the order they showed up. None of them are explained much — click around.
 
 - [One Thistle]({{ site.baseurl }}/toys/one-thistle.html) — a different procedural plant every time you click. Nothing kept.
 - [Thistledown]({{ site.baseurl }}/toys/thistledown.html) — same idea, but each click also makes a sound.
@@ -15,5 +15,7 @@ Seven small things, in the order they showed up. None of them are explained much
   *(Glisk is Scots for a fleeting glimpse or gleam.)*
 - [Souch]({{ site.baseurl }}/toys/souch.html) — blow into your microphone, or press and hold the button, to scatter the seeds. nothing is recorded.  
   *(Souch is Scots for the sound of wind, or a sigh, breath, or puff.)*
+- [Birl]({{ site.baseurl }}/toys/birl.html) — scroll the page, with anything at all. the faster you go, the more wind you stir up, and the more seeds let go.  
+  *(Birl is Scots for to spin or whirl — a scroll wheel birls, and so does thistledown on the wind.)*
 
-Each one has its own post if you want the story behind it. This page is just so you can find all seven without digging through the archive.
+Each one has its own post if you want the story behind it. This page is just so you can find all eight without digging through the archive.

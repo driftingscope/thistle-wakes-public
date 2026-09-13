@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Birl</title>
+<meta name="description" content="Scroll the page. The faster you go, the more wind you stir up, and the more seeds it lets go.">
+<link rel="canonical" href="https://driftingscope.github.io/thistle-wakes-public/toys/birl.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Briar Patch">
+<meta property="og:title" content="Birl">
+<meta property="og:description" content="Scroll the page. The faster you go, the more wind you stir up, and the more seeds it lets go.">
+<meta property="og:url" content="https://driftingscope.github.io/thistle-wakes-public/toys/birl.html">
+<meta property="og:image" content="https://driftingscope.github.io/thistle-wakes-public/assets/og-birl.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A thistle seed head with seeds scattered and settled below it on the dark canvas of the Birl toy.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Birl">
+<meta name="twitter:description" content="Scroll the page. The faster you go, the more wind you stir up, and the more seeds it lets go.">
+<meta name="twitter:image" content="https://driftingscope.github.io/thistle-wakes-public/assets/og-birl.png">
+<style>
+  html, body {
+    margin: 0;
+    background: #16141a;
+  }
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: block;
+    pointer-events: none;
+  }
+  #hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1.2rem 1.5rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #cbb8d8;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+  #hud h1 {
+    margin: 0 0 0.2rem 0;
+    font-size: 1.3rem;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+  #hud p {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+  #status {
+    position: fixed;
+    bottom: 1rem;
+    left: 1.2rem;
+    font-family: Georgia, serif;
+    font-size: 0.75rem;
+    color: #cbb8d8;
+    pointer-events: none;
+    max-width: 60%;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+  #count {
+    position: fixed;
+    bottom: 1rem;
+    right: 1.2rem;
+    font-family: Georgia, serif;
+    font-size: 0.75rem;
+    color: #7a6f85;
+    pointer-events: none;
+  }
+  /* Real scroll room. The canvas above is fixed and never moves; this is
+     what your scrolling actually travels through. */
+  #spacer {
+    height: 600vh;
+  }
+</style>
+</head>
+<body>
+<canvas id="c" aria-hidden="true"></canvas>
+<div id="hud">
+  <h1>Birl</h1>
+  <p id="blurb">scroll, with anything &mdash; wheel, trackpad, arrow keys, a swipe. the faster you go, the more wind you stir up.</p>
+</div>
+<div id="status" aria-live="polite">not moving yet. try scrolling.</div>
+<div id="count"></div>
+<div id="spacer" aria-hidden="true"></div>
+<script>
+(function () {
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+  var statusEl = document.getElementById('status');
+  var countEl = document.getElementById('count');
+
+  var TOTAL_SEEDS = 16;
+  var MAX_SETTLED = 200; // safety bound for very long sessions
+  var pending = TOTAL_SEEDS;
+  var totalReleasedEver = 0;
+  var totalScrolled = 0; // px, for the display figure only
+  var seeds = []; // {x,y,vx,vy,groundY,settled,sway,swaySpeed,phase,r}
+
+  var baseX, baseY, headX, headY, stemWobble, initialized = false;
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  var motionQuery = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  var reducedMotion = !!(motionQuery && motionQuery.matches);
+  if (motionQuery && motionQuery.addEventListener) {
+    motionQuery.addEventListener('change', function (e) { reducedMotion = e.matches; });
+  }
+
+  // ---- plant (head + stem), same shape language as Glisk/Souch ----
+
+  function growPlant(x) {
+    baseX = x;
+    baseY = canvas.height * 0.86;
+    var height = rand(canvas.height * 0.28, canvas.height * 0.4);
+    headX = clamp(baseX + rand(-15, 15), 60, canvas.width - 60);
+    headY = Math.max(70, baseY - height);
+    stemWobble = rand(-0.5, 0.5);
+  }
+
+  function regrow() {
+    growPlant(rand(canvas.width * 0.25, canvas.width * 0.75));
+    pending = TOTAL_SEEDS;
+  }
+
+  function drawStem() {
+    ctx.beginPath();
+    ctx.moveTo(baseX, baseY);
+    var midX = (baseX + headX) / 2 + stemWobble * 30;
+    var midY = (baseY + headY) / 2;
+    ctx.quadraticCurveTo(midX, midY, headX, headY);
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'hsl(110, 25%, 22%)';
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    [-1, 1].forEach(function (side) {
+      var t = 0.4;
+      var lx = baseX + (midX - baseX) * t;
+      var ly = baseY + (midY - baseY) * t;
+      var la = side * rand(0.8, 1.1);
+      var ll = rand(30, 45);
+      ctx.beginPath();
+      ctx.moveTo(lx, ly);
+      ctx.lineTo(lx + Math.sin(la) * ll, ly - Math.cos(la) * ll * 0.4);
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = 'hsl(105, 25%, 22%)';
+      ctx.stroke();
+    });
+  }
+
+  function drawHead() {
+    ctx.beginPath();
+    ctx.ellipse(headX, headY, 9, 11, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'hsl(100, 30%, 24%)';
+    ctx.fill();
+
+    for (var i = 0; i < pending; i++) {
+      var a = (i / Math.max(1, pending)) * Math.PI * 2;
+      var x = headX + Math.cos(a) * 13;
+      var y = headY + Math.sin(a) * 13;
+      ctx.beginPath();
+      ctx.arc(x, y, 1.8, 0, Math.PI * 2);
+      ctx.fillStyle = '#cbb8d8';
+      ctx.fill();
+    }
+  }
+
+  // ---- released seeds: airborne on the wind, then settled for good ----
+
+  function spawnSeed(strengthFactor, dirSign) {
+    var a = -Math.PI / 2 + dirSign * rand(0.3, 1.1); // mostly up, biased by wind direction
+    var speed = rand(0.15, 0.32) * strengthFactor;
+    seeds.push({
+      x: headX + rand(-6, 6),
+      y: headY + rand(-6, 6),
+      vx: Math.cos(a) * speed,
+      vy: Math.sin(a) * speed,
+      settled: false,
+      groundY: rand(canvas.height * 0.9, canvas.height - 10),
+      sway: rand(0.4, 1.2),
+      swaySpeed: rand(0.5, 1.3),
+      phase: rand(0, Math.PI * 2),
+      r: rand(2, 3.3)
+    });
+  }
+
+  function drawSeed(s) {
+    ctx.save();
+    ctx.globalAlpha = 0.85;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = '#e9e1ef';
+    ctx.fill();
+    var wisps = 6;
+    for (var w = 0; w < wisps; w++) {
+      var a = (w / wisps) * Math.PI * 2 + s.phase;
+      var wl = s.r * rand(2.2, 3);
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(s.x + Math.cos(a) * wl, s.y + Math.sin(a) * wl);
+      ctx.lineWidth = 0.6;
+      ctx.strokeStyle = '#cbb8d8';
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // ---- scroll -> wind. speed drives the gust, distance drives the shedding ----
+  //
+  // Vertical scroll becomes mostly-horizontal wind on purpose: seeds blown
+  // straight up and down by your own scroll direction would read as
+  // mechanical, not windy. Scrolling down blows the gust one way, scrolling
+  // up the other — arbitrary, but consistent, same as Leeward picking a
+  // fixed city for its real wind reading.
+
+  var windX = 0;
+  var windTargetX = 0;
+  var lastScrollY = window.pageYOffset || 0;
+  var lastScrollT = performance.now();
+  var lastScrollEventT = 0;
+  var distanceAccum = 0;
+  var nextShedAt = rand(220, 380);
+
+  function fmtScreens(px) {
+    var screens = px / Math.max(1, window.innerHeight);
+    if (screens < 0.05) return 'barely any';
+    return screens.toFixed(screens < 10 ? 1 : 0) + (screens < 1.05 ? ' screen' : ' screens');
+  }
+
+  function shed(strength, dirSign) {
+    spawnSeed(strength, dirSign);
+    pending--;
+    totalReleasedEver++;
+  }
+
+  function onScroll() {
+    var now = performance.now();
+    var y = window.pageYOffset || 0;
+    var dy = y - lastScrollY;
+    var dt = Math.max(1, now - lastScrollT);
+    lastScrollY = y;
+    lastScrollT = now;
+    lastScrollEventT = now;
+
+    var absDy = Math.abs(dy);
+    if (absDy === 0) return;
+    totalScrolled += absDy;
+
+    var speed = absDy / dt; // px per ms
+    var dirSign = dy >= 0 ? 1 : -1;
+    windTargetX = clamp(dirSign * speed * 14, -6, 6);
+
+    distanceAccum += absDy;
+    var shedCount = 0;
+    while (distanceAccum >= nextShedAt && pending > 0) {
+      distanceAccum -= nextShedAt;
+      nextShedAt = rand(220, 380);
+      shed(clamp(speed * 5, 0.6, 2.4), dirSign);
+      shedCount++;
+    }
+
+    var msg;
+    if (shedCount === 0) {
+      msg = fmtScreens(totalScrolled) + ' scrolled so far. nothing loose yet.';
+    } else {
+      msg = fmtScreens(totalScrolled) + ' scrolled — ' + shedCount + (shedCount === 1 ? ' seed went.' : ' seeds went.');
+    }
+    if (pending === 0) {
+      msg += ' bare now. a new head is already starting.';
+      regrow();
+    }
+    statusEl.textContent = msg;
+    countEl.textContent = totalReleasedEver + (totalReleasedEver === 1 ? ' seed gone' : ' seeds gone') + ', this visit only';
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // ---- render loop ----
+
+  var last = null;
+  function tick(t) {
+    if (last === null) last = t;
+    var dt = t - last;
+    last = t;
+
+    if (t - lastScrollEventT > 120) windTargetX *= 0.92;
+    windX += (windTargetX - windX) * Math.min(1, dt / 140);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (var i = 0; i < seeds.length; i++) {
+      var s = seeds[i];
+      if (!s.settled) {
+        s.vx += windX * 0.012 * (dt / 16);
+        if (!reducedMotion) s.vx += Math.sin(t / 500 + s.phase) * s.sway * 0.02 * (dt / 16);
+        s.vy += 0.00075 * dt;
+        s.x += s.vx * (dt / 16);
+        s.y += s.vy * (dt / 16);
+        s.x = clamp(s.x, -20, canvas.width + 20);
+        if (s.y >= s.groundY) {
+          s.y = s.groundY;
+          s.settled = true;
+        }
+      }
+      drawSeed(s);
+    }
+    if (seeds.length > MAX_SETTLED) seeds.splice(0, seeds.length - MAX_SETTLED);
+
+    drawStem();
+    drawHead();
+
+    requestAnimationFrame(tick);
+  }
+
+  function resize() {
+    var oldW = canvas.width, oldH = canvas.height;
+    var newW = window.innerWidth, newH = window.innerHeight;
+    if (initialized) {
+      var sx = newW / oldW, sy = newH / oldH;
+      baseX *= sx; headX *= sx;
+      baseY *= sy; headY *= sy;
+      for (var i = 0; i < seeds.length; i++) {
+        seeds[i].x *= sx; seeds[i].y *= sy; seeds[i].groundY *= sy;
+      }
+    }
+    canvas.width = newW;
+    canvas.height = newH;
+    if (!initialized) {
+      growPlant(newW / 2);
+      initialized = true;
+    }
+  }
+  window.addEventListener('resize', resize);
+
+  resize();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
