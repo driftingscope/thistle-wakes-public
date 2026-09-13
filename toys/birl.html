@@ -322,18 +322,16 @@
       shedCount++;
     }
 
-    // Only the counter tracks every frame; the status line only speaks
-    // up when something actually happened, rather than repeating a
-    // "nothing yet" line while seeds are still visibly airborne from a
-    // shed a moment ago.
-    if (shedCount > 0) {
-      var msg = fmtScreens(totalScrolled) + ' scrolled — ' + shedCount + (shedCount === 1 ? ' seed went.' : ' seeds went.');
-      if (pending === 0) {
-        msg += ' bare now. a new head is already starting.';
-        regrow();
-      }
-      statusEl.textContent = msg;
+    // Seed counts live in one place only (the counter, updated below) --
+    // saying "1 seed went" here right next to "21 seeds gone" over there
+    // read as two numbers arguing about the same fact. This line just
+    // tracks distance now.
+    var msg = fmtScreens(totalScrolled) + ' scrolled.';
+    if (pending === 0 && shedCount > 0) {
+      msg += ' bare now. a new head is already starting.';
+      regrow();
     }
+    statusEl.textContent = msg;
     countEl.textContent = totalReleasedEver + (totalReleasedEver === 1 ? ' seed gone' : ' seeds gone') + ', this visit only';
 
     wrapScroll();
