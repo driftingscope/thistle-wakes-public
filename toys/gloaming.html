@@ -318,6 +318,7 @@
 
     thistles.forEach(function (t) {
       var x = t.xf * canvas.width;
+      x = Math.max(t.w / 2, Math.min(canvas.width - t.w / 2, x));
       ctx.drawImage(t.canvas, x - t.w / 2, groundY - t.h + 4);
     });
 
