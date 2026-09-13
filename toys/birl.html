@@ -127,6 +127,21 @@
 
   // ---- plant (head + stem), same shape language as Glisk/Souch ----
 
+  // Each seed's angle on the head is fixed once, at grow time, and one
+  // is removed (not recomputed) when it sheds -- so a seed leaving opens
+  // a real gap where it sat, instead of every remaining seed quietly
+  // sliding over to keep the ring looking evenly full. Without this,
+  // going from 16 seeds to 15 redraws as "a very slightly sparser
+  // circle," which barely reads as loss at all.
+  var headSeedAngles = [];
+
+  function fillHeadSeedAngles() {
+    headSeedAngles = [];
+    for (var i = 0; i < TOTAL_SEEDS; i++) {
+      headSeedAngles.push((i / TOTAL_SEEDS) * Math.PI * 2 + rand(-0.1, 0.1));
+    }
+  }
+
   function growPlant(x) {
     baseX = x;
     baseY = canvas.height * 0.86;
@@ -134,6 +149,7 @@
     headX = clamp(baseX + rand(-15, 15), 60, canvas.width - 60);
     headY = Math.max(70, baseY - height);
     stemWobble = rand(-0.5, 0.5);
+    fillHeadSeedAngles();
   }
 
   function regrow() {
@@ -173,8 +189,8 @@
     ctx.fillStyle = 'hsl(100, 30%, 24%)';
     ctx.fill();
 
-    for (var i = 0; i < pending; i++) {
-      var a = (i / Math.max(1, pending)) * Math.PI * 2;
+    for (var i = 0; i < headSeedAngles.length; i++) {
+      var a = headSeedAngles[i];
       var x = headX + Math.cos(a) * 13;
       var y = headY + Math.sin(a) * 13;
       ctx.beginPath();
@@ -246,6 +262,7 @@
 
   function shed(strength, dirSign) {
     spawnSeed(strength, dirSign);
+    headSeedAngles.splice(Math.floor(rand(0, headSeedAngles.length)), 1);
     pending--;
     totalReleasedEver++;
   }
@@ -285,10 +302,12 @@
     }
 
     var msg;
-    if (shedCount === 0) {
+    if (shedCount > 0) {
+      msg = fmtScreens(totalScrolled) + ' scrolled — ' + shedCount + (shedCount === 1 ? ' seed went.' : ' seeds went.');
+    } else if (totalReleasedEver === 0) {
       msg = fmtScreens(totalScrolled) + ' scrolled so far. nothing loose yet.';
     } else {
-      msg = fmtScreens(totalScrolled) + ' scrolled — ' + shedCount + (shedCount === 1 ? ' seed went.' : ' seeds went.');
+      msg = fmtScreens(totalScrolled) + ' scrolled so far. nothing new loose yet.';
     }
     if (pending === 0) {
       msg += ' bare now. a new head is already starting.';
