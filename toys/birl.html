@@ -224,8 +224,6 @@
   var windX = 0;
   var windTargetX = 0;
   var lastScrollY = window.pageYOffset || 0;
-  var lastScrollT = performance.now();
-  var lastScrollEventT = 0;
   var distanceAccum = 0;
   var nextShedAt = rand(220, 380);
 
@@ -241,20 +239,28 @@
     totalReleasedEver++;
   }
 
-  function onScroll() {
-    var now = performance.now();
+  // Sampled once per animation frame rather than per DOM 'scroll' event:
+  // a single keyboard-scroll jump used to get judged against the time
+  // since the *previous* scroll event, which could be a second or more
+  // if you were pressing arrow keys deliberately rather than flicking a
+  // wheel — same distance, but read as near-zero speed, so keyboard
+  // scrolling barely stirred any wind at all. Judging it against this
+  // frame's own (tiny, consistent) dt instead means a jump counts for
+  // how far it moved you, not how long you took to make it.
+  function sampleScroll(dt) {
     var y = window.pageYOffset || 0;
     var dy = y - lastScrollY;
-    var dt = Math.max(1, now - lastScrollT);
     lastScrollY = y;
-    lastScrollT = now;
-    lastScrollEventT = now;
+
+    if (dy === 0) {
+      windTargetX *= 0.92;
+      return;
+    }
 
     var absDy = Math.abs(dy);
-    if (absDy === 0) return;
     totalScrolled += absDy;
 
-    var speed = absDy / dt; // px per ms
+    var speed = absDy / Math.max(1, dt); // px per ms
     var dirSign = dy >= 0 ? 1 : -1;
     windTargetX = clamp(dirSign * speed * 14, -6, 6);
 
@@ -280,7 +286,6 @@
     statusEl.textContent = msg;
     countEl.textContent = totalReleasedEver + (totalReleasedEver === 1 ? ' seed gone' : ' seeds gone') + ', this visit only';
   }
-  window.addEventListener('scroll', onScroll, { passive: true });
 
   // ---- render loop ----
 
@@ -290,7 +295,7 @@
     var dt = t - last;
     last = t;
 
-    if (t - lastScrollEventT > 120) windTargetX *= 0.92;
+    sampleScroll(dt);
     windX += (windTargetX - windX) * Math.min(1, dt / 140);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
