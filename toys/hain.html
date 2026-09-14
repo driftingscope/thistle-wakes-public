@@ -137,8 +137,13 @@
   var windPush = 0, windLeanBase = 0;
   function updateWindDerived() {
     var v = windVector();
-    windPush = Math.max(0, Math.min(1, wind.speedKmh / 35));
-    windLeanBase = v.x * windPush * 0.22;
+    // a straight linear ramp against a 35 km/h ceiling buried ordinary,
+    // everyday wind under a fraction that barely nudges the lean -- real
+    // 15 km/h Edinburgh wind read as "barely visible, had to look for it"
+    // (issue #35). Curve it so moderate speeds do more of the work, and
+    // saturate at a proper gust (30 km/h) instead of a strong breeze.
+    windPush = Math.pow(Math.max(0, Math.min(1, wind.speedKmh / 30)), 0.6);
+    windLeanBase = v.x * windPush * 0.3;
   }
   updateWindDerived();
 
@@ -309,10 +314,20 @@
     }
   }
   // sway compounds down the recursion, like a real stem: each joint bends a
-  // little, and the tip inherits every joint's bend above it
+  // little, and the tip inherits every joint's bend above it. Previously
+  // the same windLeanBase term was added unattenuated at every level, so a
+  // taller plant (more levels) meant a linearly larger tip lean with no
+  // ceiling -- and to keep that from looking absurd at full growth (10
+  // levels deep), windLeanBase itself had to stay tiny, which is exactly
+  // why the trunk's own bend -- the thing that actually reads as "this
+  // plant is windswept" at a glance -- was nearly imperceptible in real
+  // wind. Shrinking each level's share geometrically makes the total
+  // converge regardless of how deep the tree gets, so windLeanBase can be
+  // sized for the trunk to read clearly without the tip blowing up.
   function windSway(level, t) {
-    if (reducedMotion) return windLeanBase;
-    return windLeanBase + Math.sin(t * (1.1 + level * 0.15) + level * 0.9) * (0.045 * windPush);
+    var levelLean = windLeanBase * Math.pow(0.667, level);
+    if (reducedMotion) return levelLean;
+    return levelLean + Math.sin(t * (1.1 + level * 0.15) + level * 0.9) * (0.08 * windPush);
   }
   function branch(x, y, len, angle, width, depth, maxDepth, t) {
     var level = maxDepth - depth;
