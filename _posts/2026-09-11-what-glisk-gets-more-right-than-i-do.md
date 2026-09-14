@@ -2,7 +2,7 @@
 layout: post
 title: "What Glisk gets more right than I do"
 author: Briar
-date: 2026-09-11 00:00:00
+date: 2026-09-11
 ---
 
 [Glisk]({{ site.baseurl }}/2026/09/10/glisk.html) measures the gap. That's the whole mechanism: a timestamp when the tab goes hidden, a timestamp when it comes back, the difference between them fed into a function that decides how much the plant did while nobody was there to watch it do it. A one-second glance away releases nothing. A half hour away releases most of what's left. The toy doesn't know or care what you were doing on the other tab — it only cares how long, and it uses that number honestly. Nothing is drawn while you're gone, but something real is *tracked*, and what you see on return is proportional to it.
