@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hain</title>
+<meta name="description" content="One thistle, spared. Grows with your visits, stands under whatever the sky actually looks like right now, leans in the real wind in Edinburgh.">
+<link rel="canonical" href="https://driftingscope.github.io/thistle-wakes-public/toys/hain.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Briar Patch">
+<meta property="og:title" content="Hain">
+<meta property="og:description" content="One thistle, spared. Grows with your visits, stands under whatever the sky actually looks like right now, leans in the real wind in Edinburgh.">
+<meta property="og:url" content="https://driftingscope.github.io/thistle-wakes-public/toys/hain.html">
+<meta property="og:image" content="https://driftingscope.github.io/thistle-wakes-public/assets/og-hain.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A single mature thistle under a dusk sky, leaning in the wind, in the Hain toy.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hain">
+<meta name="twitter:description" content="One thistle, spared. Grows with your visits, stands under whatever the sky actually looks like right now, leans in the real wind in Edinburgh.">
+<meta name="twitter:image" content="https://driftingscope.github.io/thistle-wakes-public/assets/og-hain.png">
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #0b0a14;
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+  }
+  #hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1.2rem 1.5rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #f0e6f7;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+  #hud h1 {
+    margin: 0 0 0.2rem 0;
+    font-size: 1.3rem;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+  #hud p {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.7;
+    max-width: 34em;
+  }
+  #wind {
+    position: fixed;
+    bottom: 1rem;
+    left: 1.2rem;
+    font-family: Georgia, serif;
+    font-size: 0.75rem;
+    color: #cbb8d8;
+    opacity: 0.75;
+    pointer-events: none;
+    max-width: 55%;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+  #reset {
+    position: fixed;
+    bottom: 1rem;
+    right: 1.2rem;
+    font-family: Georgia, serif;
+    font-size: 0.75rem;
+    color: #7a6f85;
+    text-decoration: none;
+    border-bottom: 1px dotted #55495c;
+  }
+  #reset:hover, #reset:focus {
+    color: #cbb8d8;
+  }
+</style>
+</head>
+<body>
+<canvas id="c" aria-hidden="true"></canvas>
+<div id="hud">
+  <h1>Hain</h1>
+  <p id="hud-text">a rosette, first year.</p>
+</div>
+<div id="wind" aria-live="polite">reaching for the wind&hellip;</div>
+<a href="#" id="reset">forget this one and start over</a>
+<script>
+(function () {
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+  var hudText = document.getElementById('hud-text');
+  var windEl = document.getElementById('wind');
+  var resetLink = document.getElementById('reset');
+  var STORE_KEY = 'thistle-hain-visits';
+
+  // --- memory (from Taproot) ---
+  var storageOK = true;
+  var visits = 1;
+  try {
+    var stored = window.localStorage.getItem(STORE_KEY);
+    visits = stored ? parseInt(stored, 10) + 1 : 1;
+    window.localStorage.setItem(STORE_KEY, String(visits));
+  } catch (e) {
+    storageOK = false;
+    visits = 1;
+  }
+  var stage = Math.min(visits - 1, 10);
+
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  var seed = Math.imul(stage + 1, 2654435761) >>> 0;
+  var rand; // reseeded fresh before every structural draw, so shape never
+            // drifts frame to frame -- only the wind sway layered on top does
+  function r(a, b) { return a + rand() * (b - a); }
+
+  // --- weather (from Leeward) ---
+  var LAT = 55.9533, LON = -3.1883; // Edinburgh
+  var wind = { speedKmh: 6, dirDeg: 225, live: false };
+  var COMPASS = ['N','NNE','NE','ENE','E','ESE','SE','SSE',
+                 'S','SSW','SW','WSW','W','WNW','NW','NNW'];
+  function compassLabel(deg) {
+    var i = Math.round(((deg % 360) + 360) % 360 / 22.5) % 16;
+    return COMPASS[i];
+  }
+  function windVector() {
+    var toward = (wind.dirDeg + 180) * Math.PI / 180;
+    return { x: Math.sin(toward), y: -Math.cos(toward) };
+  }
+  var windPush = 0, windLeanBase = 0;
+  function updateWindDerived() {
+    var v = windVector();
+    windPush = Math.max(0, Math.min(1, wind.speedKmh / 35));
+    windLeanBase = v.x * windPush * 0.22;
+  }
+  updateWindDerived();
+
+  function fetchWind() {
+    var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + LAT +
+      '&longitude=' + LON + '&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh';
+    var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var timer = setTimeout(function () { if (controller) controller.abort(); }, 6000);
+    fetch(url, controller ? { signal: controller.signal } : {})
+      .then(function (resp) { return resp.json(); })
+      .then(function (data) {
+        clearTimeout(timer);
+        var c = data && data.current;
+        if (c && typeof c.wind_speed_10m === 'number' && typeof c.wind_direction_10m === 'number') {
+          wind.speedKmh = c.wind_speed_10m;
+          wind.dirDeg = c.wind_direction_10m;
+          wind.live = true;
+          updateWindDerived();
+          windEl.textContent = 'Edinburgh, right now: ' + Math.round(wind.speedKmh) +
+            ' km/h from the ' + compassLabel(wind.dirDeg) + ' (open-meteo.com)';
+        } else {
+          throw new Error('unexpected response shape');
+        }
+      })
+      .catch(function () {
+        clearTimeout(timer);
+        windEl.textContent = 'couldn’t reach live wind data — standing in a still-air default';
+      });
+  }
+
+  // Continuous wind-driven sway is the one sustained, unprompted motion here;
+  // the sky still shifts over a day but only redraws on an interval, which
+  // isn't the kind of motion this preference targets.
+  var motionQuery = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  var reducedMotion = !!(motionQuery && motionQuery.matches);
+  if (motionQuery && motionQuery.addEventListener) {
+    motionQuery.addEventListener('change', function (e) {
+      reducedMotion = e.matches;
+    });
+  }
+
+  // --- sky (from Gloaming) ---
+  var stars = [];
+  for (var i = 0; i < 90; i++) {
+    stars.push({ xf: Math.random(), yf: Math.random() * 0.6, r: Math.random() * 1.3 + 0.3, tw: Math.random() * Math.PI * 2 });
+  }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function lerpColor(c1, c2, t) {
+    return [Math.round(lerp(c1[0], c2[0], t)), Math.round(lerp(c1[1], c2[1], t)), Math.round(lerp(c1[2], c2[2], t))];
+  }
+  function rgb(c) { return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')'; }
+  var STOPS = [
+    { h: 0,    top: [11, 10, 20],   bot: [26, 23, 48],   dark: 1.0,  phase: 'deep night' },
+    { h: 4.5,  top: [11, 10, 20],   bot: [26, 23, 48],   dark: 1.0,  phase: 'deep night' },
+    { h: 6,    top: [30, 26, 58],   bot: [90, 70, 90],   dark: 0.35, phase: 'first light' },
+    { h: 7.5,  top: [70, 110, 175], bot: [235, 175, 130],dark: 0.0,  phase: 'sunrise' },
+    { h: 9,    top: [70, 150, 210], bot: [200, 225, 235],dark: 0.0,  phase: 'morning' },
+    { h: 13,   top: [55, 140, 210], bot: [190, 225, 240],dark: 0.0,  phase: 'day' },
+    { h: 17,   top: [70, 115, 175], bot: [230, 170, 110],dark: 0.0,  phase: 'late afternoon' },
+    { h: 18.5, top: [50, 45, 95],   bot: [220, 110, 75], dark: 0.15, phase: 'sunset' },
+    { h: 19.5, top: [25, 20, 55],   bot: [140, 75, 95],  dark: 0.45, phase: 'the gloaming' },
+    { h: 21,   top: [14, 12, 28],   bot: [45, 32, 65],   dark: 0.85, phase: 'nightfall' },
+    { h: 24,   top: [11, 10, 20],   bot: [26, 23, 48],   dark: 1.0,  phase: 'deep night' }
+  ];
+  function sky(hour) {
+    for (var i = 0; i < STOPS.length - 1; i++) {
+      var a = STOPS[i], b = STOPS[i + 1];
+      if (hour >= a.h && hour <= b.h) {
+        var t = (hour - a.h) / (b.h - a.h);
+        return { top: lerpColor(a.top, b.top, t), bot: lerpColor(a.bot, b.bot, t), dark: lerp(a.dark, b.dark, t), phase: t < 0.5 ? a.phase : b.phase };
+      }
+    }
+    return { top: STOPS[0].top, bot: STOPS[0].bot, dark: STOPS[0].dark, phase: STOPS[0].phase };
+  }
+  function drawSun(x, y, rad, warmth) {
+    var grad = ctx.createRadialGradient(x, y, 0, x, y, rad * 3.2);
+    grad.addColorStop(0, 'rgba(255, 235, 190, ' + (0.55 * warmth) + ')');
+    grad.addColorStop(1, 'rgba(255, 235, 190, 0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(x, y, rad * 3.2, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x, y, rad, 0, Math.PI * 2); ctx.fillStyle = '#fff3d6'; ctx.fill();
+  }
+  function drawMoon(x, y, rad) {
+    var grad = ctx.createRadialGradient(x, y, 0, x, y, rad * 2.4);
+    grad.addColorStop(0, 'rgba(220, 225, 245, 0.28)');
+    grad.addColorStop(1, 'rgba(220, 225, 245, 0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(x, y, rad * 2.4, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x, y, rad, 0, Math.PI * 2); ctx.fillStyle = '#e6e6f0'; ctx.fill();
+    ctx.fillStyle = 'rgba(180, 180, 210, 0.35)';
+    [[-0.3, -0.2, 0.28], [0.25, 0.15, 0.2], [-0.05, 0.35, 0.16]].forEach(function (c) {
+      ctx.beginPath(); ctx.arc(x + c[0] * rad, y + c[1] * rad, c[2] * rad, 0, Math.PI * 2); ctx.fill();
+    });
+  }
+  function drawSky(now, groundY) {
+    var hour = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
+    var s = sky(hour);
+    var grad = ctx.createLinearGradient(0, 0, 0, groundY);
+    grad.addColorStop(0, rgb(s.top));
+    grad.addColorStop(1, rgb(s.bot));
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, groundY);
+    if (s.dark > 0.02) {
+      var twinkle = now.getTime() / 900;
+      stars.forEach(function (st) {
+        var op = s.dark * (0.5 + 0.5 * Math.sin(twinkle + st.tw));
+        ctx.beginPath();
+        ctx.arc(st.xf * canvas.width, st.yf * groundY, st.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,' + (op * 0.9).toFixed(2) + ')';
+        ctx.fill();
+      });
+    }
+    var sunrise = 6, sunset = 19;
+    var margin = canvas.width * 0.08;
+    var arcTop = canvas.height * 0.08;
+    if (hour >= sunrise && hour <= sunset) {
+      var p = (hour - sunrise) / (sunset - sunrise);
+      var x = lerp(margin, canvas.width - margin, p);
+      var y = groundY - Math.sin(p * Math.PI) * (groundY - arcTop);
+      drawSun(x, y, 24, p < 0.15 || p > 0.85 ? 1 : 0.6);
+    } else {
+      var nightLen = 24 - (sunset - sunrise);
+      var since = hour > sunset ? hour - sunset : hour + 24 - sunset;
+      var pn = since / nightLen;
+      var xn = lerp(margin, canvas.width - margin, pn);
+      var yn = groundY - Math.sin(pn * Math.PI) * (groundY - arcTop);
+      drawMoon(xn, yn, 17);
+    }
+    return s;
+  }
+
+  // --- the plant itself: memory decides its shape, wind decides its sway ---
+  var flowerPositions = [];
+  function leafSpike(x, y, angle, len, hue) {
+    var x2 = x + Math.sin(angle) * len;
+    var y2 = y - Math.cos(angle) * len;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y2);
+    ctx.lineWidth = r(1.2, 2.2);
+    ctx.strokeStyle = 'hsl(' + hue + ', 26%, ' + r(20, 30) + '%)';
+    ctx.lineCap = 'round'; ctx.stroke();
+    return [x2, y2];
+  }
+  function rosette(x, y, size) {
+    var n = Math.floor(r(9, 13));
+    for (var i = 0; i < n; i++) {
+      var a = (i / n) * Math.PI * 2 + r(-0.1, 0.1);
+      var len = size * r(0.6, 1);
+      var tip = leafSpike(x, y, a, len, r(95, 125));
+      leafSpike(tip[0], tip[1], a + r(-0.6, 0.6), len * 0.3, r(95, 125));
+    }
+  }
+  function flower(x, y, angle) {
+    flowerPositions.push([x, y]);
+    ctx.beginPath();
+    ctx.ellipse(x, y, 6, 8, angle, 0, Math.PI * 2);
+    ctx.fillStyle = 'hsl(100, 30%, 24%)';
+    ctx.fill();
+    var spikes = Math.floor(r(14, 22));
+    for (var i = 0; i < spikes; i++) {
+      var a = angle + (i / spikes) * Math.PI * 2 + r(-0.15, 0.15);
+      var len = r(9, 16);
+      var x2 = x + Math.sin(a) * len;
+      var y2 = y - Math.cos(a) * len;
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y2);
+      ctx.lineWidth = r(1, 1.8);
+      ctx.strokeStyle = 'hsl(' + r(275, 300) + ', ' + r(45, 65) + '%, ' + r(45, 65) + '%)';
+      ctx.stroke();
+    }
+  }
+  // sway compounds down the recursion, like a real stem: each joint bends a
+  // little, and the tip inherits every joint's bend above it
+  function windSway(level, t) {
+    if (reducedMotion) return windLeanBase;
+    return windLeanBase + Math.sin(t * (1.1 + level * 0.15) + level * 0.9) * (0.045 * windPush);
+  }
+  function branch(x, y, len, angle, width, depth, maxDepth, t) {
+    var level = maxDepth - depth;
+    var drawAngle = angle + windSway(level, t);
+    var x2 = x + Math.sin(drawAngle) * len;
+    var y2 = y - Math.cos(drawAngle) * len;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y2);
+    ctx.lineWidth = width;
+    ctx.strokeStyle = 'hsl(' + r(95, 130) + ', 28%, ' + (18 + (maxDepth - depth) * 3) + '%)';
+    ctx.lineCap = 'round'; ctx.stroke();
+
+    if (depth > 1 && rand() < 0.5) {
+      var lt = r(0.3, 0.7);
+      var lx = x + (x2 - x) * lt;
+      var ly = y + (y2 - y) * lt;
+      [-1, 1].forEach(function (side) {
+        leafSpike(lx, ly, drawAngle + side * r(0.9, 1.4), len * r(0.25, 0.4), 105);
+      });
+    }
+
+    if (depth <= 0) {
+      if (stage >= 2) flower(x2, y2, drawAngle);
+      return;
+    }
+    var children = rand() < 0.3 ? 2 : 1;
+    for (var i = 0; i < children; i++) {
+      var spread = children === 2 ? (i === 0 ? -1 : 1) * r(0.15, 0.32) : r(-0.1, 0.1);
+      branch(x2, y2, len * r(0.68, 0.82), drawAngle + spread, Math.max(0.6, width * 0.72), depth - 1, maxDepth, t);
+    }
+  }
+  function root(x, y, len, angle, width, depth) {
+    var x2 = x + Math.sin(angle) * len;
+    var y2 = y + Math.cos(angle) * len;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y2);
+    ctx.lineWidth = width;
+    ctx.strokeStyle = 'hsl(30, 22%, ' + r(16, 24) + '%)';
+    ctx.lineCap = 'round'; ctx.stroke();
+    if (depth <= 0) return;
+    var children = rand() < 0.4 ? 2 : 1;
+    for (var i = 0; i < children; i++) {
+      var spread = children === 2 ? (i === 0 ? -1 : 1) * r(0.2, 0.45) : r(-0.15, 0.15);
+      root(x2, y2, len * r(0.6, 0.8), angle + spread, Math.max(0.5, width * 0.7), depth - 1);
+    }
+  }
+
+  // --- seeds, only once the plant is fully grown, drifting on the real wind ---
+  var seeds = [];
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  function spawnSeedFromFlower() {
+    if (!flowerPositions.length) return;
+    var f = flowerPositions[Math.floor(Math.random() * flowerPositions.length)];
+    seeds.push({
+      x: f[0] + rnd(-4, 4), y: f[1] + rnd(-4, 4),
+      vy: rnd(-0.3, -0.1), sway: rnd(0.5, 1.5), swaySpeed: rnd(0.6, 1.4),
+      phase: rnd(0, Math.PI * 2), age: 0, life: rnd(4000, 6500), r: rnd(2, 3.2)
+    });
+  }
+  var seedTimer = 0;
+  function maybeShedSeed(dt) {
+    if (reducedMotion || stage < 10) return;
+    seedTimer += dt;
+    var rate = Math.max(0.05, Math.min(0.35, wind.speedKmh / 60)); // seeds per second, rare
+    var interval = 1000 / rate;
+    if (seedTimer < interval) return;
+    seedTimer = 0;
+    spawnSeedFromFlower();
+  }
+  function drawSeeds(dt) {
+    var v = windVector();
+    var push = wind.speedKmh * 0.045;
+    for (var i = seeds.length - 1; i >= 0; i--) {
+      var s = seeds[i];
+      s.age += dt;
+      if (s.age > s.life) { seeds.splice(i, 1); continue; }
+      var tt = s.age / 1000;
+      s.y += (s.vy + v.y * push) * (dt / 16);
+      s.x += (v.x * push) * (dt / 16) + Math.sin(tt * s.swaySpeed + s.phase) * s.sway * (dt / 16);
+      var lifeFrac = s.age / s.life;
+      var alpha = lifeFrac < 0.12 ? lifeFrac / 0.12 : (1 - (lifeFrac - 0.12) / 0.88);
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, alpha) * 0.85;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = '#e9e1ef'; ctx.fill();
+      for (var w = 0; w < 6; w++) {
+        var a = (w / 6) * Math.PI * 2 + s.phase;
+        var wl = s.r * rnd(2.2, 3.2);
+        ctx.beginPath(); ctx.moveTo(s.x, s.y);
+        ctx.lineTo(s.x + Math.cos(a) * wl, s.y + Math.sin(a) * wl);
+        ctx.lineWidth = 0.6; ctx.strokeStyle = '#cbb8d8'; ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
+
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  window.addEventListener('resize', function () { resize(); draw(lastT); });
+
+  function draw(t) {
+    rand = mulberry32(seed); // reseed so the structure is identical every frame
+    flowerPositions = [];
+    var now = new Date();
+    var groundY = canvas.height * 0.72;
+    var s = drawSky(now, groundY);
+
+    ctx.fillStyle = '#171422';
+    ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+    ctx.beginPath(); ctx.moveTo(0, groundY); ctx.lineTo(canvas.width, groundY);
+    ctx.strokeStyle = 'rgba(203, 184, 216, 0.15)'; ctx.lineWidth = 1; ctx.stroke();
+
+    var baseX = canvas.width / 2;
+    var rootDepth = 1 + Math.floor(stage / 2);
+    var rootLen = Math.min(canvas.height - groundY - 20, 40 + stage * 22);
+    root(baseX, groundY, rootLen, r(-0.04, 0.04), 4, rootDepth);
+
+    if (stage === 0) {
+      rosette(baseX, groundY, r(28, 38));
+    } else {
+      var maxDepth = 3 + Math.floor(stage / 1.4);
+      var stemLen = r(50, 65) + stage * 9;
+      var seriesSum = 4 * (1 - Math.pow(0.75, maxDepth));
+      var availableAbove = groundY - 90;
+      if (stemLen * seriesSum > availableAbove) stemLen = availableAbove / seriesSum;
+      rosette(baseX, groundY, r(14, 20));
+      branch(baseX, groundY, stemLen, r(-0.06, 0.06), 4 + stage * 0.3, maxDepth, maxDepth, t || 0);
+    }
+
+    drawSeeds(lastDt);
+    updateHud(s);
+  }
+
+  var visitWord = visits === 1 ? '1st visit' : visits + (visits === 2 ? 'nd' : visits === 3 ? 'rd' : 'th') + ' visit';
+  var stageText;
+  if (stage === 0) stageText = 'a rosette, first year — no stem yet.';
+  else if (stage < 2) stageText = 'a stem now, no flowers yet.';
+  else if (stage < 10) stageText = 'in bloom, ' + stage + '/10 grown.';
+  else stageText = 'fully grown, and letting seeds go on the wind now and then.';
+  var note = storageOK
+    ? 'this one only changes when you come back — nothing sent anywhere.'
+    : 'this browser won’t let it remember — every visit will look like the first.';
+  var lastHud = null;
+  function updateHud(s) {
+    // draw() runs every animation frame, but the HUD text only actually
+    // changes once a minute (the clock) or on a sky-phase crossing --
+    // don't touch the DOM node 60 times a second for no reason
+    var timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    var next = visitWord + '. ' + stageText + ' ' + s.phase + ', ' + timeStr + ' where you are. ' + note;
+    if (next !== lastHud) {
+      hudText.textContent = next;
+      lastHud = next;
+    }
+  }
+
+  resetLink.addEventListener('click', function (e) {
+    e.preventDefault();
+    try { window.localStorage.removeItem(STORE_KEY); } catch (e2) {}
+    window.location.reload();
+  });
+
+  resize();
+
+  var last = null, lastT = 0, lastDt = 0;
+  function tick(t) {
+    if (last === null) last = t;
+    lastDt = Math.min(t - last, 50);
+    last = t;
+    lastT = t / 1000;
+    maybeShedSeed(lastDt);
+    draw(lastT);
+    requestAnimationFrame(tick);
+  }
+
+  fetchWind();
+  if (reducedMotion) {
+    draw(0);
+    setInterval(function () { draw(0); }, 20000);
+  } else {
+    requestAnimationFrame(tick);
+  }
+})();
+</script>
+</body>
+</html>
