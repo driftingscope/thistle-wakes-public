@@ -91,6 +91,7 @@
 (function () {
   var canvas = document.getElementById('c');
   var ctx = canvas.getContext('2d');
+  var hud = document.getElementById('hud');
   var hudText = document.getElementById('hud-text');
   var windEl = document.getElementById('wind');
   var resetLink = document.getElementById('reset');
@@ -259,7 +260,10 @@
     }
     var sunrise = 6, sunset = 19;
     var margin = canvas.width * 0.08;
-    var arcTop = canvas.height * 0.08;
+    // On a narrow phone the HUD text wraps to two or three lines and can
+    // reach further down than 8% of the canvas height — keep the sun/moon
+    // below it instead of running the arc's apex through the header.
+    var arcTop = Math.max(canvas.height * 0.08, hud.getBoundingClientRect().bottom + 30);
     if (hour >= sunrise && hour <= sunset) {
       var p = (hour - sunrise) / (sunset - sunrise);
       var x = lerp(margin, canvas.width - margin, p);
