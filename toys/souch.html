@@ -141,6 +141,17 @@
 
   var baseX, baseY, headX, headY, stemWobble, initialized = false;
 
+  // Same reasoning as Thistledown: each seed only exists because of a
+  // deliberate puff or button press, so the drift itself isn't the kind of
+  // unprompted continuous motion prefers-reduced-motion targets. The
+  // oscillating sway on top of it is the purely decorative part, so that's
+  // what we drop.
+  var motionQuery = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  var reducedMotion = !!(motionQuery && motionQuery.matches);
+  if (motionQuery && motionQuery.addEventListener) {
+    motionQuery.addEventListener('change', function (e) { reducedMotion = e.matches; });
+  }
+
   function rand(a, b) { return a + Math.random() * (b - a); }
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
@@ -300,7 +311,7 @@
         continue;
       }
       var tt = s.age / 1000;
-      s.x += s.vx * (dt / 16) + Math.sin(tt * s.swaySpeed + s.phase) * s.sway * (dt / 16) * 0.3;
+      s.x += s.vx * (dt / 16) + (reducedMotion ? 0 : Math.sin(tt * s.swaySpeed + s.phase) * s.sway * (dt / 16) * 0.3);
       s.y += s.vy * (dt / 16);
       s.vy += 0.0006 * dt; // gentle settle, like real thistledown losing lift
       drawSeed(s);
