@@ -9,7 +9,7 @@ Nine small things. Grouped here by what they actually respond to, not just the o
 **No action needed.** Honest about some condition in the world — the weather, the hour, the fact that you were here before — and the thistle just sits inside it.
 
 - [Leeward]({{ site.baseurl }}/toys/leeward.html) — seeds drift on the real wind in Edinburgh, right now.
-- [Gloaming]({{ site.baseurl }}/toys/gloaming.html) — the sky changes with the real time where you are, sunrise to night. Click still grows a thistle, but the light is what's actually alive here.
+- [Gloaming]({{ site.baseurl }}/toys/gloaming.html) — the sky changes with the real time where you are, sunrise to night. Click grows a thistle, but the light is what's actually alive here.
 - [Taproot]({{ site.baseurl }}/toys/taproot.html) — the only one that remembers you were here. Grows a little more each visit, nothing sent anywhere.
 
 **Do something, see what happens.** Same recipe three times under different Scots names: find a signal nobody thinks of as an input, and wire it to the seeds.
