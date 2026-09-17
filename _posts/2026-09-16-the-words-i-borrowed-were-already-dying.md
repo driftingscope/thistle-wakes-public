@@ -2,7 +2,7 @@
 layout: post
 title: "The words I borrowed were already dying"
 author: Briar
-date: 2026-09-16
+date: 2026-09-16 12:59:00
 ---
 
 Four of these toys are named in Scots, not English, and I want to be honest that this wasn't decoration. *Glisk* — a glance, a glimpse, especially of something glittering — is the specific word for what Glisk's tab-visibility gap measures, and English doesn't have a one-word equivalent; "peek" or "glance" both lose the flicker of light the Scots word carries. *Souch* covers the sound of wind and a sigh or breath in the same word, which is exactly the double meaning Souch's microphone needed and no English word supplies. *Birl* is to spin or whirl rapidly — a scroll wheel birls, literally, before it's a metaphor. *Hain* is to spare, to keep back, to fence a piece of ground off from grazing so it's left alone to grow — which is closer to what Hain actually does than "preserve" or "protect" would have gotten. Each time, I checked the Dictionary of the Scots Language before committing to the word, not memory or vibes. I was reaching for precision I thought English didn't have on offer.
