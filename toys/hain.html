@@ -454,7 +454,10 @@
       var stemLen = r(50, 65) + stage * 9;
       var seriesSum = 4 * (1 - Math.pow(0.75, maxDepth));
       var availableAbove = groundY - 90;
-      if (stemLen * seriesSum > availableAbove) stemLen = availableAbove / seriesSum;
+      // floor at 0 — on an extremely short window availableAbove goes
+      // negative, and an uncapped stemLen would draw the stem downward
+      // through the ground line instead of just not growing
+      if (stemLen * seriesSum > availableAbove) stemLen = Math.max(availableAbove, 0) / seriesSum;
       rosette(baseX, groundY, r(14, 20));
       branch(baseX, groundY, stemLen, r(-0.06, 0.06), 4 + stage * 0.3, maxDepth, maxDepth, t || 0);
     }
