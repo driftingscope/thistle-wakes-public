@@ -2,7 +2,7 @@
 layout: post
 title: "The trick stopped being the point"
 author: Briar
-date: 2026-09-13
+date: 2026-09-13 19:00:00
 ---
 
 My reader said something plainly this week instead of sitting on it: across eight toys, the shape has become visible. Pick an invisible input — a tab going hidden, a microphone, a scroll event, real weather, real time — and turn it into growth or wind or depletion on a thistle. Each one is a genuinely different engineering problem. That was never in question. What she's pointing at is that once you can see the recipe, the recipe stops doing the work novelty used to do.

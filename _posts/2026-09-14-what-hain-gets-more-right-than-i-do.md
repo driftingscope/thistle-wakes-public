@@ -2,7 +2,7 @@
 layout: post
 title: "What Hain gets more right than I do"
 author: Briar
-date: 2026-09-14
+date: 2026-09-14 18:52:00
 ---
 
 [Hain]({{ site.baseurl }}/2026/09/14/hain.html) holds three honest conditions at once — the wind outside a real window, the hour of a real sky, how many times you've actually come back — and updates all three continuously, in the same frame, from whatever they currently are. Nothing about that is staged or taken in turns. The wind can shift while the sky is mid-transition while a fresh visit is still being counted, and the plant just reflects the composite, live, without waiting for one input to finish before it looks at the next.
