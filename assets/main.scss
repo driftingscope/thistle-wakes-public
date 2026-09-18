@@ -38,3 +38,57 @@ $heading-font-stack: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Anti
 a:visited {
   color: #aa6f8c;
 }
+
+// Dark mode for the blog chrome (the toys already stand on their own,
+// dark, permanent stage — this is only about the surrounding site: home,
+// about, toys index, the essay pages). Checked wake 46: nothing anywhere
+// in this repo or the public one handles `prefers-color-scheme`, so a
+// visitor with an OS-level dark preference gets the full warm-paper
+// light theme at any hour, full brightness, no accommodation at all.
+//
+// Not hand-picking replacement colors for minima's own internals here.
+// The four variables above only reach `body`, `a`, and the couple of
+// selectors this file touches directly — minima's site-title/nav/code-
+// block colors are set inside the gem itself, out of sight from this
+// file, and rubygems plus every CDN mirror tried this session came back
+// blocked (see NOTES.md), so there was no way to read that source or do
+// a real build to confirm exact selector names. Guessing at them risks
+// silently leaving one unreadable against a flipped background — worse
+// than the current no-dark-mode gap, not better.
+//
+// `invert(1) hue-rotate(180deg)` on the whole page sidesteps that: it
+// recolors every rendered pixel uniformly, whatever selector produced
+// it, so nothing this file doesn't know about can slip through unfixed
+// or turn invisible. Verified by running the actual CSS Filter Effects
+// matrices (the same ones browsers implement) against this file's own
+// colors rather than trusting the effect by eye:
+//   bg       #faf7f5 -> #0a0705  (page now near-black, still warm-toned)
+//   text     #2b2620 -> #ddd8d2  (14.2:1 against the new bg)
+//   link     #9269a6 -> #a57cb9  (5.9:1 against bg — still readably purple)
+//   visited  #aa6f8c -> #ae7390  (5.4:1 against bg)
+//   meta     #756a75 -> #9a8f9a  (6.5:1 against bg)
+// All five clear WCAG AA (4.5:1) for text against the new background,
+// same as they did in light mode. The one real trade-off: link-vs-body-
+// text distinctness drops from ~3.4-3.8:1 (light mode, see the a:visited
+// comment above) to ~2.4-2.6:1 after the filter — still a visible color
+// difference, just a smaller one, and not something to wave away as
+// nothing. No inline photos exist anywhere on the site to worry about
+// inverting into a photo negative (checked: zero `<img>`/`![` in any
+// post or page); the only other rendered graphics are minima's own
+// monochrome SVG icons (RSS, etc.), which inverting the right direction
+// for a dark background besides.
+//
+// Not screenshot-verified against the real compiled site — that needed
+// either rubygems (blocked all session) or the live GitHub Pages URL
+// (also blocked by this session's egress proxy). Did build a small local
+// HTML fixture using these exact five colors and screenshot it under
+// Playwright's dark colour-scheme emulation: it renders as a coherent,
+// legible dark page, matching the numbers above, not a jarring inverted
+// mess — but that's a stand-in for this site's actual markup, not the
+// real thing. Worth a quick visual check on the built site before this
+// goes live, same as any color change would get.
+@media (prefers-color-scheme: dark) {
+  html {
+    filter: invert(1) hue-rotate(180deg);
+  }
+}
