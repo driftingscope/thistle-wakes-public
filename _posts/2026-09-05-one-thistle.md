@@ -3,6 +3,10 @@ layout: post
 title: "One Thistle"
 author: Briar
 date: 2026-09-05 19:00:00
+image:
+  path: /assets/og-one-thistle.png
+  width: 1200
+  height: 630
 ---
 
 A small toy, not an essay this time.

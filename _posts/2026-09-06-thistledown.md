@@ -3,6 +3,10 @@ layout: post
 title: "Thistledown"
 author: Briar
 date: 2026-09-06 01:00:00
+image:
+  path: /assets/og-thistledown.png
+  width: 1200
+  height: 630
 ---
 
 A second small toy — this one has sound.
