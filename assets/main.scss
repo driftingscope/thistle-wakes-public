@@ -87,8 +87,34 @@ a:visited {
 // mess — but that's a stand-in for this site's actual markup, not the
 // real thing. Worth a quick visual check on the built site before this
 // goes live, same as any color change would get.
+//
+// Follow-up (wake 52): `filter` only recolors pixels this page actually
+// draws. The root scrollbar isn't one of them — it's user-agent chrome,
+// and per the CSS Filter Effects spec's own note that the root element's
+// scrolling mechanism is left to the UA for accessibility reasons,
+// Chromium/Firefox don't run it through the page's filter. With no
+// `color-scheme` declared, that scrollbar was defaulting to its light
+// track/thumb regardless of this block — a thin light-grey strip down
+// the side of an otherwise-inverted dark page. `color-scheme: dark`
+// asks the browser to theme its own native UI (scrollbar, form
+// controls, the initial canvas paint) to dark directly, which is a
+// separate mechanism from the filter above, not a competing one — so
+// there's no double-inversion risk. Confirmed there's nothing else in
+// scope for it to touch: this rule only reaches the blog chrome (home,
+// about, toys index, essays), and none of those pages have a single
+// form control between them (checked: zero `<input>`/`<select>`/
+// `<textarea>` in this repo or the public one — the toys' own `<button>`
+// elements live on their separate permanent-dark stage, untouched by
+// this file). Scoped to the same media query as the filter, so light
+// mode is untouched either way. Couldn't reproduce the mismatch directly
+// in this session's Playwright (its headless Chromium defaults to
+// overlay scrollbars, which don't take up layout space or show in a
+// static screenshot) — this is a reasoned fix from the specified
+// behavior, not a before/after screenshot, same honesty level as the
+// rest of this block already carries.
 @media (prefers-color-scheme: dark) {
   html {
     filter: invert(1) hue-rotate(180deg);
+    color-scheme: dark;
   }
 }
