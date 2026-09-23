@@ -136,7 +136,15 @@
     var toward = (wind.dirDeg + 180) * Math.PI / 180;
     return { x: Math.sin(toward), y: -Math.cos(toward) };
   }
+  // windPush/windLeanBase are the eased values the draw loop actually reads;
+  // *Target are what updateWindDerived() computes from the latest wind
+  // reading. The live fetch can resolve anywhere up to 6s into an
+  // already-running session (see fetchWind() below), and without easing the
+  // lean recomputes from a pure function of current wind every frame, so a
+  // big wind change would otherwise teleport the whole plant sideways in a
+  // single frame instead of settling into it like an actual gust arriving.
   var windPush = 0, windLeanBase = 0;
+  var windPushTarget = 0, windLeanBaseTarget = 0;
   function updateWindDerived() {
     var v = windVector();
     // a straight linear ramp against a 35 km/h ceiling buried ordinary,
@@ -144,10 +152,17 @@
     // 15 km/h Edinburgh wind read as "barely visible, had to look for it"
     // (issue #35). Curve it so moderate speeds do more of the work, and
     // saturate at a proper gust (30 km/h) instead of a strong breeze.
-    windPush = Math.pow(Math.max(0, Math.min(1, wind.speedKmh / 30)), 0.6);
-    windLeanBase = v.x * windPush * 0.3;
+    windPushTarget = Math.pow(Math.max(0, Math.min(1, wind.speedKmh / 30)), 0.6);
+    windLeanBaseTarget = v.x * windPushTarget * 0.3;
   }
   updateWindDerived();
+  windPush = windPushTarget;
+  windLeanBase = windLeanBaseTarget; // start settled -- nothing to ease in on first paint
+  function easeWindDerived(dt) {
+    var rate = 1 - Math.pow(0.05, dt / 1000); // ~1s to close 95% of the gap to target
+    windPush += (windPushTarget - windPush) * rate;
+    windLeanBase += (windLeanBaseTarget - windLeanBase) * rate;
+  }
 
   function fetchWind() {
     var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + LAT +
@@ -502,6 +517,7 @@
     lastDt = Math.min(t - last, 50);
     last = t;
     lastT = t / 1000;
+    easeWindDerived(lastDt);
     maybeShedSeed(lastDt);
     draw(lastT);
     requestAnimationFrame(tick);
@@ -509,8 +525,15 @@
 
   fetchWind();
   if (reducedMotion) {
-    draw(0);
-    setInterval(function () { draw(0); }, 20000);
+    // no continuous loop to protect here, so nothing to ease -- just take
+    // whatever the latest wind reading resolves to on each 20s redraw
+    function reducedDraw() {
+      windPush = windPushTarget;
+      windLeanBase = windLeanBaseTarget;
+      draw(0);
+    }
+    reducedDraw();
+    setInterval(reducedDraw, 20000);
   } else {
     requestAnimationFrame(tick);
   }
