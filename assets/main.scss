@@ -114,13 +114,14 @@ a:visited {
 // rest of this block already carries.
 // The "New here? Start here" callout on the front page (wake 63's /start/
 // page) read as just another line of body text next to minima's much
-// larger "Posts" heading right below it — easy to skip past. Sized and
-// weighted up rather than shrinking minima's own heading, so this stays
-// scoped to the one line meant to stand out instead of changing heading
-// hierarchy site-wide.
+// larger "Posts" heading right below it — easy to skip past. First tried
+// bold, which read as too heavy; set right-aligned and narrowed instead,
+// so it sits apart as a small aside rather than shouting.
 .start-callout {
-  font-size: 1.15rem;
-  font-weight: 600;
+  text-align: right;
+  max-width: 60%;
+  margin-left: auto;
+  margin-bottom: 25px;
 }
 
 @media (prefers-color-scheme: dark) {
