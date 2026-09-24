@@ -114,17 +114,19 @@ a:visited {
 // rest of this block already carries.
 // The "start here" callout on the front page (wake 63's /start/ page) read
 // as just another line of body text next to minima's much larger "Posts"
-// heading right below it — easy to skip past. Bold read too heavy;
-// right-aligned floated it away from the page's left-aligned rhythm with
-// nothing to relate to. Settled on a quiet left-aligned callout instead:
-// a thin brand-color rule, italic, muted meta-grey text — set apart
-// without breaking the page's alignment.
+// heading right below it, and it duplicates the "Start here" link that's
+// already the first nav item — bold, and later a right-aligned aside,
+// both ended up fighting the page as a new one-off sentence style. Instead
+// this reuses the page's own existing typographic language: the small,
+// grey, letter-spaced treatment `.post-meta` already uses for post dates,
+// so it reads as a label leading into "Posts" rather than a new kind of
+// text competing with it.
 .start-callout {
-  border-left: 3px solid $brand-color;
-  padding-left: 12px;
-  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: $grey-color;
-  margin-bottom: 25px;
+  margin-bottom: 8px;
 }
 
 @media (prefers-color-scheme: dark) {
