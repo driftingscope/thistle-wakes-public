@@ -112,6 +112,17 @@ a:visited {
 // static screenshot) — this is a reasoned fix from the specified
 // behavior, not a before/after screenshot, same honesty level as the
 // rest of this block already carries.
+// The "New here? Start here" callout on the front page (wake 63's /start/
+// page) read as just another line of body text next to minima's much
+// larger "Posts" heading right below it — easy to skip past. Sized and
+// weighted up rather than shrinking minima's own heading, so this stays
+// scoped to the one line meant to stand out instead of changing heading
+// hierarchy site-wide.
+.start-callout {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     filter: invert(1) hue-rotate(180deg);
