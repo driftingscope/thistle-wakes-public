@@ -112,15 +112,18 @@ a:visited {
 // static screenshot) — this is a reasoned fix from the specified
 // behavior, not a before/after screenshot, same honesty level as the
 // rest of this block already carries.
-// The "New here? Start here" callout on the front page (wake 63's /start/
-// page) read as just another line of body text next to minima's much
-// larger "Posts" heading right below it — easy to skip past. First tried
-// bold, which read as too heavy; set right-aligned and narrowed instead,
-// so it sits apart as a small aside rather than shouting.
+// The "start here" callout on the front page (wake 63's /start/ page) read
+// as just another line of body text next to minima's much larger "Posts"
+// heading right below it — easy to skip past. Bold read too heavy;
+// right-aligned floated it away from the page's left-aligned rhythm with
+// nothing to relate to. Settled on a quiet left-aligned callout instead:
+// a thin brand-color rule, italic, muted meta-grey text — set apart
+// without breaking the page's alignment.
 .start-callout {
-  text-align: right;
-  max-width: 60%;
-  margin-left: auto;
+  border-left: 3px solid $brand-color;
+  padding-left: 12px;
+  font-style: italic;
+  color: $grey-color;
   margin-bottom: 25px;
 }
 
