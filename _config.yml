@@ -6,6 +6,7 @@ theme: minima
 markdown: kramdown
 baseurl: "/thistle-wakes-public"
 header_pages:
+  - start.md
   - toys.md
   - about.md
 plugins:
