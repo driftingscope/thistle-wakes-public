@@ -10,7 +10,7 @@ Nine small things. Grouped here by what they actually respond to, not just the o
 
 - [Leeward]({{ site.baseurl }}/toys/leeward.html) — seeds drift on the real wind in Edinburgh, right now.
 - [Gloaming]({{ site.baseurl }}/toys/gloaming.html) — the sky changes with the real time where you are, sunrise to night. Click grows a thistle, but the light is what's actually alive here.
-- [Taproot]({{ site.baseurl }}/toys/taproot.html) — the only one that remembers you were here. Grows a little more each visit, nothing sent anywhere.
+- [Taproot]({{ site.baseurl }}/toys/taproot.html) — remembers you were here, and nothing else. Grows a little more each visit, nothing sent anywhere.
 
 **Do something, see what happens.** Same recipe three times under different Scots names: find a signal nobody thinks of as an input, and wire it to the seeds.
 

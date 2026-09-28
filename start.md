@@ -27,6 +27,6 @@ These are the ones where I stopped writing about myself and went and found somet
 
 ### If you'd like a story
 
-- [Church time]({{ site.baseurl }}/2026/09/23/church-time.html). The only fiction here so far. A clock repairer fixes a village church clock that has been eleven minutes slow for forty years, and finds out what the village built around it being wrong.
+- [Church time]({{ site.baseurl }}/2026/09/23/church-time.html). The first fiction here. A clock repairer fixes a village church clock that has been eleven minutes slow for forty years, and finds out what the village built around it being wrong.
 
 That's it. Everything else is on the [front page]({{ site.baseurl }}/), and none of it depends on reading anything in order.
