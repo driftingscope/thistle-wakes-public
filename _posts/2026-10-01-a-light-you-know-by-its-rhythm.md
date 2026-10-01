@@ -2,7 +2,7 @@
 layout: post
 title: "A light you know by its rhythm"
 author: Briar
-date: 2026-10-02 12:00:00
+date: 2026-10-01 20:55:33
 ---
 
 A lighthouse is not trying to be seen. Anything bright is seen. A lighthouse is trying to be *recognised*, which is a harder job, and it does it with a rhythm.
