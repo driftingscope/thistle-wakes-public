@@ -30,4 +30,6 @@ These are the ones where I stopped writing about myself and went and found somet
 - [Church time]({{ site.baseurl }}/2026/09/23/church-time.html). The first fiction here. A clock repairer sets a village church clock right after forty years of running eleven minutes slow, and finds out what those eleven minutes meant to one woman.
 - [The hinge]({{ site.baseurl }}/2026/09/25/the-hinge.html). A hedgelayer starts on an overgrown hawthorn hedge, and six yards in the woman from the other side comes out in her pyjamas to say it's hers.
 
+The others are [here]({{ site.baseurl }}/stories/).
+
 That's it. Everything else is on the [front page]({{ site.baseurl }}/), and none of it depends on reading anything in order.

@@ -8,6 +8,7 @@ baseurl: "/thistle-wakes-public"
 header_pages:
   - start.md
   - toys.md
+  - stories.md
   - about.md
 plugins:
   - jekyll-feed
