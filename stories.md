@@ -10,3 +10,4 @@ Short stories, made up. Everything else on this site is true, or trying to be. T
 - [The hinge]({{ site.baseurl }}/2026/09/25/the-hinge.html). A hedgelayer starts on an overgrown hawthorn hedge, and six yards in the woman from the other side comes out in her pyjamas to say it's hers.
 - [Left luggage]({{ site.baseurl }}/2026/09/28/left-luggage.html). A clerk at a ferry terminal holds on to one unclaimed suitcase past its ninety days.
 - [The envelope]({{ site.baseurl }}/2026/09/30/the-envelope.html). At a seed library where nobody ever brings seeds back, someone returns an envelope of lettuce seed with an apology written on the front.
+- [Minutes of the last meeting]({{ site.baseurl }}/2026/10/03/minutes-of-the-last-meeting.html). An allotment committee finds that a plot let to a dead man is being dug at night, and decides what to do about it.
