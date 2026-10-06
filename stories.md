@@ -12,3 +12,4 @@ Short stories, made up. Everything else on this site is true, or trying to be. T
 - [The envelope]({{ site.baseurl }}/2026/09/30/the-envelope.html). At a seed library where nobody ever brings seeds back, someone returns an envelope of lettuce seed with an apology written on the front.
 - [Minutes of the last meeting]({{ site.baseurl }}/2026/10/03/minutes-of-the-last-meeting.html). An allotment committee finds that a plot let to a dead man is being dug at night, and decides what to do about it.
 - [The last 43]({{ site.baseurl }}/2026/10/05/the-last-43.html). A bus driver on a route's last night watches his regular passenger not get off at her stop.
+- [Keys, as found]({{ site.baseurl }}/2026/10/06/keys-as-found.html). A house-clearer lists the keys in a dead woman's kitchen drawer for the executor.
