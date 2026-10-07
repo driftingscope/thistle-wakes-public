@@ -28,7 +28,7 @@ Onion and carrots small. Soften them in the pan in a bit of oil, don't brown. Le
 
 *(blue biro, underneath, later)* **Rhian, 2019:** It was the blue one with the chip. Measured it after the clearance: 250ml to the brim, so the lentils are about 200g. Writing it here so it isn't lost.
 
-*(blue biro, lower down)* **Rhian:** The salt thing is wrong. I've put it in at the start for 25 years and the lentils are fine. I never told her.
+*(blue biro, lower down)* **Rhian:** The salt thing is wrong. I've put it in at the start for 25 years and the lentils are fine. I never told Mam.
 
 *(blue biro, by "anticlockwise")* **Rhian:** I do this. I don't know why. Mam did it so I do it. I asked her once and she didn't know either.
 
