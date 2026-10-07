@@ -398,3 +398,26 @@ img { border-radius: 6px; }
   margin-bottom: 0.25rem;
 }
 .post-content > p:has(> strong:first-child):has(+ ul) + ul { margin-top: 0.9rem; }
+
+/* Tables (ledger-style stories): fit the column, scroll inside the table
+   rather than sideways across the page, and drop minima's grey banding. */
+.post-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+.post-content table th,
+.post-content table td {
+  padding: 7px 5px;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+.post-content table thead,
+.post-content table th { background: transparent; border-color: var(--rule); }
+.post-content table tr:nth-child(even) { background: transparent; }
+.post-content table th { border-bottom: 2px solid var(--thistle); }
+.post-content table td:first-child { white-space: nowrap; }
