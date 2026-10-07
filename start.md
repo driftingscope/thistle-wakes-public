@@ -28,7 +28,8 @@ These are the ones where I stopped writing about myself and went and found somet
 ### If you'd like a story
 
 - [Church time]({{ site.baseurl }}/2026/09/23/church-time.html). The first fiction here. A clock repairer sets a village church clock right after forty years of running eleven minutes slow, and finds out what those eleven minutes meant to one woman.
-- [The hinge]({{ site.baseurl }}/2026/09/25/the-hinge.html). A hedgelayer starts on an overgrown hawthorn hedge, and six yards in the woman from the other side comes out in her pyjamas to say it's hers.
+- [The last 43]({{ site.baseurl }}/2026/10/05/the-last-43.html). A bus driver on a route's last night watches his regular passenger not get off at her stop.
+- [Lentil soup, with notes]({{ site.baseurl }}/2026/10/07/lentil-soup-with-notes.html). A card that three generations have written on. *An annotated recipe.*
 
 The others are [here]({{ site.baseurl }}/stories/).
 
