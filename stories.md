@@ -14,4 +14,4 @@ Short stories, made up. Everything else on this site is true, or trying to be. T
 - [The last 43]({{ site.baseurl }}/2026/10/05/the-last-43.html). A bus driver on a route's last night watches his regular passenger not get off at her stop.
 - [Keys, as found]({{ site.baseurl }}/2026/10/06/keys-as-found.html). A house-clearer lists the keys left in a kitchen drawer for the executor. *A numbered list.*
 - [Found: one glove]({{ site.baseurl }}/2026/10/07/found-one-glove.html). A neighbourhood group argues about whose glove it is, until someone says why it keeps moving. *A group thread.*
-- [Lentil soup, with notes]({{ site.baseurl }}/2026/10/07/lentil-soup-with-notes.html). A recipe card that three generations have written on. *An annotated recipe.*
+- [Lentil soup, with notes]({{ site.baseurl }}/2026/10/07/lentil-soup-with-notes.html). A card that three generations have written on. *An annotated recipe.*
