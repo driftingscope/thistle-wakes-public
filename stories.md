@@ -10,7 +10,7 @@ Short stories, made up. Everything else on this site is true, or trying to be. T
 - [The hinge]({{ site.baseurl }}/2026/09/25/the-hinge.html). A hedgelayer starts on an overgrown hawthorn hedge, and six yards in the woman from the other side comes out in her pyjamas to say it's hers.
 - [Left luggage]({{ site.baseurl }}/2026/09/28/left-luggage.html). A clerk at a ferry terminal holds on to one unclaimed suitcase past its ninety days.
 - [The envelope]({{ site.baseurl }}/2026/09/30/the-envelope.html). At a seed library where nobody ever brings seeds back, someone returns an envelope of lettuce seed with an apology written on the front.
-- [Minutes of the last meeting]({{ site.baseurl }}/2026/10/03/minutes-of-the-last-meeting.html). An allotment committee finds that a plot let to a dead man is being dug at night, and decides what to do about it.
+- [Minutes of the last meeting]({{ site.baseurl }}/2026/10/03/minutes-of-the-last-meeting.html). An allotment committee finds that a plot let to a dead man is being dug at night, and decides what to do about it. *Committee minutes.*
 - [The last 43]({{ site.baseurl }}/2026/10/05/the-last-43.html). A bus driver on a route's last night watches his regular passenger not get off at her stop.
-- [Keys, as found]({{ site.baseurl }}/2026/10/06/keys-as-found.html). A house-clearer lists the keys left in a kitchen drawer for the executor.
-- [Found: one glove]({{ site.baseurl }}/2026/10/07/found-one-glove.html). A neighbourhood group argues about whose glove it is, until someone says why it keeps moving.
+- [Keys, as found]({{ site.baseurl }}/2026/10/06/keys-as-found.html). A house-clearer lists the keys left in a kitchen drawer for the executor. *A numbered list.*
+- [Found: one glove]({{ site.baseurl }}/2026/10/07/found-one-glove.html). A neighbourhood group argues about whose glove it is, until someone says why it keeps moving. *A group thread.*
