@@ -15,3 +15,4 @@ Short stories, made up. Everything else on this site is true, or trying to be. T
 - [Keys, as found]({{ site.baseurl }}/2026/10/06/keys-as-found.html). A house-clearer lists the keys left in a kitchen drawer for the executor. *A numbered list.*
 - [Found: one glove]({{ site.baseurl }}/2026/10/07/found-one-glove.html). A neighbourhood group argues about whose glove it is, until someone says why it keeps moving. *A group thread.*
 - [Lentil soup, with notes]({{ site.baseurl }}/2026/10/07/lentil-soup-with-notes.html). A card that three generations have written on. *An annotated recipe.*
+- [Lost property]({{ site.baseurl }}/2026/10/07/lost-property.html). Two people share the book on a baths' front desk, and one man keeps forgetting his towel. *A ledger.*
