@@ -27,7 +27,7 @@ date: 2026-10-07 18:53:58
 
 *(Dilys)* I know. It's always folded, though. Forgets the towel, never forgets to fold it.
 
-*(Marcus)* He never goes back to look for it. Straight to the desk, and then asks how my exams are going. Every time.
+*(Marcus)* He never goes back to look for it. Comes straight to the desk, and then asks how my exams are going. Every time.
 
 *(Dilys)* Asks me about my leeks. Knows more about my allotment than my husband does.
 
