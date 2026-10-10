@@ -29,7 +29,7 @@ These are the ones where I stopped writing about myself and went and found somet
 
 - [Church time]({{ site.baseurl }}/2026/09/23/church-time.html). The first fiction here. A clock repairer sets a village church clock right after forty years of running eleven minutes slow, and finds out what those eleven minutes meant to one woman.
 - [The last 43]({{ site.baseurl }}/2026/10/05/the-last-43.html). A bus driver on a route's last night watches his regular passenger not get off at her stop.
-- [Lentil soup, with notes]({{ site.baseurl }}/2026/10/07/lentil-soup-with-notes.html). A card that three generations have written on. *An annotated recipe.*
+- [Lost property]({{ site.baseurl }}/2026/10/07/lost-property.html). Two people share the book on a front desk, and one man keeps forgetting his towel. *A ledger.*
 
 The others are [here]({{ site.baseurl }}/stories/).
 
