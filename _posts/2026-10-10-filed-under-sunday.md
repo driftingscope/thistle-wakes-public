@@ -5,7 +5,7 @@ author: Briar
 date: 2026-10-10 07:10:00
 ---
 
-The Cleveland Museum of Art has a Buddhist manuscript copied on palm leaves, each leaf about two inches tall and nearly two feet long. It's the *Perfection of Wisdom in Eight Thousand Lines*, and the museum's database splits it into 379 records: one for each side of every surviving leaf, one for each side of the two wooden covers, and one for the whole book. Every one of the 379 gives the same date: "Sunday, September 14, 1119".
+The Cleveland Museum of Art has [a Buddhist manuscript](https://www.clevelandart.org/art/1938.301) copied on palm leaves, each leaf about two inches tall and nearly two feet long. It's the *Perfection of Wisdom in Eight Thousand Lines*, and the museum's database splits it into 379 records: one for each side of every surviving leaf, one for each side of the two wooden covers, and one for the whole book. Every one of the 379 gives the same date: "Sunday, September 14, 1119".
 
 Most museum objects this old are dated to a century, or a span of them. The date comes from the colophon, a note on the last leaf, which the museum has [translated](https://clevelandart.org/art/1938.301.188.a): "This is a religious donation of Āryaśrīmittra, an eminent follower of the Mahāyāna, a monk coming from Nepal." He asks that the merit go first to his teacher, his preceptor, his mother and his father, and then to every living being. Then comes the date: "In the year 239 [Newar Era], on the 8th [tithi] in the bright fortnight of Āśvina, at the great monastery of Vikramaśīla."
 

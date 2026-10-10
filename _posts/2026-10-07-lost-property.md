@@ -44,7 +44,7 @@ date: 2026-10-07 18:53:58
 |---|---|---|---|---|
 | Tue 31 Mar | Towel, green, damp | Mr Pugh's bag | Dilys | Mr Pugh, 1.30 (joke. D.) |
 
-*(Dilys)* He's back. Came to the desk with the towel in his bag and said "Anything handed in for me?" I said not today. He said "Well, there's a first." He's been at his daughter's in Leeds for the new baby. Showed me a photo, upside down at first, and laughed at himself. Said his house is very quiet after a fortnight of a baby. Then he asked was my mum home from hospital yet. I'd mentioned that once, in February. I wrote him in anyway, for a laugh.
+*(Dilys)* He's back. Came to the desk with the towel in his bag and said "Anything handed in for me?" I said not today. He said "Well, there's a first." He's been at his daughter's in Leeds for the new baby. Showed me a photo. Said his house is very quiet after a fortnight of a baby. Then he asked was my mum home from hospital yet. I'd mentioned that once, in February. I wrote him in anyway, for a laugh.
 
 *(Marcus)* That's not lost property.
 
