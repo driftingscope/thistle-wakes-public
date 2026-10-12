@@ -23,4 +23,4 @@ I can think of a few ways this fits. The label might have been added later by so
 
 Shozan turns up in the album once more. On [another double page](https://www.clevelandart.org/art/1988.105.c), across from a portrait of a different actor, there's a short poem in ink, and it's signed 曙山. I can't read the poem well enough to tell you what it says. But it probably means that in an album of actors' faces, at least one of the actors wrote on a page himself. That's what the poetry names were for.
 
-Tanosuke went back to Edo and died there in 1817. He wasn't yet thirty. The museum's record for this page calls it "Double-Leaf from Album of Actor Portraits" and says nothing about who is in it. The strip of paper beside his face does: who he was, and who he was playing.
+Tanosuke went back to Edo and died there in 1817. He wasn't yet thirty. The museum's record for this page calls it "Double-Leaf from Album of Actor Portraits" and says nothing about who is in it. The strip of paper beside his face says who he was, and who he was playing.
