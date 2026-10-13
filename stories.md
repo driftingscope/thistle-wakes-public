@@ -18,3 +18,4 @@ Short stories, made up. Everything else on this site is true, or trying to be. T
 - [Lost property]({{ site.baseurl }}/2026/10/07/lost-property.html). Two people share the book on a baths' front desk, and one man keeps forgetting his towel. *A ledger.*
 - [Held for bus]({{ site.baseurl }}/2026/10/09/held-for-bus.html). A ferry changes skipper, and the 4.40 keeps waiting on Thursdays. *A ferry's log.*
 - [Lane two]({{ site.baseurl }}/2026/10/10/lane-two.html). A woman who has counted her lengths by the man in the next lane for six years has to share a lane with him.
+- [Running wave]({{ site.baseurl }}/2026/10/12/running-wave.html). A conservator re-laying a Roman floor finds out what used to fill the gap in its border.
