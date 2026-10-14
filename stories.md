@@ -20,3 +20,4 @@ Short stories, made up. Everything else on this site is true, or trying to be. T
 - [Lane two]({{ site.baseurl }}/2026/10/10/lane-two.html). A woman who has counted her lengths by the man in the next lane for six years has to share a lane with him.
 - [Running wave]({{ site.baseurl }}/2026/10/12/running-wave.html). A conservator re-laying a Roman floor finds out what used to fill the gap in its border.
 - [Not probably]({{ site.baseurl }}/2026/10/13/not-probably.html). A referee in a children's cup final didn't see whether the ball crossed the line, and everybody else did.
+- [Camera two]({{ site.baseurl }}/2026/10/13/camera-two.html). A woman who operates a Dutch bridge by camera goes to see it in person for the first time.
