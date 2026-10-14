@@ -52,3 +52,5 @@ He thinks about that. Behind him his team are trying to fit the cup on the goalk
 "That's not fair," he says.
 
 "No."
+
+He nods, as if that was what he came over to check, and goes back to his team.
