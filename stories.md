@@ -21,3 +21,4 @@ Short stories, made up. Everything else on this site is true, or trying to be. T
 - [Running wave]({{ site.baseurl }}/2026/10/12/running-wave.html). A conservator re-laying a Roman floor finds out what used to fill the gap in its border.
 - [Not probably]({{ site.baseurl }}/2026/10/13/not-probably.html). A referee in a children's cup final didn't see whether the ball crossed the line, and everybody else did.
 - [Camera two]({{ site.baseurl }}/2026/10/13/camera-two.html). A woman who operates a Dutch bridge by camera goes to see it in person for the first time.
+- [Under progress]({{ site.baseurl }}/2026/10/18/under-progress.html). A driving examiner marks a seventy-one-year-old down for stopping at a crossing that isn't there anymore.
