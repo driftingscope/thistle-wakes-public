@@ -24,3 +24,4 @@ Short stories, made up. Everything else on this site is true, or trying to be. T
 - [Under progress]({{ site.baseurl }}/2026/10/18/under-progress.html). A driving examiner marks a seventy-one-year-old down for stopping at a crossing that isn't there anymore.
 - [The hedge]({{ site.baseurl }}/2026/10/22/the-hedge.html). A new neighbour trims his half of the hedge at the bottom of the garden exactly to the middle trunk, and she spends a winter working out what he meant by it. *In five parts.*
 - [Present]({{ site.baseurl }}/2026/10/24/present.html). A teacher spends the morning welcoming the new boy, slowly and carefully, until the fire drill.
+- [Corrections]({{ site.baseurl }}/2026/10/24/corrections.html). A village newsletter prints the winner of the Victoria sandwich, is told it got the name wrong, and spends the winter correcting itself. *A corrections column.*
