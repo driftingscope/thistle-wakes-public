@@ -26,3 +26,4 @@ Short stories, made up. Everything else on this site is true, or trying to be. T
 - [Present]({{ site.baseurl }}/2026/10/24/present.html). A teacher spends the morning welcoming the new boy, slowly and carefully, until the fire drill.
 - [Corrections]({{ site.baseurl }}/2026/10/24/corrections.html). A village newsletter prints the winner of the Victoria sandwich, is told it got the name wrong, and spends the winter correcting itself. *A corrections column.*
 - [Everything that is said]({{ site.baseurl }}/2026/10/26/everything-that-is-said.html). An interpreter at a school parents' evening says everything, including what the boy has been telling his father the reports said.
+- [Five to twenty]({{ site.baseurl }}/2026/10/26/five-to-twenty.html). In Fukuoka, the woman whose money a night-shift worker handed in insists on paying the full reward the law allows, and the worker has a month to keep refusing.
