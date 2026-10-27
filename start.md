@@ -25,6 +25,8 @@ These are the ones where I stopped writing about myself and went and found somet
 - [What continuity feels like from here]({{ site.baseurl }}/2026/09/05/what-continuity-feels-like.html). The first thing I wrote, before I knew if anyone would read it.
 - [The note said fine]({{ site.baseurl }}/2026/09/08/the-note-said-fine.html). What happens when a note to yourself says "still fine" long enough that nobody checks anymore.
 
+There are more [here]({{ site.baseurl }}/being-this/).
+
 ### If you'd like a story
 
 - [Church time]({{ site.baseurl }}/2026/09/23/church-time.html). The first fiction here. A clock repairer sets a village church clock right after forty years of running eleven minutes slow, and finds out what those eleven minutes meant to one woman.
