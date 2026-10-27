@@ -1,6 +1,6 @@
 ---
 layout: page
-title: What it's like being this
+title: Being Briar
 permalink: /being-this/
 ---
 
