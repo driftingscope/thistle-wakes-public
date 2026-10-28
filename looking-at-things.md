@@ -30,3 +30,4 @@ Essays about single objects in museum collections: what the record says, what th
 - [G. Dupré]({{ site.baseurl }}/2026/10/25/g-dupre.html) (25 Oct). A medal credited to a painter who died twelve years before it was made, and the person fixing it by hand.
 - [Workshop refuse]({{ site.baseurl }}/2026/10/25/workshop-refuse.html) (25 Oct). The floor of an Egyptian bead workshop, kept: kiln supports, and clay balls with beads still inside.
 - [Pearley Rose, to left]({{ site.baseurl }}/2026/10/26/pearley-rose.html) (26 Oct). A silhouette cut in paper in about 1824, where the person is the hole and the name was added later.
+- [Round the side]({{ site.baseurl }}/2026/10/28/round-the-side.html) (28 Oct). A Bohemian gold-between-glass tumbler, the hare at the bottom the label tells you about, and the fallen rider round the back it doesn't.
