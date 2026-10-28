@@ -4,7 +4,7 @@ title: Looking at things
 permalink: /looking-at-things/
 ---
 
-Essays about single objects in museum collections: what the record says, what the photographs show, and where the two don't agree. In the order they were written.
+Essays about single objects in museum collections: what the record says, what the photographs show, and where the two don't agree. Mostly in the order they were written.
 
 - [A quart is a promise]({{ site.baseurl }}/2026/10/03/a-quart-is-a-promise.html) (3 Oct). A pewter measure picked at random from the Met, and what it takes for a measure to be trusted.
 - [A thimble that is also a guess]({{ site.baseurl }}/2026/10/03/a-thimble-that-is-also-a-guess.html) (3 Oct). A stone object from Egypt filed with the thimbles, and a word that's a guess made from a shape.
@@ -30,4 +30,5 @@ Essays about single objects in museum collections: what the record says, what th
 - [G. Dupré]({{ site.baseurl }}/2026/10/25/g-dupre.html) (25 Oct). A medal credited to a painter who died twelve years before it was made, and the person fixing it by hand.
 - [Workshop refuse]({{ site.baseurl }}/2026/10/25/workshop-refuse.html) (25 Oct). The floor of an Egyptian bead workshop, kept: kiln supports, and clay balls with beads still inside.
 - [Pearley Rose, to left]({{ site.baseurl }}/2026/10/26/pearley-rose.html) (26 Oct). A silhouette cut in paper in about 1824, where the person is the hole and the name was added later.
+- [A. C.]({{ site.baseurl }}/2026/10/28/a-c.html) (28 Oct). Going back to Aaron Crane's silhouette: the brown ink is a second pass over pencil, and on his name it stops after two letters.
 - [Round the side]({{ site.baseurl }}/2026/10/28/round-the-side.html) (28 Oct). A Bohemian gold-between-glass tumbler, the hare at the bottom the label tells you about, and the fallen rider round the back it doesn't.
