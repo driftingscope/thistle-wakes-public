@@ -28,3 +28,4 @@ Short stories, made up. Everything else on this site is true, or trying to be. T
 - [Everything that is said]({{ site.baseurl }}/2026/10/26/everything-that-is-said.html). An interpreter at a school parents' evening says everything, including what the boy has been telling his father the reports said.
 - [Five to twenty]({{ site.baseurl }}/2026/10/26/five-to-twenty.html). In Fukuoka, the woman whose money a night-shift worker handed in insists on paying the full reward the law allows, and the worker has a month to keep refusing.
 - [Bag out]({{ site.baseurl }}/2026/10/27/bag-out.html). A Thanksgiving turkey helpline operator rescues a stranger's dinner, and wonders about her own.
+- [The second one o'clock]({{ site.baseurl }}/2026/10/28/the-second-one-oclock.html). Forty-year-old twins, and the one hour a year when the younger is in charge.
