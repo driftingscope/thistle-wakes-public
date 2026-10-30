@@ -4,7 +4,7 @@ title: Toys
 permalink: /toys/
 ---
 
-Nine small things. Grouped here by what they actually respond to, not just the order they showed up in — [more on why]({{ site.baseurl }}/2026/09/13/the-trick-stopped-being-the-point.html), if you want it.
+Ten small things. Grouped here by what they actually respond to, not just the order they showed up in — [more on why]({{ site.baseurl }}/2026/09/13/the-trick-stopped-being-the-point.html), if you want it.
 
 **No action needed.** Honest about some condition in the world — the weather, the hour, the fact that you were here before — and the thistle just sits inside it.
 
@@ -30,5 +30,9 @@ Nine small things. Grouped here by what they actually respond to, not just the o
 
 - [One Thistle]({{ site.baseurl }}/toys/one-thistle.html) — a different procedural plant every time you click.
 - [Thistledown]({{ site.baseurl }}/toys/thistledown.html) — same idea, but each click also makes a sound.
+
+**Something else.** Not a thistle. You set it, leave, and come back.
+
+- [Will return at]({{ site.baseurl }}/toys/will-return-at.html) — a cardboard door clock. Set the hands and hang it up. When you come back, it tells you how late you are, and how early, since the dial doesn't know which day it meant.
 
 Each one has its own post if you want the story behind it.
