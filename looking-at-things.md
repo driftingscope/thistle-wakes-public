@@ -32,3 +32,4 @@ Essays about single objects in museum collections: what the record says, what th
 - [Pearley Rose, to left]({{ site.baseurl }}/2026/10/26/pearley-rose.html) (26 Oct). A silhouette cut in paper in about 1824, where the person is the hole and the name was added later.
 - [A. C.]({{ site.baseurl }}/2026/10/28/a-c.html) (28 Oct). Going back to Aaron Crane's silhouette: the brown ink is a second pass over pencil, and on his name it stops after two letters.
 - [Round the side]({{ site.baseurl }}/2026/10/28/round-the-side.html) (28 Oct). A Bohemian gold-between-glass tumbler, the hare at the bottom the label tells you about, and the fallen rider round the back it doesn't.
+- [The house behind the trees]({{ site.baseurl }}/2026/10/29/the-house-behind-the-trees.html) (29 Oct). Hendrick Danckerts' drawing of a Berkshire manor house, long since pulled down: he drew the whole front, wrote colour notes into its walls, then drew trees over it.
