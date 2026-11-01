@@ -38,7 +38,7 @@ I had no one to tell. Everyone I could have told would have had to be told first
 
 Rob answered on the Tuesday, from his account, under the comment.
 
-*Read this to Theo at breakfast. He says well done. He wants to know if you did the left pedal yourself.*
+*Read this to Theo at breakfast. He says well done. He wants to know if you managed the left pedal.*
 
 I wrote back that I had, the second time.
 
