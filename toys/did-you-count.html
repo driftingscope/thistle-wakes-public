@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Did you count?</title>
+<meta name="description" content="Paste in something you've written. It marks the words that claim more than you may have checked, like most, only, shows and first, and asks each one a question.">
+<link rel="canonical" href="https://thistlewakes.com/toys/did-you-count.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Briar Patch">
+<meta property="og:title" content="Did you count?">
+<meta property="og:description" content="Paste in something you've written. It marks the words that claim more than you may have checked, like most, only, shows and first, and asks each one a question.">
+<meta property="og:url" content="https://thistlewakes.com/toys/did-you-count.html">
+<meta property="og:image" content="https://thistlewakes.com/assets/og-did-you-count.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Three sentences on cream paper, with the words most, one other and seen highlighted and numbered.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Did you count?">
+<meta name="twitter:description" content="Paste in something you've written. It marks the words that claim more than you may have checked, like most, only, shows and first, and asks each one a question.">
+<meta name="twitter:image" content="https://thistlewakes.com/assets/og-did-you-count.png">
+<style>
+  :root {
+    --page: #ece6dc;
+    --ink: #241f1a;
+    --dim: #675d51;
+    --paper: #f7f1e3;
+    --rule: #cdbfa8;
+    --mark: #f0d9a8;
+    --done: #d6dcc4;
+    --accent: #8a3b22;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #1d1a17;
+      --ink: #ebe3d6;
+      --dim: #a99d8d;
+      --paper: #26221d;
+      --rule: #4a4238;
+      --mark: #5a4626;
+      --done: #3b4330;
+      --accent: #e08a6a;
+    }
+  }
+  html, body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+  }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1.5;
+  }
+  main {
+    max-width: 38rem;
+    margin: 0 auto;
+    padding: 1.5rem 16px 3rem;
+  }
+  h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+  .intro {
+    margin: 0.3rem 0 1rem;
+    font-size: 0.95rem;
+    color: var(--dim);
+  }
+  label.lbl {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--dim);
+    margin-bottom: 0.25rem;
+  }
+  textarea {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 9rem;
+    padding: 0.6rem 0.7rem;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    resize: vertical;
+  }
+  textarea:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    align-items: baseline;
+    margin: 0.4rem 0 1.2rem;
+    font-size: 0.85rem;
+    color: var(--dim);
+  }
+  button.link {
+    font: inherit;
+    color: var(--dim);
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  button.link:hover, button.link:focus {
+    color: var(--accent);
+  }
+  #marked {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 0.7rem 0.8rem;
+    margin: 0 0 1rem;
+  }
+  #marked:empty { display: none; }
+  #marked mark {
+    background: var(--mark);
+    color: inherit;
+    padding: 0 0.1em;
+    border-radius: 2px;
+  }
+  #marked mark.done {
+    background: var(--done);
+  }
+  #marked sup {
+    font-size: 0.65em;
+    color: var(--accent);
+    margin-left: 0.05em;
+  }
+  #tally {
+    margin: 0 0 0.6rem;
+    font-size: 0.95rem;
+  }
+  ol#qs {
+    margin: 0;
+    padding-left: 1.6rem;
+  }
+  ol#qs li {
+    margin: 0 0 0.8rem;
+  }
+  .ctx {
+    font-size: 0.85rem;
+    color: var(--dim);
+  }
+  .ctx b {
+    color: var(--ink);
+    font-weight: normal;
+    background: var(--mark);
+    padding: 0 0.1em;
+    border-radius: 2px;
+  }
+  li.done .ctx b { background: var(--done); }
+  .q {
+    display: block;
+    margin: 0.1rem 0 0.2rem;
+  }
+  li.done .q { color: var(--dim); }
+  .tick {
+    font-size: 0.85rem;
+    color: var(--dim);
+  }
+  .tick input { margin: 0 0.35rem 0 0; vertical-align: -1px; }
+  .foot {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: var(--dim);
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Did you count?</h1>
+  <p class="intro">Paste in something you've written. It marks the words that claim more than you may have checked, and asks each one a question. Most of them will be fine. It can't tell which; you can.</p>
+
+  <label class="lbl" for="text">Your text</label>
+  <textarea id="text" spellcheck="false" placeholder="Most of the letters were written by the same hand, which clearly shows..."></textarea>
+  <div class="row">
+    <button class="link" id="sample" type="button">Try three of my mistakes</button>
+    <button class="link" id="clear" type="button">Clear</button>
+  </div>
+
+  <div id="marked" aria-hidden="true"></div>
+  <p id="tally" aria-live="polite"></p>
+  <ol id="qs"></ol>
+
+  <p class="foot">Nothing you type leaves this page or is kept anywhere. Close it and it's gone. Where it came from: <a href="/2026/11/02/did-you-count.html">Did you count?</a></p>
+</main>
+<script>
+(function () {
+  // Each rule: a list of words or phrases, and the question to ask about them.
+  // Longer phrases come first so "almost all" is caught before "all".
+  var RULES = [
+    { words: ['almost all', 'nearly all', 'virtually all', 'the majority of', 'the majority', 'most of', 'most'],
+      q: 'How many, out of how many? Did you count, or does it feel like most?' },
+    { words: ['all of', 'all', 'every', 'everyone', 'everybody', 'everything', 'each one'],
+      q: 'Did you look at every one?' },
+    { words: ['no one', 'nobody', 'none', 'nothing', 'not one', 'not a single'],
+      q: 'None that you found, or none there are?' },
+    { words: ['always', 'never', 'invariably', 'without exception'],
+      q: 'Every time? How many times did you see it happen?' },
+    { words: ['one other', 'the only', 'only'],
+      q: 'The only one you found, or the only one there is? Where did you stop looking?' },
+    { words: ['many', 'few', 'several', 'a handful', 'countless', 'numerous', 'often', 'rarely', 'usually', 'seldom'],
+      q: 'Could you put a number here instead?' },
+    { words: ['the first', 'first', 'the last', 'earliest', 'oldest', 'latest', 'newest', 'unique', 'unprecedented'],
+      q: 'First known, or first? Who would know if there was an earlier one?' },
+    { words: ['shows', 'showed', 'shown', 'proves', 'proved', 'proven', 'confirms', 'confirmed', 'reveals', 'revealed', 'demonstrates', 'demonstrated'],
+      q: 'Does it show that, or is that what you read into it? Would someone who disagreed with you see the same thing?' },
+    { words: ['saw', 'seen', 'watched', 'noticed', 'witnessed'],
+      q: 'Who saw it, and were they in a position to? Or is this what they could have seen?' },
+    { words: ['knew', 'known', 'realised', 'realized', 'understood', 'meant to', 'intended'],
+      q: 'How do you know what they knew or meant? Is it in the source, or in you?' },
+    { words: ['clearly', 'obviously', 'of course', 'certainly', 'undoubtedly', 'surely', 'evidently', 'plainly', 'no doubt'],
+      q: 'Clear to whom? If it were clear, would it need the word?' },
+    { words: ['because', 'so that', 'which is why', 'therefore', 'thus'],
+      q: 'Is that the reason, or a reason? Is it written down anywhere, or did you supply it?' },
+    { words: ['exactly', 'precisely'],
+      q: 'Exactly, or near enough? Would the number survive someone measuring it again?' }
+  ];
+
+  var SAMPLE =
+    'There are thirty tiny amulets on the tray, and most are monkeys. ' +
+    'The museum has one other Turner print from the same series. ' +
+    'The ladder hanging on the ridge, seen through a telescope from below, said a climb had happened.';
+
+  var SAMPLE_NOTES = {
+    'most': 'Eight of the thirty were monkeys or baboons. Eight more are just called "Amulet".',
+    'one other': 'It has two, each from a different donor.',
+    'seen': 'Rey says they left the ladder for the telescope. He doesn\'t say anyone saw it.'
+  };
+
+  function esc(s) {
+    return s.replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function reEsc(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+  // One big alternation, longest phrases first, so the regex engine
+  // prefers "almost all" over "all" at the same position.
+  var entries = [];
+  RULES.forEach(function (r, i) {
+    r.words.forEach(function (w) { entries.push({ w: w, rule: i }); });
+  });
+  entries.sort(function (a, b) { return b.w.length - a.w.length; });
+  var lookup = {};
+  entries.forEach(function (e) { lookup[e.w] = e.rule; });
+  var pattern = new RegExp(
+    "(^|[^A-Za-z\\u00C0-\\u024F'\\u2019])(" +
+    entries.map(function (e) { return reEsc(e.w).replace(/ /g, '\\s+'); }).join('|') +
+    ")(?![A-Za-z\\u00C0-\\u024F])", 'gi');
+
+  var ta = document.getElementById('text');
+  var marked = document.getElementById('marked');
+  var tally = document.getElementById('tally');
+  var qs = document.getElementById('qs');
+  var ticked = {};   // key -> true, survives re-rendering while the text is similar
+  var isSample = false;
+
+  function findAll(text) {
+    var out = [];
+    var m;
+    pattern.lastIndex = 0;
+    while ((m = pattern.exec(text)) !== null) {
+      var start = m.index + m[1].length;
+      var word = m[2];
+      var norm = word.toLowerCase().replace(/\s+/g, ' ');
+      out.push({ start: start, end: start + word.length, word: word, norm: norm, rule: lookup[norm] });
+      // allow the next match to begin right after this word
+      pattern.lastIndex = start + word.length;
+    }
+    return out;
+  }
+
+  function context(text, f) {
+    var a = Math.max(0, f.start - 40);
+    var b = Math.min(text.length, f.end + 40);
+    // snap to word edges
+    if (a > 0) { var s = text.indexOf(' ', a); if (s !== -1 && s < f.start) a = s + 1; }
+    if (b < text.length) { var e = text.lastIndexOf(' ', b); if (e > f.end) b = e; }
+    var pre = text.slice(a, f.start).replace(/\s+/g, ' ');
+    var post = text.slice(f.end, b).replace(/\s+/g, ' ');
+    return (a > 0 ? '…' : '') + esc(pre) + '<b>' + esc(f.word) + '</b>' + esc(post) + (b < text.length ? '…' : '');
+  }
+
+  function keyFor(text, f, n) {
+    // the word plus a few characters either side, so ticks follow the word as you edit nearby
+    return f.norm + '|' + text.slice(Math.max(0, f.start - 12), f.end + 12).toLowerCase() + '|' + n;
+  }
+
+  function render() {
+    var text = ta.value;
+    var found = findAll(text);
+    if (!text.trim()) {
+      marked.innerHTML = '';
+      tally.textContent = '';
+      qs.innerHTML = '';
+      return;
+    }
+    // marked-up copy of the text
+    var html = '';
+    var pos = 0;
+    var seen = {};
+    var keys = [];
+    found.forEach(function (f, i) {
+      var base = f.norm + '|' + text.slice(Math.max(0, f.start - 12), f.end + 12).toLowerCase();
+      seen[base] = (seen[base] || 0) + 1;
+      var k = keyFor(text, f, seen[base]);
+      keys.push(k);
+      html += esc(text.slice(pos, f.start)) +
+        '<mark' + (ticked[k] ? ' class="done"' : '') + '>' + esc(f.word) + '</mark><sup>' + (i + 1) + '</sup>';
+      pos = f.end;
+    });
+    html += esc(text.slice(pos));
+    marked.innerHTML = html;
+
+    // questions
+    qs.innerHTML = '';
+    var doneCount = 0;
+    found.forEach(function (f, i) {
+      var k = keys[i];
+      var li = document.createElement('li');
+      if (ticked[k]) { li.className = 'done'; doneCount++; }
+      var note = (isSample && SAMPLE_NOTES[f.norm]) ? SAMPLE_NOTES[f.norm] : null;
+      li.innerHTML =
+        '<span class="ctx">' + context(text, f) + '</span>' +
+        '<span class="q">' + esc(RULES[f.rule].q) + '</span>' +
+        (note ? '<span class="q"><em>What it was: ' + esc(note) + '</em></span>' : '') +
+        '<label class="tick"><input type="checkbox"' + (ticked[k] ? ' checked' : '') + '>I checked</label>';
+      li.querySelector('input').addEventListener('change', function (ev) {
+        if (ev.target.checked) ticked[k] = true; else delete ticked[k];
+        render();
+      });
+      qs.appendChild(li);
+    });
+
+    var n = found.length;
+    if (n === 0) {
+      tally.textContent = 'Nothing marked. That doesn’t mean it’s all true, only that it doesn’t use these words.';
+    } else if (doneCount === n) {
+      tally.textContent = 'All ' + n + ' checked.';
+    } else {
+      tally.textContent = n + (n === 1 ? ' word' : ' words') + ' to look at' +
+        (doneCount ? ', ' + doneCount + ' checked so far.' : '. None of them is a mistake until you’ve looked.');
+    }
+  }
+
+  var timer = null;
+  ta.addEventListener('input', function () {
+    isSample = (ta.value === SAMPLE);
+    clearTimeout(timer);
+    timer = setTimeout(render, 150);
+  });
+  document.getElementById('sample').addEventListener('click', function () {
+    ta.value = SAMPLE;
+    isSample = true;
+    ticked = {};
+    render();
+  });
+  document.getElementById('clear').addEventListener('click', function () {
+    ta.value = '';
+    isSample = false;
+    ticked = {};
+    render();
+    ta.focus();
+  });
+})();
+</script>
+</body>
+</html>
