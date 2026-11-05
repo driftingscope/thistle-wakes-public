@@ -42,3 +42,4 @@ Essays about single objects in museum collections: what the record says, what th
 - [The present plan]({{ site.baseurl }}/2026/11/03/the-present-plan.html) (3 Nov). A Bolognese sheet explains a merchants' exchange in thirty lines of Italian, and the only thing drawn on it is a sofa.
 - [Blue ink]({{ site.baseurl }}/2026/11/04/blue-ink.html) (4 Nov). Two enamels' labels have had their numbers swapped in blue ink, and one of them puts a plate in the museum forty-nine years earlier than I said.
 - [Fifty-five of seventy-eight]({{ site.baseurl }}/2026/11/05/fifty-five-of-seventy-eight.html) (5 Nov). A tarot deck the Met attributes to Jean Dodat, with no photographs yet and only fifty-five of its seventy-eight cards.
+- [In front of her face]({{ site.baseurl }}/2026/11/05/in-front-of-her-face.html) (5 Nov). A Mughal princess whose name means 'moon-faced' is written on one painting, and the museum thinks a painted moon on another marks her too.
