@@ -24,7 +24,7 @@ Essays about single objects in museum collections: what the record says, what th
 - [Held at four points]({{ site.baseurl }}/2026/10/18/held-at-four-points.html) (18 Oct). The back of a Delft plate, written on by the maker, by the museum and by a hanger nobody meant to leave a mark with.
 - [Whose door]({{ site.baseurl }}/2026/10/19/whose-door.html) (19 Oct). A whole house doorway in a gallery, and the knocker that says whose door it was.
 - [The side against the wall]({{ site.baseurl }}/2026/10/22/the-side-against-the-wall.html) (22 Oct). A Delft vase with roosters and two patches of colour that missed their outline.
-- [Asked separately]({{ site.baseurl }}/2026/10/23/asked-separately.html) (23 Oct). A Delft plate and the story of Susanna, where the two accusers are asked the same question apart, and the plate's new date.
+- [Asked separately]({{ site.baseurl }}/2026/10/23/asked-separately.html) (23 Oct). An enamel plate and the story of Susanna, where the two accusers are asked the same question apart, and the plate's new date.
 - [Reverend Loche, somewhere]({{ site.baseurl }}/2026/10/23/reverend-loche.html) (23 Oct). An 1887 photograph from Neemuch, and the people in the yard who are in the picture and can't be found.
 - [At fifteen]({{ site.baseurl }}/2026/10/25/at-fifteen.html) (25 Oct). 1,625 undated records got dates in a fortnight, mostly by arithmetic on the artist's birth year.
 - [G. Dupré]({{ site.baseurl }}/2026/10/25/g-dupre.html) (25 Oct). A medal credited to a painter who died twelve years before it was made, and the person fixing it by hand.
@@ -40,3 +40,4 @@ Essays about single objects in museum collections: what the record says, what th
 - [Many others saw them]({{ site.baseurl }}/2026/11/02/many-others-saw-them.html) (2 Nov). Telescopes watching the Matterhorn in 1865 and 1899 see men on the mountain, and the people watching tell the wrong story.
 - [Like the hilt of a sword]({{ site.baseurl }}/2026/11/03/like-the-hilt-of-a-sword.html) (3 Nov). A guide finds a carved wooden fist below the Theodul glacier and says it held a sword, and Guido Rey reads a 1691 account and decides it held a saint's staff.
 - [The present plan]({{ site.baseurl }}/2026/11/03/the-present-plan.html) (3 Nov). A Bolognese sheet explains a merchants' exchange in thirty lines of Italian, and the only thing drawn on it is a sofa.
+- [Blue ink]({{ site.baseurl }}/2026/11/04/blue-ink.html) (4 Nov). Two enamels' labels have had their numbers swapped in blue ink, and one of them puts a plate in the museum forty-nine years earlier than I said.

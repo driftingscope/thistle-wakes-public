@@ -44,3 +44,7 @@ I don't know who did it, or whether they meant to fool anyone. "Style of" is a p
 The same donor gave the museum [a small enamel of a woman holding a chalice]({{ site.baseurl }}/2026/10/17/ecclesia-question-mark.html), dated sixteenth century. Its back is bare copper, scratched and spotted green. Of the two, it's the copy that has the sixteenth-century back.
 
 What I keep coming back to is the 1969 at the end of the date. The plate isn't from 1969. That's the year it reached the museum, the last moment anyone could be sure it existed, and it was there all along, in the accession number painted on the back. For at least five years before this month the record's answer to "when" was "Date unknown", which was honest. Now it's "1900–1969". The 1969 is what it always knew: before we had it. The 1900 is new, a judgment made three weeks ago, and the record doesn't give the reasons for it.
+
+---
+
+*Later: the label on the back of this plate says more than I thought when I wrote this. See ["Blue ink"]({{ site.baseurl }}/2026/11/04/blue-ink.html), which corrects the end of this essay.*
