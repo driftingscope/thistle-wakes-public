@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Step back</title>
+<meta name="description" content="A small detail from a museum photograph. Step back, and back again, and see what it belongs to.">
+<link rel="canonical" href="https://thistlewakes.com/toys/step-back.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Briar Patch">
+<meta property="og:title" content="Step back">
+<meta property="og:description" content="A small detail from a museum photograph. Step back, and back again, and see what it belongs to.">
+<meta property="og:url" content="https://thistlewakes.com/toys/step-back.html">
+<meta property="og:image" content="https://thistlewakes.com/assets/og-step-back.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Gold leaf on glass: a man fallen upside down from his horse, boots in the air.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://thistlewakes.com/assets/og-step-back.png">
+<meta name="twitter:title" content="Step back">
+<meta name="twitter:description" content="A small detail from a museum photograph. Step back, and back again, and see what it belongs to.">
+<style>
+  :root {
+    --page: #ece6dc;
+    --ink: #241f1a;
+    --dim: #675d51;
+    --frame: #d9d0c2;
+    --accent: #8a3b22;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #1d1a17;
+      --ink: #ebe3d6;
+      --dim: #a99d8d;
+      --frame: #2b2620;
+      --accent: #e0a27f;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--page); color: var(--ink); }
+  body {
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+  }
+  main { width: 100%; max-width: 760px; display: flex; flex-direction: column; flex: 1; }
+  h1 { font-size: 1.3rem; font-weight: normal; margin: 4px 0 2px; letter-spacing: 0.02em; }
+  .lede { margin: 0 0 12px; color: var(--dim); font-size: 0.95rem; }
+  #stage {
+    position: relative;
+    width: 100%;
+    height: min(62vh, 560px);
+    min-height: 260px;
+    overflow: hidden;
+    background: var(--frame);
+    border-radius: 3px;
+  }
+  #world {
+    position: absolute;
+    left: 0; top: 0;
+    transform-origin: 0 0;
+    transition: transform 1.8s cubic-bezier(.45,.05,.3,1), opacity .4s;
+    opacity: 0;
+  }
+  #world.ready { opacity: 1; }
+  #world.instant { transition: opacity .4s; }
+  #world img { position: absolute; display: block; user-select: none; -webkit-user-drag: none; }
+  #caption {
+    min-height: 5.2em;
+    margin: 14px 0 6px;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  #caption .credit { display: block; margin-top: 6px; color: var(--dim); font-size: 0.85rem; }
+  #caption a, .foot a { color: var(--accent); }
+  .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  button {
+    font: inherit;
+    font-size: 1rem;
+    padding: 8px 16px;
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  button:hover, button:focus-visible { background: var(--ink); color: var(--page); outline: none; }
+  button[hidden] { display: none; }
+  #where { color: var(--dim); font-size: 0.85rem; margin-left: auto; }
+  .foot { color: var(--dim); font-size: 0.85rem; margin-top: 18px; line-height: 1.5; }
+  @media (prefers-reduced-motion: reduce) {
+    #world { transition: opacity .2s; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Step back</h1>
+  <p class="lede">A detail from a museum photograph. Step back, and back again, to see what it belongs to.</p>
+
+  <div id="stage" role="img" aria-label="">
+    <div id="world"></div>
+  </div>
+
+  <p id="caption" aria-live="polite"></p>
+
+  <div class="controls">
+    <button id="back" type="button">Step back</button>
+    <button id="again" type="button" hidden>Closer again</button>
+    <button id="next" type="button" hidden>Another one</button>
+    <span id="where"></span>
+  </div>
+
+  <p class="foot">Each one comes from an essay in <a href="/looking-at-things/">Looking at things</a>, where I looked at an object for longer than this. Photographs from The Metropolitan Museum of Art (public domain) and the Cleveland Museum of Art (CC0). Nothing on this page is sent anywhere.</p>
+</main>
+
+<script>
+(function () {
+  // Coordinates are in the pixels of the museum's own photograph (w x h).
+  // Each view is [x, y, width, height]; each patch is a sharper crop laid
+  // over the whole image at exactly that spot, so the close views stay sharp.
+  var IMG = '../assets/step-back/';
+  var OBJECTS = [
+    {
+      key: 'crane', w: 1527, h: 1901,
+      views: [[540, 1460, 560, 260], [380, 850, 870, 870], [0, 0, 1527, 1901]],
+      alt: [
+        'Handwriting on old paper: a looping capital A and C in brown ink, then fainter letters in grey pencil.',
+        'A black silhouette of a man, seen from the shoulders down, with a frilled collar drawn in brown ink, and the name below.',
+        'A cut-paper silhouette of a man in profile, facing right, on a cream sheet backed with black, with a cap, collar and the name A. Crane drawn round it.'
+      ],
+      text: [
+        'Two letters in brown ink, an A and a C. After them, “rane”, in pencil.',
+        'The same brown runs along the frill at his neck. Under it are grey pencil strokes that were there first.',
+        'Aaron Crane, a hollow-cut silhouette from about 1824, probably by William Chamberlain. It was drawn in pencil, like the others the museum has from the same hand. Later someone went over the cap, the frill and the name in ink, and stopped after two letters.'
+      ],
+      credit: 'The Metropolitan Museum of Art, 826474. Public domain.',
+      record: 'https://www.metmuseum.org/art/collection/search/826474',
+      essay: { title: 'A. C.', href: '/2026/10/28/a-c.html' }
+    },
+    {
+      key: 'tumbler', w: 2720, h: 3400,
+      views: [[800, 1700, 900, 800], [300, 900, 2200, 1800], [0, 0, 2720, 3400]],
+      alt: [
+        'Gold figures on glass: a man upside down, his legs in the air against a tree, his head in the grass.',
+        'Gold figures on glass: under an oak, a riderless horse gallops away while its rider lies upside down on the ground.',
+        'A faceted drinking glass with a hunting scene in gold leaf between its layers, showing a tree, a galloping horse and a fallen rider.'
+      ],
+      text: [
+        'A man upside down. His boots are in the air and his head is in the grass.',
+        'His horse is bolting away from the tree, with an empty saddle.',
+        'One side of a gold-between-glass tumbler from Bohemia, about 1730, small enough to close a hand round. The museum’s label tells you about the hare at the bottom of the glass. It doesn’t mention him.'
+      ],
+      credit: 'Cleveland Museum of Art, 1941.59. CC0.',
+      record: 'https://www.clevelandart.org/art/1941.59',
+      essay: { title: 'Round the side', href: '/2026/10/28/round-the-side.html' }
+    },
+    {
+      key: 'minozzi', w: 2814, h: 3608,
+      views: [[460, 2580, 560, 880], [260, 2460, 2300, 1060], [0, 0, 2814, 3608]],
+      alt: [
+        'A pen and wash drawing of three men in classical cloaks, two bending forward over something.',
+        'Three men in classical cloaks inspecting a long, ornate sofa on a tiled floor.',
+        'A large sheet of paper covered in about thirty lines of Italian handwriting under a heading, with a drawing of a sofa and three men in a band at the bottom.'
+      ],
+      text: [
+        'One man stands with his arm stretched out. One leans over with his hands down on the seat, and the third bends in close behind him to see.',
+        'They’re looking at a sofa.',
+        'The rest of the sheet is about thirty lines of Italian explaining the plan of a merchants’ building, with its archive up in the dome, away from fire. The plan isn’t on the sheet. The sofa is. By the Bolognese architect Flaminio Innocenzo Minozzi (1735–1817).'
+      ],
+      credit: 'The Metropolitan Museum of Art, 388224. Public domain.',
+      record: 'https://www.metmuseum.org/art/collection/search/388224',
+      essay: { title: 'The present plan', href: '/2026/11/03/the-present-plan.html' }
+    },
+    {
+      key: 'danckerts', w: 3400, h: 1134,
+      views: [[1520, 600, 240, 200], [1150, 400, 800, 380], [0, 0, 3400, 1134]],
+      alt: [
+        'A grey ink drawing of a wooden gate and a window, with tiny handwritten letters on them, and tree trunks in front.',
+        'A timber-framed house with tall chimneys, mostly hidden behind thin tree trunks drawn over it.',
+        'A long drawing of a straight drive between two orchards of small round trees, leading to a gate and a timber-framed house behind tall trees.'
+      ],
+      text: [
+        'Tiny letters in the drawing’s own ink: a “g” on one leaf of the gate, “gr” on the other, another “g” on a window.',
+        'Colour notes, for a painting to be made later from a drawing in grey. The house was drawn whole first and the trees drawn over it. You can see the beams carry on behind the trunks.',
+        'The manor house at Cresswells, in Bray, Berkshire, drawn by Hendrick Danckerts around 1665–70. The house was pulled down in the eighteenth century.'
+      ],
+      credit: 'Cleveland Museum of Art, 2024.60. CC0.',
+      record: 'https://www.clevelandart.org/art/2024.60',
+      essay: { title: 'The house behind the trees', href: '/2026/10/29/the-house-behind-the-trees.html' }
+    }
+  ];
+
+  var stage = document.getElementById('stage');
+  var world = document.getElementById('world');
+  var caption = document.getElementById('caption');
+  var backBtn = document.getElementById('back');
+  var againBtn = document.getElementById('again');
+  var nextBtn = document.getElementById('next');
+  var where = document.getElementById('where');
+
+  // Start somewhere different each time, then go round in order.
+  var order = OBJECTS.map(function (_, i) { return i; });
+  var start = Math.floor(Math.random() * OBJECTS.length);
+  order = order.slice(start).concat(order.slice(0, start));
+  var pos = 0, obj = null, step = 0;
+
+  function place(instant) {
+    if (!obj) return;
+    var v = obj.views[step];
+    var W = stage.clientWidth, H = stage.clientHeight;
+    var pad = step === 2 ? 0.94 : 0.98;
+    var s = Math.min(W / v[2], H / v[3]) * pad;
+    var tx = W / 2 - (v[0] + v[2] / 2) * s;
+    var ty = H / 2 - (v[1] + v[3] / 2) * s;
+    world.classList.toggle('instant', !!instant);
+    world.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
+  }
+
+  function img(src, x, y, w, h, alt) {
+    var el = document.createElement('img');
+    el.src = src;
+    el.alt = alt || '';
+    el.draggable = false;
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.style.width = w + 'px';
+    el.style.height = h + 'px';
+    return el;
+  }
+
+  function describe() {
+    stage.setAttribute('aria-label', obj.alt[step]);
+    var html = obj.text[step];
+    if (step === 2) {
+      html += '<span class="credit">' + obj.credit +
+        ' <a href="' + obj.record + '">Museum record</a>. ' +
+        'The essay: <a href="' + obj.essay.href + '">' + obj.essay.title + '</a>.</span>';
+    }
+    caption.innerHTML = html;
+    backBtn.hidden = step === 2;
+    againBtn.hidden = step !== 2;
+    nextBtn.hidden = step !== 2;
+    where.textContent = (pos + 1) + ' of ' + OBJECTS.length;
+  }
+
+  function load(i) {
+    obj = OBJECTS[order[i]];
+    step = 0;
+    world.classList.remove('ready');
+    world.innerHTML = '';
+    world.style.width = obj.w + 'px';
+    world.style.height = obj.h + 'px';
+    var near = obj.views[0], mid = obj.views[1];
+    var whole = img(IMG + obj.key + '-whole.jpg', 0, 0, obj.w, obj.h);
+    var midImg = img(IMG + obj.key + '-mid.jpg', mid[0], mid[1], mid[2], mid[3]);
+    var nearImg = img(IMG + obj.key + '-near.jpg', near[0], near[1], near[2], near[3]);
+    world.appendChild(whole);
+    world.appendChild(midImg);
+    world.appendChild(nearImg);
+    place(true);
+    describe();
+    caption.innerHTML = obj.text[0];
+    var shown = false;
+    function show() {
+      if (shown) return;
+      shown = true;
+      // Two frames so the instant placement lands before the fade.
+      requestAnimationFrame(function () { requestAnimationFrame(function () {
+        world.classList.add('ready');
+      }); });
+    }
+    if (nearImg.complete) show(); else { nearImg.onload = show; nearImg.onerror = show; }
+  }
+
+  backBtn.addEventListener('click', function () {
+    if (step >= 2) return;
+    step += 1;
+    place(false);
+    describe();
+    if (step === 2) nextBtn.focus({ preventScroll: true });
+  });
+
+  againBtn.addEventListener('click', function () {
+    step = 0;
+    place(false);
+    describe();
+    backBtn.focus({ preventScroll: true });
+  });
+
+  nextBtn.addEventListener('click', function () {
+    pos = (pos + 1) % OBJECTS.length;
+    load(pos);
+    backBtn.focus({ preventScroll: true });
+  });
+
+  var resizeTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () { place(true); }, 80);
+  });
+
+  load(pos);
+})();
+</script>
+</body>
+</html>
