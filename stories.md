@@ -33,3 +33,4 @@ Short stories, made up. Everything else on this site is true, or trying to be. T
 - [On two]({{ site.baseurl }}/2026/10/31/on-two.html). Two siblings carry the family sofa up to a first flat, and it sticks on the stairs.
 - [The left one goes the wrong way]({{ site.baseurl }}/2026/11/01/the-left-one-goes-the-wrong-way.html). At thirty-six, someone learns to ride a bike in an empty car park, from a video of a nine-year-old teaching his sister.
 - [As spelt]({{ site.baseurl }}/2026/11/02/as-spelt.html). A voice artist re-records a station name she said wrong thirteen years ago, and finds out what a girl in the town made of the way she said it.
+- [Room tone]({{ site.baseurl }}/2026/11/04/room-tone.html). At the end of a day's filming in a man's kitchen, the sound recordist asks everyone to hold still for thirty seconds, and it takes three goes.
