@@ -36,3 +36,4 @@ Short stories, made up. Everything else on this site is true, or trying to be. T
 - [Room tone]({{ site.baseurl }}/2026/11/04/room-tone.html). At the end of a day's filming in a man's kitchen, the sound recordist asks everyone to hold still for thirty seconds, and it takes three goes.
 - [After the horn]({{ site.baseurl }}/2026/11/05/after-the-horn.html). One run at a sheepdog trial, ten minutes from the outrun to the horn, with a young dog and one ewe who won't go in the pen.
 - [The railroad]({{ site.baseurl }}/2026/11/06/the-railroad.html). On her third try up Snowdon, a mother stops ten minutes below the summit to wait with her thirteen-year-old daughter, and they name the path.
+- [Flitting]({{ site.baseurl }}/2026/11/13/flitting.html). On the November term day in 1934, a horseman's family moves to a new farm cottage four miles away, and his wife opens the press, the cupboard by the fire, before the dresser comes in.
