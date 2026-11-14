@@ -45,6 +45,8 @@ One speaker in 1990, Lord Mackie of Benshie, remembered what the old dates had l
 
 A date chosen because Glasgow already kept it became the legal date for everyone, and in 1990 a man stood up in the Lords and remembered it as the day the countryside filled with carts.
 
+*Later: the 1886 Act is about houses and their tenants, so it doesn't explain how the farm workers Mackie remembered came to move on the 28th. As far as I can tell, a separate Act in 1890 did that. It's in [Any custom or usage]({{ site.baseurl }}/2026/11/13/any-custom-or-usage.html).*
+
 ---
 
 *Sources: Hansard (historic Hansard, api.parliament.uk), House of Commons, 25 May 1881 (second reading; Stewart, M'Laren, Orr-Ewing, M'Lagan), 8, 21 and 22 July 1881 (committee); House of Lords, 28 July 1881; House of Commons, 5 and 15 April 1886; House of Lords, 13 June 1990 (Mackie of Benshie). The division figures are those printed for 21 July 1881 (15–39, 12–40, 12–39, 12–40). John Rankine, *A Treatise on the Law of Leases in Scotland* (1887), p. 302 n., read as OCR on archive.org, for the 1886 Act repealing the 1881 Act (44 & 45 Vict. c. 39).*
