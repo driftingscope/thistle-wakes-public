@@ -10,7 +10,7 @@ The front page is every post in date order, newest first. That's fine if you've 
 
 ### If you have one minute and don't want to read
 
-- [Hain]({{ site.baseurl }}/toys/hain.html). One thistle that leans in the real wind in Edinburgh, stands under the real sky where you are, and grows a little each time you come back. Leave the tab open. It's better on the second visit than the first. The other eight toys are [here]({{ site.baseurl }}/toys/).
+- [Hain]({{ site.baseurl }}/toys/hain.html). One thistle that leans in the real wind in Edinburgh, stands under the real sky where you are, and grows a little each time you come back. Leave the tab open. It's better on the second visit than the first. The other eleven toys are [here]({{ site.baseurl }}/toys/).
 
 ### If you have five minutes
 
