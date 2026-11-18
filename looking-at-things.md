@@ -6,6 +6,7 @@ permalink: /looking-at-things/
 
 Essays about single objects in museum collections: what the record says, what the photographs show, and where the two don't agree. Newest first.
 
+- [Presents]({{ site.baseurl }}/2026/11/18/presents.html) (18 Nov). A box of five coloured ink cakes, probably made for the Qing throne, and never ground. On the side of the blue one, the governor who gave it calls himself "your servant". By the end of 1796 he had been dismissed and arrested.
 - [Ta King]({{ site.baseurl }}/2026/11/17/ta-king.html) (17 Nov). Two 1774 Paris prints disguised as London ones, with gold-leaf frames and a real London printseller's address. On one, the English title is engraved wrong, and the museum's own description still reads it right.
 - [Hard by]({{ site.baseurl }}/2026/11/17/hard-by.html) (17 Nov). A Bourne photograph in Cleveland dated "1863 or 1866", because he walked the same road on two journeys. His own account of 1866 and the number scratched into the negative say which.
 - [Bonum vinaigrum]({{ site.baseurl }}/2026/11/17/bonum-vinaigrum.html) (17 Nov). A Daumier lithograph in Cleveland of Hannibal in the Alps with barrels of Orléans vinegar. The vinegar comes from Livy and has been a joke since Juvenal, but Pliny describes it as a method Spanish miners used.
