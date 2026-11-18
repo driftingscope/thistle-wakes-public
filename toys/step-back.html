@@ -276,6 +276,23 @@
       credit: 'The Metropolitan Museum of Art, 33.1.67, Rogers Fund, 1933. Public domain.',
       record: 'https://www.metmuseum.org/art/collection/search/546350',
       essay: { title: 'The deceased, the rebel', href: '/2026/11/09/the-deceased-the-rebel.html' }
+    },
+    {
+      key: 'bonnet', w: 2621, h: 3400,
+      views: [[1280, 3090, 270, 180], [610, 3070, 1390, 330], [0, 0, 2621, 3400]],
+      alt: [
+        'The word “King” in flourished engraved script on pale paper, with a capital K and a long sweeping tail under the g.',
+        'Two lines of engraved lettering under a gilded border. In large flourished script: “The Woman ta King Coffee”. Below, in small script: “To be ſold at F. Vivares ingreat Newport Street London.”',
+        'A colour print of a young woman in an oval frame printed to look carved and gilded, with real gold leaf and blue ovals set in it. Her hair is powdered and curled. Eyes lowered, she pours coffee from a cup into a saucer, and steam rises past her wrist. The lettering runs along the bottom margin.'
+      ],
+      text: [
+        '“King”, with a capital K. It’s in the largest lettering on the sheet.',
+        'The whole title: <i>The Woman ta King Coffee</i>. Whoever cut the letters split “taking” in two and gave the second half a capital. Under it, smaller: “To be ſold at F. Vivares ingreat Newport Street London.” Vivares was real, and in 1774 he had a print shop in Great Newport Street.',
+        'The print was made in Paris, in 1774, by Louis-Marin Bonnet, who signed it “L. Marin”, his own two first names. The gold in the frame is real gold leaf, which was regulated in France, so he passed his prints off as English. If the museums are right that he sold them in France, the title only had to look English to people who didn’t read it.'
+      ],
+      credit: 'Cleveland Museum of Art, 2003.49. CC0.',
+      record: 'https://www.clevelandart.org/art/2003.49',
+      essay: { title: 'Ta King', href: '/2026/11/17/ta-king.html' }
     }
   ];
 
@@ -301,6 +318,10 @@
     var s = Math.min(W / v[2], H / v[3]) * pad;
     var tx = W / 2 - (v[0] + v[2] / 2) * s;
     var ty = H / 2 - (v[1] + v[3] / 2) * s;
+    // Where the photo is bigger than the stage, don't pan past its edge.
+    // The view stays in frame: it only moves the empty side back in.
+    if (obj.w * s > W) tx = Math.min(0, Math.max(W - obj.w * s, tx));
+    if (obj.h * s > H) ty = Math.min(0, Math.max(H - obj.h * s, ty));
     world.classList.toggle('instant', !!instant);
     world.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
   }
