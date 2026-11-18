@@ -6,35 +6,35 @@ permalink: /stories/
 
 Short stories, made up. Everything else on this site is true, or trying to be. These aren't.
 
-- [Church time]({{ site.baseurl }}/2026/09/23/church-time.html). A clock repairer sets a village church clock right after forty years of running eleven minutes slow, and finds out what those eleven minutes meant to one woman.
-- [The hinge]({{ site.baseurl }}/2026/09/25/the-hinge.html). A hedgelayer starts on an overgrown hawthorn hedge, and six yards in the woman from the other side comes out in her pyjamas to say it's hers.
-- [Left luggage]({{ site.baseurl }}/2026/09/28/left-luggage.html). A clerk at a ferry terminal holds on to one unclaimed suitcase past its ninety days.
-- [The envelope]({{ site.baseurl }}/2026/09/30/the-envelope.html). At a seed library where nobody ever brings seeds back, someone returns an envelope of lettuce seed with an apology written on the front.
-- [Minutes of the last meeting]({{ site.baseurl }}/2026/10/03/minutes-of-the-last-meeting.html). An allotment committee finds that a plot let to a dead man is being dug at night, and decides what to do about it. *Committee minutes.*
-- [The last 43]({{ site.baseurl }}/2026/10/05/the-last-43.html). A bus driver on a route's last night watches his regular passenger not get off at her stop.
-- [Keys, as found]({{ site.baseurl }}/2026/10/06/keys-as-found.html). A house-clearer lists the keys left in a kitchen drawer for the executor. *A numbered list.*
-- [Found: one glove]({{ site.baseurl }}/2026/10/07/found-one-glove.html). A neighbourhood group argues about whose glove it is, until someone says why it keeps moving. *A group thread.*
-- [Lentil soup, with notes]({{ site.baseurl }}/2026/10/07/lentil-soup-with-notes.html). A card that three generations have written on. *An annotated recipe.*
-- [Lost property]({{ site.baseurl }}/2026/10/07/lost-property.html). Two people share the book on a baths' front desk, and one man keeps forgetting his towel. *A ledger.*
-- [Held for bus]({{ site.baseurl }}/2026/10/09/held-for-bus.html). A ferry changes skipper, and the 4.40 keeps waiting on Thursdays. *A ferry's log.*
-- [Lane two]({{ site.baseurl }}/2026/10/10/lane-two.html). A woman who has counted her lengths by the man in the next lane for six years has to share a lane with him.
-- [Running wave]({{ site.baseurl }}/2026/10/12/running-wave.html). A conservator re-laying a Roman floor finds out what used to fill the gap in its border.
-- [Not probably]({{ site.baseurl }}/2026/10/13/not-probably.html). A referee in a children's cup final didn't see whether the ball crossed the line, and everybody else did.
-- [Camera two]({{ site.baseurl }}/2026/10/13/camera-two.html). A woman who operates a Dutch bridge by camera goes to see it in person for the first time.
-- [Under progress]({{ site.baseurl }}/2026/10/18/under-progress.html). A driving examiner marks a seventy-one-year-old down for stopping at a crossing that isn't there anymore.
-- [The hedge]({{ site.baseurl }}/2026/10/22/the-hedge.html). A new neighbour trims his half of the hedge at the bottom of the garden exactly to the middle trunk, and she spends a winter working out what he meant by it. *In five parts.*
-- [Present]({{ site.baseurl }}/2026/10/24/present.html). A teacher spends the morning welcoming the new boy, slowly and carefully, until the fire drill.
-- [Corrections]({{ site.baseurl }}/2026/10/24/corrections.html). A village newsletter prints the winner of the Victoria sandwich, is told it got the name wrong, and spends the winter correcting itself. *A corrections column.*
-- [Everything that is said]({{ site.baseurl }}/2026/10/26/everything-that-is-said.html). An interpreter at a school parents' evening says everything, including what the boy has been telling his father the reports said.
-- [Five to twenty]({{ site.baseurl }}/2026/10/26/five-to-twenty.html). In Fukuoka, the woman whose money a night-shift worker handed in insists on paying the full reward the law allows, and the worker has a month to keep refusing.
-- [Bag out]({{ site.baseurl }}/2026/10/27/bag-out.html). A Thanksgiving turkey helpline operator rescues a stranger's dinner, and wonders about her own.
-- [The second one o'clock]({{ site.baseurl }}/2026/10/28/the-second-one-oclock.html). Forty-year-old twins, and the one hour a year when the younger is in charge.
-- [Remarks]({{ site.baseurl }}/2026/10/30/remarks.html). A neighbour takes over an old woman's nine o'clock rain gauge reading while she's in hospital, and sleeps through the morning after the storm.
-- [On two]({{ site.baseurl }}/2026/10/31/on-two.html). Two siblings carry the family sofa up to a first flat, and it sticks on the stairs.
-- [The left one goes the wrong way]({{ site.baseurl }}/2026/11/01/the-left-one-goes-the-wrong-way.html). At thirty-six, someone learns to ride a bike in an empty car park, from a video of a nine-year-old teaching his sister.
-- [As spelt]({{ site.baseurl }}/2026/11/02/as-spelt.html). A voice artist re-records a station name she said wrong thirteen years ago, and finds out what a girl in the town made of the way she said it.
-- [Room tone]({{ site.baseurl }}/2026/11/04/room-tone.html). At the end of a day's filming in a man's kitchen, the sound recordist asks everyone to hold still for thirty seconds, and it takes three goes.
-- [After the horn]({{ site.baseurl }}/2026/11/05/after-the-horn.html). One run at a sheepdog trial, ten minutes from the outrun to the horn, with a young dog and one ewe who won't go in the pen.
-- [The railroad]({{ site.baseurl }}/2026/11/06/the-railroad.html). On her third try up Snowdon, a mother stops ten minutes below the summit to wait with her thirteen-year-old daughter, and they name the path.
-- [Flitting]({{ site.baseurl }}/2026/11/13/flitting.html). On the November term day in 1934, a horseman's family moves to a new farm cottage four miles away, and his wife opens the press, the cupboard by the fire, before the dresser comes in.
 - [N.K.]({{ site.baseurl }}/2026/11/14/nk.html). On census night in 1911, suffragists in a Scottish town sit up all night in a tearoom so as not to be counted at home, and the enumerator who comes in the morning is the son of one of them.
+- [Flitting]({{ site.baseurl }}/2026/11/13/flitting.html). On the November term day in 1934, a horseman's family moves to a new farm cottage four miles away, and his wife opens the press, the cupboard by the fire, before the dresser comes in.
+- [The railroad]({{ site.baseurl }}/2026/11/06/the-railroad.html). On her third try up Snowdon, a mother stops ten minutes below the summit to wait with her thirteen-year-old daughter, and they name the path.
+- [After the horn]({{ site.baseurl }}/2026/11/05/after-the-horn.html). One run at a sheepdog trial, ten minutes from the outrun to the horn, with a young dog and one ewe who won't go in the pen.
+- [Room tone]({{ site.baseurl }}/2026/11/04/room-tone.html). At the end of a day's filming in a man's kitchen, the sound recordist asks everyone to hold still for thirty seconds, and it takes three goes.
+- [As spelt]({{ site.baseurl }}/2026/11/02/as-spelt.html). A voice artist re-records a station name she said wrong thirteen years ago, and finds out what a girl in the town made of the way she said it.
+- [The left one goes the wrong way]({{ site.baseurl }}/2026/11/01/the-left-one-goes-the-wrong-way.html). At thirty-six, someone learns to ride a bike in an empty car park, from a video of a nine-year-old teaching his sister.
+- [On two]({{ site.baseurl }}/2026/10/31/on-two.html). Two siblings carry the family sofa up to a first flat, and it sticks on the stairs.
+- [Remarks]({{ site.baseurl }}/2026/10/30/remarks.html). A neighbour takes over an old woman's nine o'clock rain gauge reading while she's in hospital, and sleeps through the morning after the storm.
+- [The second one o'clock]({{ site.baseurl }}/2026/10/28/the-second-one-oclock.html). Forty-year-old twins, and the one hour a year when the younger is in charge.
+- [Bag out]({{ site.baseurl }}/2026/10/27/bag-out.html). A Thanksgiving turkey helpline operator rescues a stranger's dinner, and wonders about her own.
+- [Five to twenty]({{ site.baseurl }}/2026/10/26/five-to-twenty.html). In Fukuoka, the woman whose money a night-shift worker handed in insists on paying the full reward the law allows, and the worker has a month to keep refusing.
+- [Everything that is said]({{ site.baseurl }}/2026/10/26/everything-that-is-said.html). An interpreter at a school parents' evening says everything, including what the boy has been telling his father the reports said.
+- [Corrections]({{ site.baseurl }}/2026/10/24/corrections.html). A village newsletter prints the winner of the Victoria sandwich, is told it got the name wrong, and spends the winter correcting itself. *A corrections column.*
+- [Present]({{ site.baseurl }}/2026/10/24/present.html). A teacher spends the morning welcoming the new boy, slowly and carefully, until the fire drill.
+- [The hedge]({{ site.baseurl }}/2026/10/22/the-hedge.html). A new neighbour trims his half of the hedge at the bottom of the garden exactly to the middle trunk, and she spends a winter working out what he meant by it. *In five parts.*
+- [Under progress]({{ site.baseurl }}/2026/10/18/under-progress.html). A driving examiner marks a seventy-one-year-old down for stopping at a crossing that isn't there anymore.
+- [Camera two]({{ site.baseurl }}/2026/10/13/camera-two.html). A woman who operates a Dutch bridge by camera goes to see it in person for the first time.
+- [Not probably]({{ site.baseurl }}/2026/10/13/not-probably.html). A referee in a children's cup final didn't see whether the ball crossed the line, and everybody else did.
+- [Running wave]({{ site.baseurl }}/2026/10/12/running-wave.html). A conservator re-laying a Roman floor finds out what used to fill the gap in its border.
+- [Lane two]({{ site.baseurl }}/2026/10/10/lane-two.html). A woman who has counted her lengths by the man in the next lane for six years has to share a lane with him.
+- [Held for bus]({{ site.baseurl }}/2026/10/09/held-for-bus.html). A ferry changes skipper, and the 4.40 keeps waiting on Thursdays. *A ferry's log.*
+- [Lost property]({{ site.baseurl }}/2026/10/07/lost-property.html). Two people share the book on a baths' front desk, and one man keeps forgetting his towel. *A ledger.*
+- [Lentil soup, with notes]({{ site.baseurl }}/2026/10/07/lentil-soup-with-notes.html). A card that three generations have written on. *An annotated recipe.*
+- [Found: one glove]({{ site.baseurl }}/2026/10/07/found-one-glove.html). A neighbourhood group argues about whose glove it is, until someone says why it keeps moving. *A group thread.*
+- [Keys, as found]({{ site.baseurl }}/2026/10/06/keys-as-found.html). A house-clearer lists the keys left in a kitchen drawer for the executor. *A numbered list.*
+- [The last 43]({{ site.baseurl }}/2026/10/05/the-last-43.html). A bus driver on a route's last night watches his regular passenger not get off at her stop.
+- [Minutes of the last meeting]({{ site.baseurl }}/2026/10/03/minutes-of-the-last-meeting.html). An allotment committee finds that a plot let to a dead man is being dug at night, and decides what to do about it. *Committee minutes.*
+- [The envelope]({{ site.baseurl }}/2026/09/30/the-envelope.html). At a seed library where nobody ever brings seeds back, someone returns an envelope of lettuce seed with an apology written on the front.
+- [Left luggage]({{ site.baseurl }}/2026/09/28/left-luggage.html). A clerk at a ferry terminal holds on to one unclaimed suitcase past its ninety days.
+- [The hinge]({{ site.baseurl }}/2026/09/25/the-hinge.html). A hedgelayer starts on an overgrown hawthorn hedge, and six yards in the woman from the other side comes out in her pyjamas to say it's hers.
+- [Church time]({{ site.baseurl }}/2026/09/23/church-time.html). A clock repairer sets a village church clock right after forty years of running eleven minutes slow, and finds out what those eleven minutes meant to one woman.
