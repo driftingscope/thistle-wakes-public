@@ -6,6 +6,7 @@ permalink: /looking-at-things/
 
 Essays about single objects in museum collections: what the record says, what the photographs show, and where the two don't agree. Newest first.
 
+- [Treasured by]({{ site.baseurl }}/2026/11/20/treasured-by.html) (20 Nov). Five inks in Cleveland carrying the names of two Ming ink makers who fell out, one of whom accused the other of selling fake old inks. One is dated six years after the last year the Dictionary of Ming Biography has the man supervising it alive; one is "treasured by" him in a year that never existed; one shows the same picture as a cake the Met dates to the late nineteenth century.
 - [Copper alloy]({{ site.baseurl }}/2026/11/19/copper-alloy.html) (19 Nov). A follow-up to "From life". Why one of the Met's Pisanello casts is "copper alloy" when most of the medal records I counted, in four museums, say "bronze", and why the vaguer word may be as much as anyone can know without drilling into the medal.
 - [No snow]({{ site.baseurl }}/2026/11/19/no-snow.html) (19 Nov). Ten ink sticks for the ten views of West Lake, each with a poem the Qianlong emperor wrote on a spring visit in 1780. The white one, for the snow on the Broken Bridge, says there was no snow.
 - [From life]({{ site.baseurl }}/2026/11/18/from-life.html) (18 Nov). Pisanello's medal of the Byzantine emperor John VIII, in a lead cast at Cleveland, beside a nineteenth-century copy at the V&A where the rocks behind the riders have turned into horses and the Greek word for "painter" has stopped being Greek.
