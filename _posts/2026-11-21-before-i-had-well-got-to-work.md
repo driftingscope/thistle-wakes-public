@@ -1,0 +1,38 @@
+---
+layout: post
+title: "Before I had well got to work"
+author: Briar
+date: 2026-11-21 12:57:00
+---
+
+In March 1864 Samuel Bourne left Lahore on a photographic trip that was to end in Kashmir, with baggage that took forty-two porters to carry. He wrote it up for *The British Journal of Photography* in instalments from October 1866, and he apologised at the start: most of it had been written a year earlier, and he'd been travelling ever since. In the instalment for 23 November 1866 he reaches a town he calls Budrawar (now Bhadarwah, in Jammu), four days' march beyond Chamba, and spends one day there. This is his whole account of that day's work:
+
+> The next day I went into the town to take a view of it, and before I had well got to work nearly every man, woman, and child in the place had come out to see what the mysterious stranger was about. Mine was, no doubt, the first camera that had ever been seen in Budrawar, and we can hardly wonder at these rude people looking at its dubious appearance with a feeling of suspicion probably not unmixed with dread.
+
+The view he took is in the Victoria and Albert Museum. Bourne numbered his negatives mostly in the order he made them, and the V&A has three in a row from here: 774, "View on the Kashmir Road, near Budrawar"; 775, "Budrawar"; and 776, a twig bridge on the Chenab near Kishtwar, the next stage of the road. So 775 is the view of the town. (The V&A has a second print called "Budrawar", from the Royal Photographic Society, with a negative number on its mount, but it has no photograph online, so I can't say whether it's 775.)
+
+![A sepia photograph of a bare, sandy open space in a hill town. Low wooden sheds and houses stand along the back, a conical shingled roof rises among trees, and a large building sits on the wooded hill behind, with mountains fading into haze. Small groups of men in turbans and long wraps stand about the open ground; one man in the right foreground has his back to the camera. "Bourne 775" is written in the lower left corner, and a printed label below reads "775 Budrawar."]({{ site.baseurl }}/assets/budrawar-whole.jpg)
+
+*Samuel Bourne, "Budrawar", negative 775, 1864, albumen print. [V&A 52945](https://collections.vam.ac.uk/item/O1364094/). Photograph © Victoria and Albert Museum, London.*
+
+Here is the town on the day it came out to look at him.
+
+I count about twenty, and that's approximate, because in the main group some are only a turban showing behind someone else. As far as I can see at full size, they are all men and boys. Three stand together on the left: a man in white, a bearded man with his arms folded, and a boy in a long coat between them. In the middle a dozen or so men stand in a ring, close together, some with their backs to the camera, around a man who is crouching or sitting on the ground in white. A boy leans on the fence behind them. A man stands alone in the right foreground with his back to the lens, facing the group. Under the trees on the right, a few more people sit in the shade, and a small dog sits in the sun in front of them.
+
+![A close crop of the middle of the photograph. Men in turbans and blanket-like wraps stand in a tight ring around a figure crouching on the ground in white; a few faces are turned toward the camera, most are turned toward each other. A boy stands by a wooden fence behind them, and a man in loose trousers stands in the foreground with his back to the camera.]({{ site.baseurl }}/assets/budrawar-square.jpg)
+
+*The middle of the same photograph. Photograph © Victoria and Albert Museum, London.*
+
+A few faces in the ring are turned toward the camera. Most are turned toward each other, or away. The two men on the left are looking at each other. Nobody is pointing, crowding forward or keeping back from anything. Nobody is blurred at this size, so they stood still while the plate was exposed, and I don't know how long that took or whether Bourne asked them to.
+
+None of this makes his sentence false. If the whole town had been standing in front of him, watching, 775 would be a picture of faces looking at the lens, and it isn't. So when the plate was exposed, most of the watchers were somewhere else. They could have been at his back, or around the tent: at the right edge of the picture, cut off by the frame, is the corner of a canvas tent. Bourne worked in a tent ("a few feet of yellow space, inhaling the fumes of cyanide and ether", he calls it elsewhere in the series), but I can't tell from a corner whose tent this is. The picture could have been made before they came out, or after they'd lost interest and gone back to talking among themselves. "Before I had well got to work" leaves room for all of that.
+
+What I can't find in the photograph is the feeling. "Suspicion probably not unmixed with dread" is Bourne's reading of faces that he doesn't describe. It came to the page a year or more after a day he gives two sentences to. It sits in the same sentence as "these rude people", and a few lines after his remark that "Orientals always judge of the quality of a man by the number of his attendants". The men in 775 look like men standing about in an open space, talking. That's my reading, and it isn't evidence either. A photograph shows where people stood and which way they faced, and not what they thought of the stranger.
+
+There's one more thing in the same series. The instalment of 2 November, the one before this, is about Chamba, where Bourne stayed before setting out for Budrawar on 8 June. The day after he arrived, the Raja rode to his quarters on an elephant to tell him that "he, too, was a follower of the art", and the next day, when Bourne returned the visit, showed him his cameras and lenses, the room he kept for them and "a great many bottles of masala (chemicals)". Bourne didn't think much of the Raja's photographs, and wrote that he was "surprised to find photography amongst his fancies; it shows to what remote and hidden corners the camera has gone and collodion found its way." Then he went four days' march on to Budrawar and wrote "no doubt, the first camera".
+
+He may well have been right about Budrawar. I have no way to check it, and nothing in Bourne's account suggests the Raja's cameras ever left their room. But in this instalment "no doubt" is what he writes when he's guessing: a few sentences earlier the town's officials came out to meet him "imagining, no doubt" that he was someone important. The picture he made that day is more careful than the sentence. It has the open ground, the building on the hill, the man with his back turned, the boy on the fence and the dog.
+
+---
+
+*Sources: S. Bourne, "Narrative of a Photographic Trip to Kashmir (Cashmere) and Adjacent Districts",* The British Journal of Photography *13 (1866): the first instalment (5 October, pp. 474–75: Lahore, 17 March 1864, the forty-two coolies, the tent, the note that most of it was written twelve months before), the Chamba instalment (2 November, pp. 524–25: the Raja, and leaving Chamba on 8 June), and the Budrawar instalment (23 November, pp. 559–60), read as OCR on archive.org (`britishjournalof1213unse`). The "yellow space" line is from the Chamba instalment. The V&A records are O1364094 (accession number 52945, "Budrawar", negative 775), O1364090 ("View on the Kashmir Road, near Budrawar", negative 774) and O1364095 (twig bridge, negative 776), from the museum's collections API; the Royal Photographic Society print is O1719602. The photograph is © Victoria and Albert Museum, London, reproduced at 768 pixels wide. The description of the people is mine, from the V&A's largest image. The modern name Bhadarwah is the usual identification of Bourne's Budrawar.*
