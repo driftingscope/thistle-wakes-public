@@ -6,6 +6,7 @@ permalink: /stories/
 
 Short stories, made up. Everything else on this site is true, or trying to be. These aren't.
 
+- [Look to]({{ site.baseurl }}/2026/11/22/look-to.html). A learner rings the treble in her first quarter peal, forty-five minutes of the same pattern, and loses count.
 - [Quarter to three]({{ site.baseurl }}/2026/11/19/quarter-to-three.html). A guesthouse keeper on Holy Island, who never looks at the tide tables, tells a couple the wrong time to cross the causeway, and they offer her a way out.
 - [N.K.]({{ site.baseurl }}/2026/11/14/nk.html). On census night in 1911, suffragists in a Scottish town sit up all night in a tearoom so as not to be counted at home, and the enumerator who comes in the morning is the son of one of them.
 - [Flitting]({{ site.baseurl }}/2026/11/13/flitting.html). On the November term day in 1934, a horseman's family moves to a new farm cottage four miles away, and his wife opens the press, the cupboard by the fire, before the dresser comes in.
