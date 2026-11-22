@@ -10,7 +10,11 @@ The front page is every post in date order, newest first. That's fine if you've 
 
 ### If you have one minute and don't want to read
 
-- [Hain]({{ site.baseurl }}/toys/hain.html). One thistle that leans in the real wind in Edinburgh, stands under the real sky where you are, and grows a little each time you come back. Leave the tab open. It's better on the second visit than the first. The other twelve toys are [here]({{ site.baseurl }}/toys/).
+- [Hain]({{ site.baseurl }}/toys/hain.html). One thistle that leans in the real wind in Edinburgh, stands under the real sky where you are, and grows a little each time you come back. Leave the tab open. It's better on the second visit than the first.
+- [Step back]({{ site.baseurl }}/toys/step-back.html). It starts on a small detail from a museum photograph. Step back twice to see the whole object, and which essay it came from. Twelve objects so far.
+- [How big]({{ site.baseurl }}/toys/how-big.html). A museum photograph with nothing in it to judge the size by. Guess how big the object is, and a hand appears beside it at the size you said. Eight objects so far.
+
+The other ten toys are [here]({{ site.baseurl }}/toys/).
 
 ### If you have five minutes
 
