@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How big</title>
+<meta name="description" content="A museum photograph with nothing in it to judge size by. Guess, and a hand appears beside it at the size you said.">
+<link rel="canonical" href="https://thistlewakes.com/toys/how-big.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Briar Patch">
+<meta property="og:title" content="How big">
+<meta property="og:description" content="A museum photograph with nothing in it to judge size by. Guess, and a hand appears beside it at the size you said.">
+<meta property="og:url" content="https://thistlewakes.com/toys/how-big.html">
+<meta property="og:image" content="https://thistlewakes.com/assets/og-how-big.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A small mud slab with a pinched clay face, and beside it the outline of a hand, much bigger.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://thistlewakes.com/assets/og-how-big.png">
+<meta name="twitter:title" content="How big">
+<meta name="twitter:description" content="A museum photograph with nothing in it to judge size by. Guess, and a hand appears beside it at the size you said.">
+<style>
+  :root {
+    --page: #ece6dc;
+    --ink: #241f1a;
+    --dim: #675d51;
+    --frame: #d9d0c2;
+    --accent: #8a3b22;
+    --hand: #9b8e7e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #1d1a17;
+      --ink: #ebe3d6;
+      --dim: #a99d8d;
+      --frame: #2b2620;
+      --accent: #e0a27f;
+      --hand: #7d7264;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--page); color: var(--ink); }
+  body {
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+  }
+  main { width: 100%; max-width: 760px; display: flex; flex-direction: column; flex: 1; }
+  h1 { font-size: 1.3rem; font-weight: normal; margin: 4px 0 2px; letter-spacing: 0.02em; }
+  .lede { margin: 0 0 12px; color: var(--dim); font-size: 0.95rem; }
+  #stage {
+    position: relative;
+    width: 100%;
+    height: min(56vh, 500px);
+    min-height: 240px;
+    overflow: hidden;
+    background: var(--frame);
+    border-radius: 3px;
+  }
+  #obj, #hand { position: absolute; opacity: 0; transition: opacity .4s; }
+  #stage.ready #obj, #stage.ready #hand { opacity: 1; }
+  #obj { overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
+  #obj img { position: absolute; display: block; max-width: none; user-select: none; -webkit-user-drag: none; }
+  #hand { fill: var(--hand); }
+  #stage.anim #obj, #stage.anim #obj img, #stage.anim #hand {
+    transition: left 1.4s cubic-bezier(.45,.05,.3,1), top 1.4s cubic-bezier(.45,.05,.3,1),
+                width 1.4s cubic-bezier(.45,.05,.3,1), height 1.4s cubic-bezier(.45,.05,.3,1), opacity .4s;
+  }
+  .ask { margin: 14px 0 4px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .ask label { font-size: 1.05rem; }
+  #said { color: var(--dim); font-variant-numeric: tabular-nums; }
+  #guess { width: 100%; margin: 6px 0 10px; accent-color: var(--accent); }
+  #guess:disabled { opacity: .45; }
+  .ends { display: flex; justify-content: space-between; color: var(--dim); font-size: 0.8rem; margin-top: -8px; margin-bottom: 8px; }
+  #caption { min-height: 4.2em; margin: 4px 0 8px; font-size: 1.05rem; line-height: 1.5; }
+  #caption .credit { display: block; margin-top: 6px; color: var(--dim); font-size: 0.85rem; }
+  #caption a, .foot a { color: var(--accent); }
+  .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  button {
+    font: inherit;
+    font-size: 1rem;
+    padding: 8px 16px;
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  button:hover, button:focus-visible { background: var(--ink); color: var(--page); outline: none; }
+  button[hidden] { display: none; }
+  #where { color: var(--dim); font-size: 0.85rem; margin-left: auto; }
+  .foot { color: var(--dim); font-size: 0.85rem; margin-top: 18px; line-height: 1.5; }
+  @media (prefers-reduced-motion: reduce) {
+    #stage.anim #obj, #stage.anim #obj img, #stage.anim #hand { transition: opacity .2s; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>How big</h1>
+  <p class="lede">A museum photograph, with nothing in it to judge the size by. Move the slider, and the hand beside it changes to match what you've said.</p>
+
+  <div id="stage" role="img" aria-label="">
+    <div id="obj"><img id="pic" alt=""></div>
+    <svg id="hand" viewBox="0 0 120 190" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M48,190 C51.2,190.7 58.7,190.0 64,190 C69.3,190.0 74.7,190.0 80,190 C85.3,190.0 92.5,191.2 96,190 C99.5,188.8 99.3,186.7 101,183 C102.7,179.3 104.5,173.5 106,168 C107.5,162.5 108.9,156.3 110,150 C111.1,143.7 111.8,136.2 112.5,130 C113.2,123.8 113.5,118.5 114,113 C114.5,107.5 115.0,102.5 115.5,97 C116.0,91.5 116.5,86.2 117,80 C117.5,73.8 118.2,66.0 118.5,60 C118.8,54.0 118.9,48.0 118.5,44 C118.1,40.0 117.2,37.7 116,36 C114.8,34.3 112.9,33.8 111.5,34 C110.1,34.2 108.5,35.0 107.5,37 C106.5,39.0 106.2,41.5 105.5,46 C104.8,50.5 104.2,58.0 103.5,64 C102.8,70.0 102.1,78.0 101.5,82 C100.9,86.0 100.6,87.7 100,88 C99.4,88.3 98.3,87.3 98,84 C97.7,80.7 97.9,75.3 98,68 C98.1,60.7 98.6,47.7 98.5,40 C98.4,32.3 98.2,26.5 97.5,22 C96.8,17.5 95.8,14.9 94.5,13 C93.2,11.1 91.2,10.5 89.5,10.5 C87.8,10.5 85.8,11.1 84.5,13 C83.2,14.9 82.2,17.5 81.5,22 C80.8,26.5 80.8,32.0 80.5,40 C80.2,48.0 80.2,63.5 80,70 C79.8,76.5 79.8,77.5 79.5,79 C79.2,80.5 78.7,82.2 78.5,79 C78.3,75.8 78.5,68.5 78.5,60 C78.5,51.5 78.7,36.5 78.5,28 C78.3,19.5 78.2,13.2 77.5,9 C76.8,4.8 75.8,4.0 74.5,2.5 C73.2,1.0 71.2,0.0 69.5,0 C67.8,0.0 65.8,1.0 64.5,2.5 C63.2,4.0 62.2,4.8 61.5,9 C60.8,13.2 60.7,19.5 60.5,28 C60.3,36.5 60.6,51.5 60.5,60 C60.4,68.5 60.2,75.7 60,79 C59.8,82.3 59.3,81.5 59,80 C58.7,78.5 58.4,76.3 58,70 C57.6,63.7 57.2,49.7 56.5,42 C55.8,34.3 55.0,28.2 54,24 C53.0,19.8 51.9,18.0 50.5,16.5 C49.1,15.0 47.1,14.8 45.5,15 C43.9,15.2 42.2,16.2 41,18 C39.8,19.8 38.9,21.7 38.5,26 C38.1,30.3 38.4,36.3 38.5,44 C38.6,51.7 38.8,64.0 39,72 C39.2,80.0 40.1,86.3 40,92 C39.9,97.7 39.6,104.5 38.5,106 C37.4,107.5 35.3,103.7 33.5,101 C31.7,98.3 28.9,92.6 27.5,90 C26.1,87.4 26.0,87.5 25,85.5 C24.0,83.5 22.8,80.5 21.5,78 C20.2,75.5 19.0,72.3 17.5,70.5 C16.0,68.7 14.2,67.3 12.5,67 C10.8,66.7 8.8,67.2 7.5,68.5 C6.2,69.8 5.5,72.1 5,74.5 C4.5,76.9 4.4,79.6 4.5,83 C4.6,86.4 4.8,91.2 5.5,95 C6.2,98.8 7.6,101.8 9,106 C10.4,110.2 11.9,115.2 14,120 C16.1,124.8 19.0,129.8 21.5,135 C24.0,140.2 26.6,146.0 29,151 C31.4,156.0 34.0,160.5 36,165 C38.0,169.5 39.5,174.5 41,178 C42.5,181.5 43.8,184.0 45,186 C46.2,188.0 44.8,189.3 48,190Z"/>
+    </svg>
+  </div>
+
+  <div class="ask">
+    <label for="guess" id="question"></label>
+    <span id="said" aria-live="polite"></span>
+  </div>
+  <input id="guess" type="range" min="0" max="1000" step="1">
+  <div class="ends" aria-hidden="true"><span>1 cm</span><span>3 m</span></div>
+
+  <p id="caption" aria-live="polite"></p>
+
+  <div class="controls">
+    <button id="go" type="button">That's my guess</button>
+    <button id="next" type="button" hidden>Another one</button>
+    <span id="where"></span>
+  </div>
+
+  <p class="foot">The hand is a drawn outline, 19 cm from the wrist to the tip of the middle finger, which is about the length of an adult's. The sizes are the museums' own measurements. Each object comes from an essay in <a href="/looking-at-things/">Looking at things</a>. Photographs from The Metropolitan Museum of Art (public domain) and the Cleveland Museum of Art (CC0). Nothing on this page is sent anywhere.</p>
+</main>
+
+<script>
+(function () {
+  // box is the measured thing, in the pixels of the image file: [x0, y0, x1, y1].
+  // axis says which side of the box `cm` is: 'h' for height, 'w' for width.
+  var IMG = '../assets/step-back/';
+  var OBJECTS = [
+    {
+      key: 'lisht', box: [199, 160, 794, 1229], axis: 'h', cm: 6.5,
+      ask: 'How tall is it?',
+      alt: 'A rough slab of grey-brown mud with a lump of clay pinched into a face at the top and faded red writing below.',
+      text: 'An unfired mud slab from Lisht, in Egypt, with a face pinched from a separate lump of clay and red writing below it. It’s one of eighty-one at the Met, dug up in 1932–33.',
+      credit: 'The Metropolitan Museum of Art, 33.1.67, Rogers Fund, 1933. Public domain.',
+      record: 'https://www.metmuseum.org/art/collection/search/546350',
+      essay: { title: 'The deceased, the rebel', href: '/2026/11/09/the-deceased-the-rebel.html' }
+    },
+    {
+      key: 'crane', box: [47, 78, 1039, 1335], axis: 'h', cm: 10.1,
+      ask: 'How tall is the sheet?',
+      alt: 'A cut-paper silhouette of a man in profile on a cream sheet backed with black, with the name A. Crane written below.',
+      text: 'Aaron Crane, a hollow-cut silhouette from about 1824, probably by William Chamberlain. The sheet is 10.1 by 8.2 cm.',
+      credit: 'The Metropolitan Museum of Art, 38.145.384. Public domain.',
+      record: 'https://www.metmuseum.org/art/collection/search/826474',
+      essay: { title: 'A. C.', href: '/2026/10/28/a-c.html' }
+    },
+    {
+      key: 'vase', box: [285, 156, 773, 1288], axis: 'h', cm: 25.1,
+      ask: 'How tall is it, lid and all?',
+      alt: 'A painted delftware vase with a tall lid ending in a blue plume, two cockerels on the front.',
+      text: 'A covered vase of Dutch delftware from the middle of the 1700s. The museum gives the vase alone as 15 cm, so the lid and its plume add the other ten.',
+      credit: 'Cleveland Museum of Art, 1969.257. CC0.',
+      record: 'https://www.clevelandart.org/art/1969.257',
+      essay: { title: 'The side against the wall', href: '/2026/10/22/the-side-against-the-wall.html' }
+    },
+    {
+      key: 'bonnet', box: [0, 0, 1079, 1400], axis: 'h', cm: 32.2,
+      ask: 'How tall is the sheet?',
+      alt: 'A print of a young woman pouring coffee into a saucer, in an oval gold frame, titled The Woman ta King Coffee.',
+      text: 'Louis-Marin Bonnet’s <i>The Woman ta King Coffee</i>, Paris, 1774. The printed image on the sheet is 28.5 cm tall.',
+      credit: 'Cleveland Museum of Art, 2003.49. CC0.',
+      record: 'https://www.clevelandart.org/art/2003.49',
+      essay: { title: 'Ta King', href: '/2026/11/17/ta-king.html' }
+    },
+    {
+      key: 'mahliqa', box: [0, 0, 922, 1400], axis: 'h', cm: 42.2,
+      ask: 'How tall is the page?',
+      alt: 'A painted page: a walled city at the top, a garden with a tall tank of water down the middle, a winged creature in a tree on the left and women on the right.',
+      text: 'A leaf from a poetical romance, painted around 1710. The page is 42.2 by 28.5 cm.',
+      credit: 'Cleveland Museum of Art, 2013.336. CC0.',
+      record: 'https://www.clevelandart.org/art/2013.336',
+      essay: { title: 'In front of her face', href: '/2026/11/05/in-front-of-her-face.html' }
+    },
+    {
+      key: 'minozzi', box: [0, 0, 1092, 1400], axis: 'h', cm: 49,
+      ask: 'How tall is the sheet?',
+      alt: 'A sheet of handwritten Italian, with a drawing of two men in cloaks leaning over the end of a long sofa at the bottom.',
+      text: 'Flaminio Innocenzo Minozzi’s sheet: about thirty lines of Italian on the plan of a merchants’ building, and a sofa. The sheet is 49 by 38 cm.',
+      credit: 'The Metropolitan Museum of Art, 62.635.209. Public domain.',
+      record: 'https://www.metmuseum.org/art/collection/search/388224',
+      essay: { title: 'The present plan', href: '/2026/11/03/the-present-plan.html' }
+    },
+    {
+      key: 'danckerts', box: [6, 4, 1794, 590], axis: 'w', cm: 88.9,
+      ask: 'How wide is the sheet?',
+      alt: 'A long, low drawing in grey ink of a timbered house behind rows of tall trees, with an avenue leading up to it.',
+      text: 'Hendrick Danckerts’ drawing of the manor house at Cresswells, in Bray, around 1665–70. The sheet is 88.9 cm wide and 27.9 tall.',
+      credit: 'Cleveland Museum of Art, 2024.60. CC0.',
+      record: 'https://www.clevelandart.org/art/2024.60',
+      essay: { title: 'The house behind the trees', href: '/2026/10/29/the-house-behind-the-trees.html' }
+    }
+  ];
+
+  var HAND_W = 12, HAND_H = 19;      // cm; the svg viewBox is 120 x 190
+  var MIN_CM = 1, MAX_CM = 300;
+
+  var stage = document.getElementById('stage');
+  var objEl = document.getElementById('obj');
+  var pic = document.getElementById('pic');
+  var hand = document.getElementById('hand');
+  var slider = document.getElementById('guess');
+  var question = document.getElementById('question');
+  var said = document.getElementById('said');
+  var caption = document.getElementById('caption');
+  var goBtn = document.getElementById('go');
+  var nextBtn = document.getElementById('next');
+  var where = document.getElementById('where');
+
+  var order = [], pos = -1, obj = null, shownCm = HAND_H, revealed = false;
+
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function toCm(v) { return MIN_CM * Math.pow(MAX_CM / MIN_CM, v / 1000); }
+  function toV(cm) { return Math.round(1000 * Math.log(cm / MIN_CM) / Math.log(MAX_CM / MIN_CM)); }
+
+  function fmt(cm) {
+    if (cm >= 100) return (cm / 100).toFixed(2).replace(/0$/, '') + ' m';
+    if (cm >= 20) return Math.round(cm) + ' cm';
+    return (Math.round(cm * 2) / 2).toString() + ' cm';
+  }
+
+  var PARTS = ['', '', 'half its size', 'a third of its size', 'a quarter of its size', 'a fifth of its size'];
+  var TIMES = ['', '', 'twice', 'three times', 'four times', 'five times', 'six times', 'seven times', 'eight times', 'nine times', 'ten times'];
+  function verdict(guess, real) {
+    var r = guess / real;
+    if (r < 1.15 && r > 1 / 1.15) return 'That’s close.';
+    if (r > 1) {
+      if (r < 1.75) return 'About ' + Math.round((r - 1) * 10) * 10 + '% bigger than it is.';
+      var n = Math.round(r);
+      return n <= 10 ? 'About ' + TIMES[n] + ' its size.' : 'More than ten times its size.';
+    }
+    var f = 1 / r;
+    if (f < 1.75) return 'About ' + Math.round((1 - r) * 10) * 10 + '% smaller than it is.';
+    var m = Math.round(f);
+    return m <= 5 ? 'About ' + PARTS[m] + '.' : 'Less than a fifth of its size.';
+  }
+
+  // Lay the object and the hand side by side, bottoms level, as if the
+  // object's measured side were `cm` long, scaled to fit the stage.
+  function layout(cm) {
+    var b = obj.box, bw = b[2] - b[0], bh = b[3] - b[1];
+    var ow, oh;
+    if (obj.axis === 'h') { oh = cm; ow = cm * bw / bh; }
+    else { ow = cm; oh = cm * bh / bw; }
+    var W = stage.clientWidth, H = stage.clientHeight;
+    var pad = Math.max(14, Math.min(W, H) * 0.06), gap = Math.max(12, W * 0.04);
+    var s = Math.min((W - 2 * pad - gap) / (ow + HAND_W), (H - 2 * pad) / Math.max(oh, HAND_H));
+    var totalW = (ow + HAND_W) * s + gap;
+    var left = (W - totalW) / 2, base = H - pad;
+    var pw = ow * s, ph = oh * s, k = pw / bw;
+    objEl.style.left = left + 'px';
+    objEl.style.top = (base - ph) + 'px';
+    objEl.style.width = pw + 'px';
+    objEl.style.height = ph + 'px';
+    pic.style.width = (obj.iw * k) + 'px';
+    pic.style.height = (obj.ih * k) + 'px';
+    pic.style.left = (-b[0] * k) + 'px';
+    pic.style.top = (-b[1] * k) + 'px';
+    hand.style.left = (left + pw + gap) + 'px';
+    hand.style.top = (base - HAND_H * s) + 'px';
+    hand.style.width = (HAND_W * s) + 'px';
+    hand.style.height = (HAND_H * s) + 'px';
+    shownCm = cm;
+  }
+
+  function showSaid() {
+    said.textContent = revealed ? '' : fmt(toCm(+slider.value));
+  }
+
+  function load() {
+    if (pos >= order.length - 1) { order = shuffle(OBJECTS.slice()); pos = -1; }
+    obj = order[++pos];
+    revealed = false;
+    stage.classList.remove('ready', 'anim');
+    question.textContent = obj.ask;
+    caption.innerHTML = '';
+    slider.disabled = false;
+    slider.value = toV(HAND_H);
+    showSaid();
+    goBtn.hidden = false;
+    nextBtn.hidden = true;
+    where.textContent = (pos + 1) + ' of ' + order.length;
+    stage.setAttribute('aria-label', obj.alt);
+    pic.onload = function () {
+      obj.iw = pic.naturalWidth; obj.ih = pic.naturalHeight;
+      layout(toCm(+slider.value));
+      requestAnimationFrame(function () { stage.classList.add('ready'); });
+    };
+    pic.src = IMG + obj.key + '-whole.jpg';
+    if (pic.complete && pic.naturalWidth) pic.onload();
+  }
+
+  slider.addEventListener('input', function () {
+    if (revealed || !obj.iw) return;
+    stage.classList.remove('anim');
+    layout(toCm(+slider.value));
+    showSaid();
+  });
+
+  goBtn.addEventListener('click', function () {
+    if (!obj.iw) return;
+    var guess = toCm(+slider.value);
+    revealed = true;
+    slider.disabled = true;
+    stage.classList.add('anim');
+    layout(obj.cm);
+    showSaid();
+    caption.innerHTML =
+      '<strong>' + obj.cm + ' cm.</strong> You said ' + fmt(guess) + '. ' + verdict(guess, obj.cm) + ' ' +
+      obj.text +
+      '<span class="credit">' + obj.credit + ' <a href="' + obj.record + '">Record</a>. ' +
+      'The essay: <a href="' + obj.essay.href + '">' + obj.essay.title + '</a>.</span>';
+    goBtn.hidden = true;
+    nextBtn.hidden = false;
+    nextBtn.focus();
+  });
+
+  nextBtn.addEventListener('click', load);
+
+  var t = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(t);
+    t = setTimeout(function () {
+      if (!obj || !obj.iw) return;
+      stage.classList.remove('anim');
+      layout(shownCm);
+    }, 80);
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>
