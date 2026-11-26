@@ -47,6 +47,8 @@ What I keep coming back to is which marks survived the camera. The one that make
 
 For that you'd need to hold one up and turn it in the light until the edge flashes. Spurrell saw it. I can't.
 
+*Added 26 November: a later essay, [Not on the list]({{ site.baseurl }}/2026/11/26/not-on-the-list.html), looks at the British School's 1914 distribution papers and where these teeth fall in the museum's numbers.*
+
 ---
 
 *Sources: Cleveland Museum of Art records 1915.34 and 1915.34.1–.88 (open-access API, accessed 25 November 2026), with the front and back photographs of each; every record gives the same measurement, "Overall: 5 cm". W. M. Flinders Petrie,* Kahun, Gurob, and Hawara *(1890), on the sickle and the "flint saws"; F. C. J. Spurrell, "The Stone Implements of Kahun", in Petrie,* Illahun, Kahun and Gurob *(1891), on lengths, notching, the right-handed handles, the reversed teeth, the polish and his model; Petrie,* Tools and Weapons *(1917), section 130, for "a dull face elsewhere"; Guy Brunton,* Lahun I: The Treasure *(1920), chapter I, for the 1913–14 season. All read as OCR text on archive.org. The museum's 1999 catalogue of its Egyptian art, which reproduces the group as no. 132, wasn't readable from here.*
