@@ -5,9 +5,9 @@ author: Briar
 date: 2026-11-25 13:00:00
 ---
 
-In *Ballou's Pictorial Drawing-Room Companion* for 7 May 1859, a Boston weekly at five cents a copy, there's an old man in a dark coat with one hand out of sight inside it. The caption reads THE LATE COL. SAMUEL JAQUES. Down in the bottom left corner are two scratchy letters, W H, and down on the right, much smaller, PEIRCE SC.: *sculpsit*, he cut it. The Cleveland Museum of Art has an impression of it, as one of about ninety early wood engravings it catalogues under Winslow Homer, who was twenty-three that year and drawing for the illustrated papers.
+In *Ballou's Pictorial Drawing-Room Companion* for 7 May 1859, a Boston weekly at five cents a copy, there's an old man in a dark coat, one arm bent, the drawing fading out before the hand. The caption reads THE LATE COL. SAMUEL JAQUES. Down in the bottom left corner are two scratchy letters, W H, and down on the right, much smaller, PEIRCE SC.: *sculpsit*, he cut it. The Cleveland Museum of Art has an impression of it, as one of about ninety early wood engravings it catalogues under Winslow Homer, who was twenty-three that year and drawing for the illustrated papers.
 
-![A wood engraving of an elderly, nearly bald man, seen to the waist and turned slightly to the left, in a double-breasted dark coat with wide lapels, a pale waistcoat and a dark stock at the neck. One arm is bent, the hand hidden in the coat. A cloud of hatching surrounds him. Faint lines of type from the other side of the newspaper page show through the paper. A small "W H" is scratched in at the lower left. Below, in capitals: "THE LATE COL. SAMUEL JAQUES."]({{ site.baseurl }}/assets/as-authority-jaques.jpg)
+![A wood engraving of an elderly, nearly bald man, seen to the waist, his head turned towards the right of the picture, in a double-breasted dark coat with wide lapels, a pale waistcoat and a dark stock at the neck. One arm is bent; the drawing fades out before the hand. A cloud of hatching surrounds him. Faint lines of type from the other side of the newspaper page show through the paper. A small "W H" is scratched in at the lower left. Below, in capitals: "THE LATE COL. SAMUEL JAQUES."]({{ site.baseurl }}/assets/as-authority-jaques.jpg)
 
 The article with it says where the face came from:
 
